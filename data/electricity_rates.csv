@@ -1,0 +1,59 @@
+﻿State,Utility,Plan Type,Plan Name,Season,Time,Tier,Rate,Effective Date,Source
+Nevada,NV Energy,Fixed,Fixed,All,All,All,0.1429,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+Nevada,NV Energy,TOU,Time of Use,Summer,On-Peak,All,0.3999,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+Nevada,NV Energy,TOU,Time of Use,Summer,Off-Peak,All,0.0906,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+Nevada,NV Energy,TOU,Time of Use,Winter,All,All,0.0971,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+Connecticut,Eversource,Fixed,Rate 1,All,All,All,0.1193,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+Connecticut,Eversource,TOU,Rate 7,All,On-Peak,All,0.1628,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+Connecticut,Eversource,TOU,Rate 7,All,Off-Peak,All,0.0956,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+Florida,FPL,Fixed,RS1,All,All,1st,0.1086,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+Florida,FPL,Fixed,RS1,All,All,2nd,0.1286,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+Florida,FPL,TOU,RTR-1,Summer,On-Peak,1st,0.2319,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+Florida,FPL,TOU,RTR-1,Summer,On-Peak,2nd,0.2519,,
+Florida,FPL,TOU,RTR-1,Summer,Off-Peak,1st,0.0547,,
+Florida,FPL,TOU,RTR-1,Summer,Off-Peak,2nd,0.0747,,
+Florida,FPL,TOU,RTR-1,Winter,On-Peak,1st,0.2319,,
+Florida,FPL,TOU,RTR-1,Winter,On-Peak,2nd,0.2519,,
+Florida,FPL,TOU,RTR-1,Winter,Off-Peak,1st,0.0547,,
+Florida,FPL,TOU,RTR-1,Winter,Off-Peak,2nd,0.0747,,
+,,,,,,,,,
+Maryland,Baltimore Gas & Electric,Fixed,R,Summer,All,All,0.12008,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,Fixed,R,Non-Summer,All,All,0.14126,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Summer,Peak,All,0.14113,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Summer,Intermediate,All,0.10925,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Summer,Off-Peak,All,0.10711,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Non-Summer,Peak,All,0.16264,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Non-Summer,Intermediate,All,0.14424,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,RL,Non-Summer,Off-Peak,All,0.12961,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Summer,Peak,All,0.18559,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Summer,Intermediate,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Summer,Off-Peak,All,0.08411,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Non-Summer,Peak,All,0.24207,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Non-Summer,Intermediate,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+Maryland,Baltimore Gas & Electric,TOU,EV,Non-Summer,Off-Peak,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+,,,,,,,,,
+Pennsylvania,PECO,Fixed,R,All,All,All,0.08465,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+Pennsylvania,PECO,TOU,R-TOU,All,Peak,All,0.23655,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+Pennsylvania,PECO,TOU,R-TOU,All,Off-Peak,All,0.05898,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+Pennsylvania,PECO,TOU,R-TOU,All,Super Off-Peak,All,0.0393,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+Georgia has,Fixed Rate,Season,,,,,,,
+,,Usage,,https://www.georgiapower.com/residential/billing-and-rate-plans/pricing-and-rate-plans.html#tariffs,,,,,
+,TOU,Time,,,,,,,
+,,Season,,,,,,,
+,,PEAK DEMAND (in KW),,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+NC,Dominion,Fixed,,Summer,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
