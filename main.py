@@ -6,12 +6,14 @@ TIER_PATH = "data/tier_definitions.csv"
 TIMES_PATH = "data/time_of_use_definitions.csv"
 
 def process_hour_ranges(raw_strings: str):
-    #creates a list of strings with hour ranges like "7-11"
+    #from input like "7-11; 20-24", creates a list of strings with hour ranges like "7-11"
     range_strings = raw_strings.replace(" ", "").split(";")
     
     #for each range, create a tuple of the integer values like (7, 11)
     ranges = [tuple([int(rs.split("-")[0]), int(rs.split("-")[1])])
               for rs in range_strings]
+    
+    #return a list of tuples corresponding to the original input: [(7, 11), (20, 24)]
     return ranges
 
 
