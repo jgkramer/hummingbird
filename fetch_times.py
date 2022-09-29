@@ -17,6 +17,8 @@ def process_hour_ranges(raw_strings: str):
     return ranges
 
 
-times_table = pd.read_csv(TIMES_PATH)
-times_table["Time Segments"] = times_table["Time Segments"].apply(process_hour_ranges)
-
+if __name__ == "main":
+    times_table = pd.read_csv(TIMES_PATH)
+    print(times_table["Time Segments"])
+    times_table["Time Segments"] = times_table["Time Segments"].apply(process_hour_ranges)
+    print(times_table["Time Segments"])
