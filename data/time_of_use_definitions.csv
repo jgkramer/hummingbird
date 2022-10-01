@@ -1,9 +1,9 @@
-﻿State,Utility,Plan Name,Season,Time Period,Time Segments,Source
-NV,NV Energy,Time of Use,Summer,On-Peak,13-19;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,Time of Use,Summer,Off-Peak,0-13; 19-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,Time of Use,Winter,All,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-CT,Eversource,Rate 7,All,On-Peak,12-20;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-CT,Eversource,Rate 7,All,Off-Peak,0-12; 20-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+﻿State,Utility,Plan Type,Season,Time Period,Time Segments,Source
+NV,NV Energy,TOU,Summer,On-Peak,13-19;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,TOU,Summer,Off-Peak,0-13; 19-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,TOU,Winter,All,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+CT,Eversource,TOU,All,On-Peak,12-20;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+CT,Eversource,TOU,All,Off-Peak,0-12; 20-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
 FL,FPL,Time of Use,Summer,On-Peak,12-21;,https://www.fpl.com/rates/time-of-use.html
 FL,FPL,Time of Use,Summer,Off-Peak,0-12; 21-24,https://www.fpl.com/rates/time-of-use.html
 FL,FPL,Time of Use,Winter,On-Peak,6-10; 18-22,https://www.fpl.com/rates/time-of-use.html

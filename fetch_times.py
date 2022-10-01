@@ -3,7 +3,6 @@ import pandas as pd
 
 TIMES_PATH = "data/time_of_use_definitions.csv"
 
-
 class TimesData:
 
     def __init__(self):
@@ -20,12 +19,31 @@ class TimesData:
 
         #return a list of tuples corresponding to the original input: [(7, 11), (20, 24)]
         return ranges
- 
 
     def print_key_columns(self):
-        print(self.table[["State", "Season", "Plan Name", "Time Period", "Time Segments"]])
+        print(self.table[["State", "Season", "Plan Type", "Time Period", "Time Segments"]])
 
+    def states_list(self):
+        return np.unique(self.table["State"])
+
+    def plans_for_state(self, state: str):
+        return np.unique((self.table[self.table["State"]==state])["Plan Type"])
+        
+    def seasons_for_state(self, state: str):
+        return np.unique((self.table[self.table["State"]==state])["Season"])
+
+    def time_period_series(self, state: str, plan_type: str, season: str):
+        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season)
+        return zip((self.table[filter])["Time Period"], (self.table[filter])["Time Segments"])
+        
 
 if __name__ == "__main__":
     td = TimesData()
     td.print_key_columns()
+
+    print(td.states_list())
+    print(td.plans_for_state("NV"))
+    print(td.seasons_for_state("NV"))
+    for tupe in td.time_period_series("NV", "TOU", "Summer"):
+        print(tupe)
+    
