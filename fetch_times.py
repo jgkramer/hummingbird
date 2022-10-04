@@ -32,7 +32,7 @@ class TimesData:
     def seasons_for_state(self, state: str):
         return np.unique((self.table[self.table["State"]==state])["Season"])
 
-    def time_period_series(self, state: str, plan_type: str, season: str):
+    def time_period_list(self, state: str, plan_type: str, season: str):
         filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season)
         return zip((self.table[filter])["Time Period"], (self.table[filter])["Time Segments"])
         
@@ -44,6 +44,6 @@ if __name__ == "__main__":
     print(td.states_list())
     print(td.plans_for_state("NV"))
     print(td.seasons_for_state("NV"))
-    for tupe in td.time_period_series("NV", "TOU", "Summer"):
+    for tupe in td.time_period_list("NV", "TOU", "Summer"):
         print(tupe)
     

@@ -5,26 +5,43 @@ RATES_PATH = "data/electricity_rates.csv"
 
 class RatesData:
 
-    rates_table
+    def __init__(self):
+        self.table = pd.read_csv(RATES_PATH)
 
-    def __init__
-        rates_table = pd.read_csv(RATES_PATH)
+    def print_key_columns(self):
+        print(self.table[["State", "Plan Type", "Plan Name", "Season", "Time Period", "Tier", "Rate"]])
+    
+    def states_list(self):
+        return np.unique(self.table["State"])
+
+    def plans_for_state(self, state: str):
+        return np.unique((self.table[self.table["State"]==state])["Plan Type"])
+
+    def seasons_for_plan(self, state: str, plan_type: str):
+        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type)
+        return (self.table[filter])["Season"]
+
+        
+    def rate_list(self, state: str, plan_type: str, season: str, tier: str = "All"):
+        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Tier"] == tier)
+        return zip((self.table[filter])["Time Period"], (self.table[filter])["Rate"])
 
     
-    def process_hour_ranges(raw_strings: str):
-        #from input like "7-11; 20-24", creates a list of strings with hour ranges like "7-11"
-        range_strings = raw_strings.replace(" ", "").split(";")
-    
-        #for each range, create a tuple of the integer values like (7, 11)
-        ranges = [tuple([int(rs.split("-")[0]), int(rs.split("-")[1])])
-                  for rs in range_strings]
-    
-        #return a list of tuples corresponding to the original input: [(7, 11), (20, 24)]
-        return ranges
-
-
-    
-
 if __name__ == "__main__":
-    times_table["Time Segments"] = times_table["Time Segments"].apply(process_hour_ranges)
-    print(times_table[["State", "Season", "Plan Name", "Time Period", "Time Segments"]])
+    td = RatesData()
+    td.print_key_columns()
+
+    print(td.states_list())
+    print(td.plans_for_state("NV"))
+    for tupe in td.rate_list("NV", "TOU", "Summer"):
+        print(tupe)
+    for tupe in td.rate_list("NV", "TOU", "Winter"):
+        print(tupe)
+    for tupe in td.rate_list("NV", "Fixed", "All"):
+        print(tupe)
+        
+
+
+
+    
+    
