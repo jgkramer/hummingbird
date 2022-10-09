@@ -37,8 +37,10 @@ class TimesData:
         return ((self.table[filter])["Time Period"]).tolist()
 
     def time_segments_for_period(self, state: str, plan_type: str, season: str, period_name: str):
+        if(period_name == "All"):
+            return [tuple([0, 24])]                                     
         filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Time Period"]==period_name)
-        #index zero because each item in Time Segments is a list. 
+        #index zero because each item in Time Segments is a list.
         return ((self.table[filter])["Time Segments"]).tolist()[0]
         
 

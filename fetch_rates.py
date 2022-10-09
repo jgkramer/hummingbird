@@ -28,7 +28,7 @@ class RatesData:
         for time, rate in Z:
             dictionary[time] = rate
         return dictionary
-        
+
 
     
 if __name__ == "__main__":
