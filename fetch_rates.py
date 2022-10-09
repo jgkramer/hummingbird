@@ -19,27 +19,32 @@ class RatesData:
 
     def seasons_for_plan(self, state: str, plan_type: str):
         filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type)
-        return (self.table[filter])["Season"]
+        return np.unique((self.table[filter])["Season"])
 
-        
-    def rate_list(self, state: str, plan_type: str, season: str, tier: str = "All"):
+    def rate_dictionary(self, state: str, plan_type: str, season: str, tier: str = "All"):
+        dictionary = dict()
         filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Tier"] == tier)
-        return zip((self.table[filter])["Time Period"], (self.table[filter])["Rate"])
+        Z = zip((self.table[filter])["Time Period"], (self.table[filter])["Rate"])
+        for time, rate in Z:
+            dictionary[time] = rate
+        return dictionary
+        
 
     
 if __name__ == "__main__":
-    td = RatesData()
-    td.print_key_columns()
+    rd = RatesData()
+#   rd.print_key_columns()
 
-    print(td.states_list())
-    print(td.plans_for_state("NV"))
-    for tupe in td.rate_list("NV", "TOU", "Summer"):
-        print(tupe)
-    for tupe in td.rate_list("NV", "TOU", "Winter"):
-        print(tupe)
-    for tupe in td.rate_list("NV", "Fixed", "All"):
-        print(tupe)
-        
+    print(rd.states_list())
+    plans = rd.plans_for_state("NV")
+    for plan in plans:
+        print(plan)
+        seasons = rd.seasons_for_plan("NV", plan)
+        print(seasons)
+        for season in seasons:
+            print(season)
+            rate_dict = rd.rate_dictionary("NV", plan, season)
+            print(rate_dict)
 
 
 

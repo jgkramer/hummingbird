@@ -34,16 +34,29 @@ class TimesData:
 
     def time_period_list(self, state: str, plan_type: str, season: str):
         filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season)
-        return zip((self.table[filter])["Time Period"], (self.table[filter])["Time Segments"])
+        return ((self.table[filter])["Time Period"]).tolist()
+
+    def time_segments_for_period(self, state: str, plan_type: str, season: str, period_name: str):
+        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Time Period"]==period_name)
+        #index zero because each item in Time Segments is a list. 
+        return ((self.table[filter])["Time Segments"]).tolist()[0]
         
 
 if __name__ == "__main__":
     td = TimesData()
-    td.print_key_columns()
+#    td.print_key_columns()
 
     print(td.states_list())
-    print(td.plans_for_state("NV"))
-    print(td.seasons_for_state("NV"))
-    for tupe in td.time_period_list("NV", "TOU", "Summer"):
-        print(tupe)
+#    print(td.plans_for_state("NV"))
+#    print(td.seasons_for_state("NV"))
+
+    periods = td.time_period_list("NV", "TOU", "Summer")
+    print(periods)
+
+    for period in periods:
+        print(period)
+        l = td.time_segments_for_period("NV", "TOU", "Summer", period)    
+        print(l)
+
+          
     
