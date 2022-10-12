@@ -16,18 +16,33 @@ class RateSegment:
         return self.start_time
 
 class RateSeries:
-    def __init__(self, state: str, season: str, plan_type: str, plan_name: str):
+    def _add_segments(self):
+        segs = []
+        rate_dict = self.rd.rate_dictionary(self.state, self.plan_name, self.season)
+        periods = self.td.time_period_list(self.state, self.plan_type, self.season)
+        if(len(periods) == 0): periods.append("All")
+        for period in periods:
+            segments = self.td.time_segments_for_period(self.state, self.plan_type, self.season, period)
+            for segment in segments:
+                seg = RateSegment(segment[0], segment[1], rate_dict[period], period)
+                segs.append(seg)
+        return sorted(segs, key = RateSegment.sorter)
+
+    def __init__(self, state: str, season: str, plan_type: str, plan_name: str, td: TimesData, rd: RatesData):
         self.state = state
         self.season = season
         self.plan_type = plan_type
         self.plan_name = plan_name
-        self.rate_segments = []
+        self.td = td
+        self.rd = rd
+        self.rate_segments = self._add_segments()
+        
 
-    def add_segment(self, seg: RateSegment):
-        self.rate_segments.append(seg)
+    def start_times(self):
+        return [seg.start_time for seg in self.rate_segments]
 
-    def sort(self):
-        self.rate_segments = sorted(self.rate_segments, key=RateSegment.sorter)
+    def rates(self):
+        return [seg.rate for seg in self.rate_segments]
 
     def __str__(self):
         s = []
@@ -40,40 +55,6 @@ class RateSeries:
         return "\n".join(s)
 
 
-    
-if __name__ == "__main__":
-    rd = RatesData()
-    td = TimesData()
-
-    NV_plans = rd.plans_for_state("NV")
-    print(NV_plans)
-    for plan in NV_plans:
-        print("\nplan " + plan)
-        seasons = rd.seasons_for_plan("NV", plan)
-        for season in seasons:
-            print("\nseason " + season + "\n")
-
-            rate_series = RateSeries("NV", season, plan, plan) # this is weird
-            rate_dict = rd.rate_dictionary("NV", plan, season)
-
-            periods = td.time_period_list("NV", plan, season)
-            if(len(periods) == 0):
-                periods.append("All")
-
-            rs = RateSeries("NV", season, plan, plan)
-
-            for period in periods:
-                segments = td.time_segments_for_period("NV", plan, season, period)
-
-                for segment in segments:
-                    seg = RateSegment(segment[0], segment[1], rate_dict[period], period)
-                    rs.add_segment(seg)
-                    
-            rs.sort()
-            print(rs)
-            
-            
-            
             
     
 
