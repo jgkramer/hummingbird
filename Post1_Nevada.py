@@ -14,6 +14,7 @@ def format_time(x, _):
     return hm + ("am" if (x%24)<12 else "pm")
 
 def display_state_charts(state: str, td: TimesData, rd: RatesData):
+
     fig, ax = plt.subplots(2)
     fig.tight_layout(pad = 3.0)
     summer_axes = ax[0]
@@ -53,7 +54,9 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData):
 
     summer_axes.legend(loc = 'upper left')
     winter_axes.legend(loc = 'upper left')
-    plt.show()
+
+    path = "output_" + state + ".png"
+    plt.savefig(path)
 
 if __name__ == "__main__":
     rd = RatesData()
