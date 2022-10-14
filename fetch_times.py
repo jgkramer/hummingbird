@@ -46,11 +46,8 @@ class TimesData:
 
 if __name__ == "__main__":
     td = TimesData()
-#    td.print_key_columns()
 
     print(td.states_list())
-#    print(td.plans_for_state("NV"))
-#    print(td.seasons_for_state("NV"))
 
     periods = td.time_period_list("NV", "TOU", "Summer")
     print(periods)
