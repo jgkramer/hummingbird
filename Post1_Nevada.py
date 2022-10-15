@@ -44,12 +44,12 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData):
             if(season == "Summer" or season == "All"):
                 summer_axes.step(x, y, where = "post", label = plan)
                 for a,b in zip(x,y):
-                    if(a<24): summer_axes.annotate(f" ${b}", (a,b))
+                    if(a<24): summer_axes.annotate(f" ${b: 1.3f}", (a,b))
                     
-            if(season == "Winter" or season == "All"):
+            if(season == "Winter" or season == "Non-Summer" or season == "All"):
                 winter_axes.step(x, y, where = "post", label = plan)
                 for a,b in zip(x,y):
-                    if(a<24): winter_axes.annotate(f" ${b}", (a,b))
+                    if(a<24): winter_axes.annotate(f" ${b: 1.3f}", (a,b))
 
 
     summer_axes.legend(loc = 'upper left')
@@ -61,7 +61,7 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData):
 if __name__ == "__main__":
     rd = RatesData()
     td = TimesData()
-    states = ["NV", "CT"]
+    states = ["NV", "CT", "MD"]
     for state in states:
         display_state_charts(state, td, rd)
 

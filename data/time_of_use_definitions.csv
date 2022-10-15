@@ -4,21 +4,21 @@ NV,NV Energy,TOU,Summer,Off-Peak,0-13; 19-24;,https://www.nvenergy.com/publish/c
 NV,NV Energy,TOU,Winter,All,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
 CT,Eversource,TOU,All,On-Peak,12-20;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
 CT,Eversource,TOU,All,Off-Peak,0-12; 20-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-FL,FPL,Time of Use,Summer,On-Peak,12-21;,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,Time of Use,Summer,Off-Peak,0-12; 21-24,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,Time of Use,Winter,On-Peak,6-10; 18-22,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,Time of Use,Winter,Off-Peak,0-6; 10-18; 22-24,https://www.fpl.com/rates/time-of-use.html
-MD,Baltimore Gas & Electric,Time of Use,Summer,Peak,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,Time of Use,Summer,Intermediate,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,Time of Use,Summer,Off-Peak,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,Time of Use,Non-Summer,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,Time of Use,Non-Summer,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,Time of Use,Non-Summer,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-PA,PECO,Time of Use,All,Peak,14-18;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-PA,PECO,Time of Use,All,Off-Peak,6-14; 18-24;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-PA,PECO,Time of Use,All,Super Off-Peak,0-6;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-GA,Georgia Power,Time of Use,Summer,Peak,14-19;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,Time of Use,Summer,Off-Peak,7-14; 19-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,Time of Use,Summer,Super Off-Peak,0-7; 23-24,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,Time of Use,Winter,Off-Peak,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,Time of Use,Winter,Super Off-Peak,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+FL,FPL,TOU,Summer,On-Peak,12-21;,https://www.fpl.com/rates/time-of-use.html
+FL,FPL,TOU,Summer,Off-Peak,0-12; 21-24,https://www.fpl.com/rates/time-of-use.html
+FL,FPL,TOU,Winter,On-Peak,6-10; 18-22,https://www.fpl.com/rates/time-of-use.html
+FL,FPL,TOU,Winter,Off-Peak,0-6; 10-18; 22-24,https://www.fpl.com/rates/time-of-use.html
+MD,Baltimore Gas & Electric,TOU,Summer,Peak,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Summer,Intermediate,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Non-Summer,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Non-Summer,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Non-Summer,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+PA,PECO,TOU,All,Peak,14-18;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+PA,PECO,TOU,All,Off-Peak,6-14; 18-24;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+PA,PECO,TOU,All,Super Off-Peak,0-6;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+GA,Georgia Power,TOU,Summer,Peak,14-19;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+GA,Georgia Power,TOU,Summer,Off-Peak,7-14; 19-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+GA,Georgia Power,TOU,Summer,Super Off-Peak,0-7; 23-24,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+GA,Georgia Power,TOU,Winter,Off-Peak,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+GA,Georgia Power,TOU,Winter,Super Off-Peak,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
