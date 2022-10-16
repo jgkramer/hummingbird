@@ -60,7 +60,6 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
 
     path = "output_" + state + ".png"
     plt.savefig(path)
-    plt.show()
 
 if __name__ == "__main__":
     rd = RatesData()
