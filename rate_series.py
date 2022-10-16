@@ -21,14 +21,10 @@ class RateSeries:
     def _add_segments(self):
 #        pdb.set_trace()
         segs = []
-        print(self.state, self.plan_type, self.season)
         rate_dict = self.rd.rate_dictionary(self.state, self.plan_name, self.season)
-        print(rate_dict)
         periods = self.td.time_period_list(self.state, self.plan_type, self.season)
-        print(periods)
         if(len(periods) == 0): periods.append("All")
         for period in periods:
-            print(period)
             segments = self.td.time_segments_for_period(self.state, self.plan_type, self.season, period)
             for segment in segments:
                 seg = RateSegment(segment[0], segment[1], rate_dict[period], period)
