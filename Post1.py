@@ -58,7 +58,7 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
                     if(a<24): subplot.annotate(f" ${b: 1.3f}", (a,b))
                 subplot.legend(loc = 'upper left')
 
-    path = "output_" + state + ".png"
+    path = "post1/output_" + state + ".png"
     plt.savefig(path)
 
 if __name__ == "__main__":
