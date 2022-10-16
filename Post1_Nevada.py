@@ -1,5 +1,3 @@
-
-
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, AutoMinorLocator)
 
@@ -27,8 +25,10 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
     seasons_dict = {}
     for i, state_season in enumerate(state_seasons):
         seasons_dict[state_season] = i
-        ax[i].set_title(state_season)
+        date_string = " (" + sd.season_begin(state, state_season) + " to " + sd.season_end(state, state_season) + ")"
+        ax[i].set_title(state_season + date_string)
 
+    # formatting the plots
     for subplot in ax:
         subplot.set_xlim([0, 24])
         subplot.set_ylim([0, 0.5])
@@ -37,16 +37,16 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
         subplot.xaxis.set_ticks(np.arange(0, 24+1, 4))
         subplot.set_ylabel("$ per kWh")
     
+    # go through each plan (i.e., TOU) that the state has
     state_plans = rd.plans_for_state(state)
     for plan in state_plans:
-        if(plan == "EV"): continue  #right now we're just doing straight up TOU plans. 
+        if(plan != "Fixed" and plan != "TOU"): continue  #right now we're just doing Fixed and Standard TOU plans. 
         
         seasons = list(rd.seasons_for_plan(state, plan))
         for season in seasons:
             rs = RateSeries(state, season, plan, plan, td, rd) # double plan is weird
             x = rs.start_times()
-            y = rs.rates()
-            
+            y = rs.rates()           
             x.append(24) #make sure we have a data point at end of day to finish plot
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 

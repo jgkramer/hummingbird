@@ -11,15 +11,15 @@ FL,FPL,TOU,Winter,Off-Peak,0-6; 10-18; 22-24,https://www.fpl.com/rates/time-of-u
 MD,Baltimore Gas & Electric,TOU,Summer,Peak,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 MD,Baltimore Gas & Electric,TOU,Summer,Intermediate,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Non-Summer,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Non-Summer,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Non-Summer,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Winter,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Winter,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,TOU,Winter,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 MD,Baltimore Gas & Electric,EV,Summer,Peak,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 MD,Baltimore Gas & Electric,EV,Summer,Intermediate,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 MD,Baltimore Gas & Electric,EV,Summer,Off-Peak,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Non-Summer,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Non-Summer,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Non-Summer,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,EV,Winter,Peak,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,EV,Winter,Intermediate,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,EV,Winter,Off-Peak,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
 PA,PECO,TOU,All,Peak,14-18;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
 PA,PECO,TOU,All,Off-Peak,6-14; 18-24;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
 PA,PECO,TOU,All,Super Off-Peak,0-6;,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf

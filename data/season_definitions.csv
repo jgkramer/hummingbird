@@ -1,6 +1,6 @@
 ﻿State,Utility,Season,Season_Begin,Season_End,Source
 MD,Baltimore Gas & Electric,Summer,1-Jun,30-Sep,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,Non-Summer,1-Oct,3-May,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,Winter,1-Oct,3-May,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
 FL,FPL,Summer,1-Apr,31-Oct,
 FL,FPL,Winter,1-Nov,31-Mar,https://www.fpl.com/rates/time-of-use.html
 NV,NV Energy,Summer,1-Jun,30-Sep,https://www.fpl.com/rates/time-of-use.html
