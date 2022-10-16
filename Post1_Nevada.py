@@ -33,6 +33,7 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData):
     
     state_plans = rd.plans_for_state(state)
     for plan in state_plans:
+        if(plan == "EV"): continue
         seasons = rd.seasons_for_plan(state, plan)
         for season in seasons:
             rs = RateSeries(state, season, plan, plan, td, rd) # double plan is weird
