@@ -42,8 +42,8 @@ class SeasonsData:
     def states_list(self):
         return np.unique(self.table["State"])
 
-    def seasons_for_state(self, state: str):
-        return np.unique((self.table[self.table["State"]==state])["Season"])
+#    def seasons_for_state(self, state: str):
+#        return np.unique((self.table[self.table["State"]==state])["Season"])
 
     def season_begin(self, state: str, season: str) :
         filter = (self.table["State"]==state) & (self.table["Season"]==season)
@@ -61,7 +61,7 @@ class SeasonsData:
         else:
             return None
 
-    def seasons2_for_state(self, state: str):
+    def seasons_for_state(self, state: str):
         state_table = self.table[self.table["State"]==state]
         seasons = [Season(name, start, end)
                    for name, start, end in zip(state_table["Season"],

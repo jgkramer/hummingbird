@@ -5,7 +5,7 @@ import numpy as np
 
 from fetch_rates import RatesData
 from fetch_times import TimesData
-from fetch_seasons import SeasonsData
+from fetch_seasons import SeasonsData, Season
 from rate_series import RateSegment, RateSeries
 
 def format_time(x, _):
@@ -14,7 +14,7 @@ def format_time(x, _):
 
 def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsData):
 
-    state_seasons = list(sd.seasons_for_state(state))
+    state_seasons = sd.seasons_for_state(state)
     fig, ax = plt.subplots(len(state_seasons))
     fig.tight_layout(pad = 3.0)
 
@@ -24,9 +24,9 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
     # this dictionary will come in handy later, when we have a season NAME, it will tell us which subplot belongs to that name
     seasons_dict = {}
     for i, state_season in enumerate(state_seasons):
-        seasons_dict[state_season] = i
-        date_string = " (" + sd.season_begin(state, state_season) + " to " + sd.season_end(state, state_season) + ")"
-        ax[i].set_title(state_season + date_string)
+        seasons_dict[state_season.name] = i
+        date_string = " (" + state_season.dates_string() + ")"
+        ax[i].set_title(state_season.name + date_string)
 
     # formatting the plots
     for subplot in ax:
@@ -50,7 +50,7 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
             x.append(24) #make sure we have a data point at end of day to finish plot
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 
-            seasons_to_plot = [season] if season != "All" else state_seasons
+            seasons_to_plot = [season] if season != "All" else [s.name for s in state_seasons]
             for plot_season in seasons_to_plot:
                 subplot = ax[seasons_dict[plot_season]]
                 subplot.step(x, y, where = "post", label = plan)
