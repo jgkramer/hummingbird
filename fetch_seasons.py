@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     today = datetime.today()
     x = [s.in_season(today) for s in seasons]
-    for s in seasons2:
+    for s in seasons:
         s.dates_string()
     
     print(x)
