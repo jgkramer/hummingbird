@@ -14,7 +14,7 @@ DEC_31 = datetime(1900, 12, 31)
 class Season:
     state: str
     name: str
-    start_date: datetimeo
+    start_date: datetime
     end_date: datetime
 
     def on_or_after(test: datetime, reference: datetime):
@@ -29,7 +29,6 @@ class Season:
 
     def dates_string(self):
         s = datetime.strftime(self.start_date, "%d-%b") + " to " + datetime.strftime(self.end_date, "%d-%b")
-        print(s)
         return s
     
  
@@ -85,14 +84,14 @@ class SeasonsData:
 if __name__ == "__main__":
     sd = SeasonsData()
     seasons = sd.seasons_for_state("NV")
-    print(seasons)
+#    print(seasons)
 
     today = datetime.today()
     x = [s.in_season(today) for s in seasons]
     for s in seasons:
         s.dates_string()
     
-    print(x)
+#    print(x)
     
         
     

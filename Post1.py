@@ -6,14 +6,13 @@ import numpy as np
 from fetch_rates import RatesData
 from fetch_times import TimesData
 from fetch_seasons import SeasonsData, Season
-from rate_series import RateSegment, RateSeries
+from rate_series import RateSegment, RateSeries, RatePlan
 
 def format_time(x, _):
     hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
     return hm + ("am" if (x%24)<12 else "pm")
 
 def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsData):
-
     state_seasons = sd.seasons_for_state(state)
     fig, ax = plt.subplots(len(state_seasons))
     fig.tight_layout(pad = 3.0)
@@ -39,18 +38,20 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
     
     # go through each plan (i.e., TOU) that the state has
     state_plans = rd.plans_for_state(state)
+
     for plan in state_plans:
         if(plan != "Fixed" and plan != "TOU"): continue  #right now we're just doing Fixed and Standard TOU plans. 
         
-        seasons = list(rd.seasons_for_plan(state, plan))
-        for season in seasons:
-            rs = RateSeries(state, season, plan, plan, td, rd) # double plan is weird
+        rp = RatePlan(state, plan, plan, td, rd, sd)
+        rate_series = rp.series()
+                      
+        for rs in rate_series:
             x = rs.start_times()
             y = rs.rates()           
             x.append(24) #make sure we have a data point at end of day to finish plot
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 
-            seasons_to_plot = [season] if season != "All" else [s.name for s in state_seasons]
+            seasons_to_plot = [rs.season.name] if rs.season.name != "All" else [s.name for s in state_seasons]
             for plot_season in seasons_to_plot:
                 subplot = ax[seasons_dict[plot_season]]
                 subplot.step(x, y, where = "post", label = plan)
@@ -66,12 +67,10 @@ if __name__ == "__main__":
     td = TimesData()
     sd = SeasonsData()
     states = ["NV", "CT", "MD"]
+
     for state in states:
         display_state_charts(state, td, rd, sd)
 
 
 
-
-
-    
             
