@@ -52,8 +52,8 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 
             seasons_to_plot = [rs.season.name] if rs.season.name != "All" else [s.name for s in state_seasons]
-            for plot_season in seasons_to_plot:
-                subplot = ax[seasons_dict[plot_season]]
+            subplots = [seasons_dict[s] for s in seasons_to_plot]
+            for subplot in subplots:
                 subplot.step(x, y, where = "post", label = plan)
                 for a,b in zip(x,y):
                     if(a<24): subplot.annotate(f" ${b: 1.3f}", (a,b))
@@ -63,13 +63,9 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
     plt.savefig(path)
 
 if __name__ == "__main__":
-    rd = RatesData()
-    td = TimesData()
-    sd = SeasonsData()
     states = ["NV", "CT", "MD"]
-
     for state in states:
-        display_state_charts(state, td, rd, sd)
+        display_state_charts(state, TimesData(), RatesData(), SeasonsData())
 
 
 
