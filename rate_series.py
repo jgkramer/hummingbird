@@ -25,6 +25,9 @@ class RateSegment:
         end_minutes = self.end_time * 60
         d_minutes = d.hour * 60 + d.minute
         return ((start_minutes <= d_minutes) & (d_minutes < end_minutes))
+
+    def __str__(self):
+        return ("Segment: " + self.label +", times=" + str(self.start_time) + " to " + str(self.end_time) + ", rate = " + str(self.rate))
         
 # a RateSeries is the specification of rates for a given SEASON in a PLAN in one STATE.
 # it contains a list of RateSegments that are times of the day for which different rates apply (e.g., off peak, etc.)
@@ -58,7 +61,7 @@ class RateSeries:
         return [seg.rate for seg in self.rate_segments]
 
     def segment_for_datetime(self, d: datetime):
-        for seg in self.segments:
+        for seg in self.rate_segments:
             if(seg.in_segment(d)): return seg
 
         raise ValueError("Time is not in any segment in this RateSeries")
@@ -91,6 +94,16 @@ class RatePlan:
 
     def series(self):
         return self.rate_series_list
+
+    def seasons(self):
+        return [rs.season for rs in self.rate_series_list]
+
+    def ratesegment_from_datetime(self, d: datetime):
+        for rs in self.rate_series_list:
+            if(rs.season.in_season(d)):
+                return rs.segment_for_datetime(d)
+
+        raise ValueError("No season in this rate plan for this date")
 
     
         

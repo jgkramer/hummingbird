@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 from typing import List
-from rate_series import RateSegment, RateSeries
+from rate_series import RateSegment, RateSeries, RatePlan
 from fetch_rates import RatesData
 from fetch_times import TimesData
 from fetch_seasons import Season, SeasonsData
@@ -22,13 +22,18 @@ class NVenergyUsage:
     def print(self, n=96):
         print(self.table.head(n))
 
-    def total_cost_for_day(self, plan_rates: List[RateSeries] = None, d: datetime = None):
+    def total_cost_for_day(self, rate_plan: RatePlan, d: datetime = None):
         print(d)
         fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
         filtered_table = self.table[fil]
         print(filtered_table)
-    
-        
+
+        times = filtered_table["startDateTime"]
+        apply = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
+        for t, a in zip(times, apply):
+            print(t)
+            print(a)       
+
 
 if __name__ == "__main__":
     usage = NVenergyUsage()
@@ -41,18 +46,14 @@ if __name__ == "__main__":
 
     plans = rd.plans_for_state("NV")
     for plan in plans:
-        seasons_str = list(rd.seasons_for_plan("NV", plan))
-        seasons_for_plan = [sd.season_from_name("NV", s) for s in seasons_str]
-        rate_series_for_plan = [RateSeries("NV", s, plan, plan, td, rd) for s in seasons_str]
+        rate_plan = RatePlan("NV", plan, plan, td, rd, sd)
+        d = datetime(2022, 8, 31)
+        print(d)
+        usage.total_cost_for_day(rate_plan, d)
         
 
 ## NEXT - RATESERIES NEEDS TO REPLACE SEASON STR with SEASON OBJECT                
 
 
-    d = datetime(2022, 8, 31)
-    print(d)
-    usage.total_cost_for_day(d = d)
- #   print(d)
-    
     
     
