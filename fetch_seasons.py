@@ -1,12 +1,18 @@
 import numpy as np
 import pandas as pd
+
 from datetime import datetime
 from dataclasses import dataclass
 
+from typing import List
+
 SEASONS_PATH = "data/season_definitions.csv"
+JAN_1 = datetime(1900, 1, 1)
+DEC_31 = datetime(1900, 12, 31)
 
 @dataclass(frozen = True)
 class Season:
+    state: str
     name: str
     start_date: datetime
     end_date: datetime
@@ -25,8 +31,8 @@ class Season:
         s = datetime.strftime(self.start_date, "%d-%b") + " to " + datetime.strftime(self.end_date, "%d-%b")
         print(s)
         return s
-
     
+ 
 class SeasonsData:
     def __init__(self):
         self.table = pd.read_csv(SEASONS_PATH)
@@ -60,13 +66,21 @@ class SeasonsData:
 
     def seasons_for_state(self, state: str):
         state_table = self.table[self.table["State"]==state]
-        seasons = [Season(name, start, end)
+        seasons = [Season(state, name, start, end)
                    for name, start, end in zip(state_table["Season"],
                                                state_table["BeginDateTime"],
                                                state_table["EndDateTime"])
                    ]
         return seasons
+
+    def season_from_name(self, state: str, season_name: str):
+        if(season_name == "All"): return Season(state, "All", JAN_1, DEC_31)
+        seasons = self.seasons_for_state(state)
+        for s in seasons:
+            if s.name == season_name: return s
         
+        raise KeyException("Name not in seasons for state")
+
 
 if __name__ == "__main__":
     sd = SeasonsData()

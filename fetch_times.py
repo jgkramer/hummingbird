@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
 
+from typing import List, Tuple
+
 TIMES_PATH = "data/time_of_use_definitions.csv"
 
-class TimesData:
 
+class TimesData:
+    
     def __init__(self):
         self.table = pd.read_csv(TIMES_PATH)
         self.table["Time Segments"] = self.table["Time Segments"].apply(TimesData.process_hour_ranges)
