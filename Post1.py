@@ -52,7 +52,7 @@ def display_state_charts(state: str, td: TimesData, rd: RatesData, sd: SeasonsDa
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 
             seasons_to_plot = [rs.season.name] if rs.season.name != "All" else [s.name for s in state_seasons]
-            subplots = [seasons_dict[s] for s in seasons_to_plot]
+            subplots = [ax[seasons_dict[s]] for s in seasons_to_plot]
             for subplot in subplots:
                 subplot.step(x, y, where = "post", label = plan)
                 for a,b in zip(x,y):
