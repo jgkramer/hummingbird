@@ -14,7 +14,7 @@ DEC_31 = datetime(1900, 12, 31)
 class Season:
     state: str
     name: str
-    start_date: datetime
+    start_date: datetimeo
     end_date: datetime
 
     def on_or_after(test: datetime, reference: datetime):

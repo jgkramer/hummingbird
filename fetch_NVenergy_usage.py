@@ -26,7 +26,6 @@ class NVenergyUsage:
         print(d)
         fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
         filtered_table = self.table[fil]
-#        segments = filtered_table["startDateTime"].apply(lambda x: 
         print(filtered_table)
     
         
@@ -44,8 +43,12 @@ if __name__ == "__main__":
     for plan in plans:
         seasons_str = list(rd.seasons_for_plan("NV", plan))
         seasons_for_plan = [sd.season_from_name("NV", s) for s in seasons_str]
-                                                     
-                
+        rate_series_for_plan = [RateSeries("NV", s, plan, plan, td, rd) for s in seasons_str]
+        
+
+## NEXT - RATESERIES NEEDS TO REPLACE SEASON STR with SEASON OBJECT                
+
+
     d = datetime(2022, 8, 31)
     print(d)
     usage.total_cost_for_day(d = d)
