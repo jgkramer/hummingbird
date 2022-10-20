@@ -53,7 +53,6 @@ class RateSeries:
         self.rd = rd
         self.rate_segments = self._add_segments()
 
-    
     def start_times(self):
         return [seg.start_time for seg in self.rate_segments]
 
@@ -68,7 +67,7 @@ class RateSeries:
 
     def __str__(self):
         s = []
-        s.append("state = " + self.state)
+        s.append("state = " + str(self.state))]
         s.append("season = " + str(self.season))
         s.append("plan type = " + self.plan_type)
         s.append("segments: ")
@@ -76,8 +75,9 @@ class RateSeries:
             s.append(str(seg))
         return "\n".join(s)
 
-# all seasons in a plan, consists of multiple series.
 
+
+# fully defines a TOU-based plan.  All seasons in a plan, consists of multiple series.
 class RatePlan:
     def __init__(self, state: str, plan_type: str, plan_name: str, td: TimesData, rd: RatesData, sd: SeasonsData):
         self.state = state
