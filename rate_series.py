@@ -35,9 +35,7 @@ class RateSeries:
     def _add_segments(self):
         segs = []
         rate_dict = self.rd.rate_dictionary(self.state, self.plan_name, self.season.name)
-        periods = self.td.time_period_list(self.state, self.plan_type, self.season.name)
-        if(len(periods) == 0): periods.append("All")
-        for period in periods:
+        for period in self.periods:
             segments = self.td.time_segments_for_period(self.state, self.plan_type, self.season.name, period)
             for segment in segments:
                 seg = RateSegment(segment[0], segment[1], rate_dict[period], period)
@@ -51,6 +49,10 @@ class RateSeries:
         self.plan_name = plan_name
         self.td = td
         self.rd = rd
+
+        self.periods = self.td.time_period_list(self.state, self.plan_type, self.season.name)
+        if(len(self.periods) == 0): self.periods.append("All")
+
         self.rate_segments = self._add_segments()
 
     def start_times(self):
@@ -65,6 +67,9 @@ class RateSeries:
 
         raise ValueError("Time is not in any segment in this RateSeries")
 
+    def get_periods(self):
+        return self.periods
+
     def __str__(self):
         s = []
         s.append("state = " + str(self.state))
@@ -74,7 +79,6 @@ class RateSeries:
         for seg in self.rate_segments:
             s.append(str(seg))
         return "\n".join(s)
-
 
 
 # fully defines a TOU-based plan.  All seasons in a plan, consists of multiple series.
@@ -91,6 +95,15 @@ class RatePlan:
         season_names = rd.seasons_for_plan(state, plan_name)
         seasons = [sd.season_from_name(state, s) for s in season_names]
         self.rate_series_list = [RateSeries(state, season, plan_type, plan_name, td, rd) for season in seasons]
+
+        self.periods = set()
+        for rs in self.rate_series_list:
+            pds = rs.get_periods()
+            self.periods = self.periods.union(set(rs.get_periods()))
+
+            
+    def get_periods():
+        return list(self.periods)
 
     def series(self):
         return self.rate_series_list

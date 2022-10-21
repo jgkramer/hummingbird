@@ -2,7 +2,7 @@
 NV,NV Energy,Fixed,Fixed,All,All,All,0.1429,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
 NV,NV Energy,TOU,Time of Use,Summer,On-Peak,All,0.3999,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
 NV,NV Energy,TOU,Time of Use,Summer,Off-Peak,All,0.0906,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Time of Use,Winter,All,All,0.0971,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,TOU,Time of Use,Winter,Off-Peak,All,0.0971,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
 CT,Eversource,Fixed,Rate 1,All,All,All,0.2398,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
 CT,Eversource,TOU,Rate 7,All,On-Peak,All,0.30897,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
 CT,Eversource,TOU,Rate 7,All,Off-Peak,All,0.2073,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
