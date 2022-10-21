@@ -67,7 +67,7 @@ class RateSeries:
 
     def __str__(self):
         s = []
-        s.append("state = " + str(self.state))]
+        s.append("state = " + str(self.state))
         s.append("season = " + str(self.season))
         s.append("plan type = " + self.plan_type)
         s.append("segments: ")

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 from typing import List
 from rate_series import RateSegment, RateSeries, RatePlan
@@ -22,18 +22,26 @@ class NVenergyUsage:
     def print(self, n=96):
         print(self.table.head(n))
 
-    def total_cost_for_day(self, rate_plan: RatePlan, d: datetime = None):
-        print(d)
-        fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
+
+    def total_cost_for_days(self, rate_plan: RatePlan, start_date: date, end_date: date):
+
+        end_datetime = datetime(end_date.year, end_date.month, end_date.day)
+        start_datetime = datetime(start_date.year, start_date.month, start_date.day)
+
+        day_list = [start_date + timedelta(days = i) for i in range((end_date - start_date).days + 1)]
+
+        fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list)
         filtered_table = self.table[fil]
-        print(filtered_table)
 
         times = filtered_table["startDateTime"]
-        apply = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
-        for t, a in zip(times, apply):
-            print(t)
-            print(a)       
-
+        usage = filtered_table["Usage"]
+        rateSegments = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
+        cost = [(u * r.rate) for u, r in zip(usage, rateSegments)]
+        print(len(cost))
+#       print(cost)
+        print(sum(cost))
+        return sum(cost)
+        
 
 if __name__ == "__main__":
     usage = NVenergyUsage()
@@ -47,10 +55,11 @@ if __name__ == "__main__":
     plans = rd.plans_for_state("NV")
     for plan in plans:
         rate_plan = RatePlan("NV", plan, plan, td, rd, sd)
-        d = datetime(2022, 8, 31)
-        print(d)
-        usage.total_cost_for_day(rate_plan, d)
-        
+        d = datetime(2021, 9, 1, 5).date()
+        d2 = datetime(2022, 8, 31, 4).date()
+        print(type(d))
+        usage.total_cost_for_days(rate_plan, d, d2)
+
 
 ## NEXT - RATESERIES NEEDS TO REPLACE SEASON STR with SEASON OBJECT                
 
