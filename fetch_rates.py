@@ -29,7 +29,6 @@ class RatesData:
             dictionary[time] = rate
         return dictionary
 
-
     
 if __name__ == "__main__":
     rd = RatesData()

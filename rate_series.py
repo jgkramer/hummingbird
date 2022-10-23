@@ -16,11 +16,17 @@ class RateSegment:
     end_time: int
     rate: float
     label: str
+    weekend: bool = False
+    # datetime .weekday() returns 0-4 for M-F, and 5-6 for Sa-Su
 
     def sorter(self):
         return self.start_time
 
     def in_segment(self, d: datetime) -> bool:
+        d_weekend = True if (d.weekday() >= 5) else False
+        same_daytype = (d_weekend & self.weekend) | (not d_weekend & not self.weekend)
+        if(not same_daytype): return False
+        
         start_minutes = self.start_time * 60
         end_minutes = self.end_time * 60
         d_minutes = d.hour * 60 + d.minute

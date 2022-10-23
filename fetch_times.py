@@ -24,7 +24,9 @@ class TimesData:
         return ranges
 
     def print_key_columns(self):
-        print(self.table[["State", "Season", "Plan Type", "Time Period", "Time Segments"]])
+        pd.set_option('display.max_colwidth', 16)
+        pd.set_option('display.max_columns', None)
+        print(self.table[["State", "Season", "Plan Type", "Day Type", "Time Period", "Time Segments"]])
 
     def states_list(self):
         return np.unique(self.table["State"])
@@ -50,10 +52,13 @@ class TimesData:
 if __name__ == "__main__":
     td = TimesData()
 
+    td.print_key_columns()
+    
     print(td.states_list())
 
     periods = td.time_period_list("NV", "TOU", "Summer")
     print(periods)
+    
 
     for period in periods:
         print(period)

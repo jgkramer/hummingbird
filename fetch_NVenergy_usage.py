@@ -6,6 +6,8 @@ from rate_series import RateSegment, RateSeries, RatePlan
 from fetch_seasons import Season
 from region import Region
 
+import pdb
+
 USAGE_PATH = "usage_data/Sep21-Aug22energy.csv"
 
 
@@ -31,28 +33,44 @@ class NVenergyUsage:
         day_list = [start_date + timedelta(days = i) for i in range((end_date - start_date).days + 1)]
 
         fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list)
-        filtered_table = self.table[fil]
+        filtered_table = self.table[fil].copy()
 
-        times = filtered_table["startDateTime"]
-        usage = filtered_table["Usage"]
-        rateSegments = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
+#        times = filtered_table["startDateTime"]
+#        usage = filtered_table["Usage"]
 
-        cost = [(u * r.rate) for u, r in zip(usage, rateSegments)]
-        print(len(cost))
-        return sum(cost)
+
+        filtered_table["Segment"] = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
+        filtered_table["SegmentLabel"] = [s.label for s in filtered_table["Segment"]]
+        filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
+
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+    
+#        print(filtered_table[["startDateTime", "SegmentLabel", "Usage", "Cost"]])
+
+        grouped = filtered_table.groupby("SegmentLabel")
+        print(grouped.sum())
+        
+#        print((zip(usage, rateSegments)))
+        
+        return sum(filtered_table["Cost"])
         
 
 if __name__ == "__main__":
     usage = NVenergyUsage()
 
-    region = Region("NV")
-    plans = region.get_rate_plans()
-    
-    for plan in plans:
-        d = datetime(2021, 9, 1).date()
-        d2 = datetime(2021, 9, 15).date()
-        print("Plan: " + plan.plan_name)
-        print("Cost: " + str(usage.total_cost_for_days(plan, d, d2)))
+    states = ["NV"]
+
+    for state in states:
+        region = Region(state)
+        plans = region.get_rate_plans()
+
+        for plan in plans:
+            d = datetime(2021, 9, 1).date()
+            d2 = datetime(2022, 8, 31).date()
+            print("State: " + state)
+            print("Plan: " + plan.plan_name)
+            print("Cost: " + str(usage.total_cost_for_days(plan, d, d2)))
 
 
     
