@@ -8,7 +8,7 @@ from region import Region
 
 import pdb
 
-USAGE_PATH = "usage_data/Sep21-Aug22energy.csv"
+USAGE_PATH = "usage_data/1Sep22energy.csv"
 
 
 class UsageStats:
@@ -19,6 +19,7 @@ class UsageStats:
 class NVenergyUsage:
     def __init__(self, usage_path = USAGE_PATH):
         self.table = pd.read_csv(usage_path)
+        print(self.table.head(12))
         self.table["startDateTime"] = self.table["startTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
         self.table["endDateTime"]=  self.table["endTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
     
@@ -66,8 +67,8 @@ if __name__ == "__main__":
         plans = region.get_rate_plans()
 
         for plan in plans:
-            d = datetime(2021, 9, 1).date()
-            d2 = datetime(2022, 8, 31).date()
+            d = datetime(2022, 9, 1).date()
+            d2 = datetime(2022, 9, 1).date()
             print("State: " + state)
             print("Plan: " + plan.plan_name)
             print("Cost: " + str(usage.total_cost_for_days(plan, d, d2)))

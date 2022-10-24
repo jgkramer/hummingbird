@@ -37,33 +37,44 @@ class TimesData:
     def seasons_for_state(self, state: str):
         return np.unique((self.table[self.table["State"]==state])["Season"])
 
-    def time_period_list(self, state: str, plan_type: str, season: str):
-        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season)
-        return ((self.table[filter])["Time Period"]).tolist()
 
-    def time_segments_for_period(self, state: str, plan_type: str, season: str, period_name: str):
+    def list_period_names(self, state: str, plan_type: str, season: str):
+        fil = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season)
+        return set((self.table[fil])["Time Period"])
+
+    def list_daytypes(self, state: str, plan_type: str, season: str, period_name: str):
         if(period_name == "All"):
-            return [tuple([0, 24])]                                     
-        filter = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Time Period"]==period_name)
+            return {"Weekday", "Weekend"}
+        fil = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Time Period"]==period_name)
+        return set((self.table[fil])["Day Type"])
+
+    def list_time_segments(self, state: str, plan_type: str, season: str, period_name: str, daytype: str):
+        if(period_name == "All"):
+            return [tuple([0, 24])]
+        fil = (self.table["State"]==state) & (self.table["Plan Type"]==plan_type) & (self.table["Season"]==season) & (self.table["Day Type"] == daytype) & (self.table["Time Period"]==period_name)
         #index zero because each item in Time Segments is a list.
-        return ((self.table[filter])["Time Segments"]).tolist()[0]
+        return ((self.table[fil])["Time Segments"]).tolist()[0]
         
 
 if __name__ == "__main__":
     td = TimesData()
 
     td.print_key_columns()
-    
+
     print(td.states_list())
 
-    periods = td.time_period_list("NV", "TOU", "Summer")
+    periods = td.list_period_names("NV", "Fixed", "All")
     print(periods)
-    
 
     for period in periods:
-        print(period)
-        l = td.time_segments_for_period("NV", "TOU", "Summer", period)    
-        print(l)
+        print(" " + period)
+        daytypes = td.list_daytypes("NV", "Fixed", "All", period)
+        print(daytypes)
+
+        for daytype in daytypes:
+            print(daytype)
+            l = td.list_time_segments("NV", "Fixed", "All", period, daytype)
+            print(l)
 
           
     

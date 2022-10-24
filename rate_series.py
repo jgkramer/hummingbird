@@ -19,12 +19,15 @@ class RateSegment:
     weekend: bool = False
     # datetime .weekday() returns 0-4 for M-F, and 5-6 for Sa-Su
 
+    # this is broken
     def sorter(self):
         return self.start_time
 
-    def in_segment(self, d: datetime) -> bool:
+    def is_weekend(d: datetime) -> bool:
         d_weekend = True if (d.weekday() >= 5) else False
-        same_daytype = (d_weekend & self.weekend) | (not d_weekend & not self.weekend)
+
+    def in_segment(self, d: datetime) -> bool:
+        same_daytype = (self.weekend and RateSegment.is_weekend(d)) or (not self.weekend and not RateSegment.is_weekend(d))
         if(not same_daytype): return False
         
         start_minutes = self.start_time * 60
@@ -33,7 +36,7 @@ class RateSegment:
         return ((start_minutes <= d_minutes) & (d_minutes < end_minutes))
 
     def __str__(self):
-        return ("Segment: " + self.label +", times=" + str(self.start_time) + " to " + str(self.end_time) + ", rate = " + str(self.rate))
+        return ("Segment: " + self.label + (" Weekend" if self.weekend == True else " Weekday") + ", times=" + str(self.start_time) + " to " + str(self.end_time) + ", rate = " + str(self.rate))
         
 # a RateSeries is the specification of rates for a given SEASON in a PLAN in one STATE.
 # it contains a list of RateSegments that are times of the day for which different rates apply (e.g., off peak, etc.)
@@ -41,11 +44,17 @@ class RateSeries:
     def _add_segments(self):
         segs = []
         rate_dict = self.rd.rate_dictionary(self.state, self.plan_name, self.season.name)
-        for period in self.periods:
-            segments = self.td.time_segments_for_period(self.state, self.plan_type, self.season.name, period)
-            for segment in segments:
-                seg = RateSegment(segment[0], segment[1], rate_dict[period], period)
-                segs.append(seg)
+        for period_name in self.period_names:
+            daytypes = self.td.list_daytypes(self.state, self.plan_name, self.season.name, period_name)
+            for daytype in daytypes:
+                segments = self.td.list_time_segments(self.state, self.plan_type, self.season.name, period_name, daytype)
+                for segment in segments:
+                    seg = RateSegment(start_time = segment[0],
+                                      end_time = segment[1],
+                                      rate = rate_dict[period_name],
+                                      label = period_name,
+                                      weekend = True if daytype == "Weekend" else False)
+                    segs.append(seg)
         return sorted(segs, key = RateSegment.sorter)
 
     def __init__(self, state: str, season: Season, plan_type: str, plan_name: str, td: TimesData, rd: RatesData):
@@ -56,9 +65,8 @@ class RateSeries:
         self.td = td
         self.rd = rd
 
-        self.periods = self.td.time_period_list(self.state, self.plan_type, self.season.name)
-        if(len(self.periods) == 0): self.periods.append("All")
-
+        self.period_names = self.td.list_period_names(self.state, self.plan_type, self.season.name)
+        if(len(self.period_names) == 0): self.period_names.add("All")    
         self.rate_segments = self._add_segments()
 
     def start_times(self):
@@ -73,8 +81,8 @@ class RateSeries:
 
         raise ValueError("Time is not in any segment in this RateSeries")
 
-    def get_periods(self):
-        return self.periods
+    def get_period_names(self):
+        return self.period_names
 
     def __str__(self):
         s = []
@@ -104,11 +112,11 @@ class RatePlan:
 
         self.periods = set()
         for rs in self.rate_series_list:
-            pds = rs.get_periods()
-            self.periods = self.periods.union(set(rs.get_periods()))
+            pds = rs.get_period_names()
+            self.periods = self.periods.union(set(rs.get_period_names()))
 
             
-    def get_periods():
+    def get_period_names():
         return list(self.periods)
 
     def series(self):
