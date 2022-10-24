@@ -72,11 +72,11 @@ class RateSeries:
         if(len(self.period_names) == 0): self.period_names.add("All")    
         self.rate_segments = self._add_segments()
 
-    def start_times(self):
-        return [seg.start_time for seg in self.rate_segments]
+    def start_times(self, weekend: bool):
+        return [seg.start_time for seg in self.rate_segments if seg.weekend == weekend]
 
-    def rates(self):
-        return [seg.rate for seg in self.rate_segments]
+    def rates(self, weekend: bool):
+        return [seg.rate for seg in self.rate_segments if seg.weekend == weekend]
 
     def segment_for_datetime(self, d: datetime):
         for seg in self.rate_segments:

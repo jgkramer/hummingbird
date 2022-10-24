@@ -45,8 +45,8 @@ def display_state_charts(state: str):
         # for each season(series) in the plan:
         rate_series = plan.series()  
         for rs in rate_series:
-            x = rs.start_times()
-            y = rs.rates()           
+            x = rs.start_times(False)
+            y = rs.rates(False)           
             x.append(24) #make sure we have a data point at end of day to finish plot
             y.append(y[0]) # make sure midnight (end of day) matches midnight (start of day) value
 
