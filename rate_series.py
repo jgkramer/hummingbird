@@ -28,19 +28,14 @@ class RateSegment:
         
 
     def in_segment(self, d: datetime) -> bool:
-#        print(str(d) + " weekday " + str(d.weekday()))
-#        print(self)
-#        print(RateSegment.is_weekend(d))
         same_daytype = (self.weekend and RateSegment.is_weekend(d)) or (not self.weekend and not RateSegment.is_weekend(d))
         
         if(not same_daytype):
- #           print("not same daytype")
             return False
         
         start_minutes = self.start_time * 60
         end_minutes = self.end_time * 60
         d_minutes = d.hour * 60 + d.minute
-#        print("same daytime...time segment...." + str(((start_minutes <= d_minutes) & (d_minutes < end_minutes))))
         return ((start_minutes <= d_minutes) & (d_minutes < end_minutes))
 
     def __str__(self):
