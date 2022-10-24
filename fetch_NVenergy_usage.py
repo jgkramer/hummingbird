@@ -8,7 +8,7 @@ from region import Region
 
 import pdb
 
-USAGE_PATH = "usage_data/1Sep22energy.csv"
+USAGE_PATH = "usage_data/Sep21-Aug22energy.csv"
 
 
 class UsageStats:
@@ -36,13 +36,11 @@ class NVenergyUsage:
         fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list)
         filtered_table = self.table[fil].copy()
 
-#        times = filtered_table["startDateTime"]
-#        usage = filtered_table["Usage"]
-
-
         filtered_table["Segment"] = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
         filtered_table["SegmentLabel"] = [s.label for s in filtered_table["Segment"]]
         filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
+
+
 
         pd.set_option('display.max_rows', None)
         pd.set_option('display.max_columns', None)
@@ -67,8 +65,9 @@ if __name__ == "__main__":
         plans = region.get_rate_plans()
 
         for plan in plans:
-            d = datetime(2022, 9, 1).date()
-            d2 = datetime(2022, 9, 1).date()
+            print(plan)
+            d = datetime(2021, 9, 1).date()
+            d2 = datetime(2022, 8, 31).date()
             print("State: " + state)
             print("Plan: " + plan.plan_name)
             print("Cost: " + str(usage.total_cost_for_days(plan, d, d2)))
