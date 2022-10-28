@@ -28,6 +28,12 @@ class NVenergyUsage:
     def print(self, n=96):
         print(self.table.head(n))
 
+    def usage_series_for_day(self, d: datetime):
+        fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
+        filtered_table = self.table[fil]
+        print(len(filtered_table))
+        return zip(filtered_table["startDateTime"], filtered_table["Usage"])
+
     def total_cost_for_days(self, rate_plan: RatePlan, start_date: date, end_date: date):
         end_datetime = datetime(end_date.year, end_date.month, end_date.day)
         start_datetime = datetime(start_date.year, start_date.month, start_date.day)
@@ -40,17 +46,11 @@ class NVenergyUsage:
         filtered_table["SegmentLabel"] = [s.label for s in filtered_table["Segment"]]
         filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
 
-
-
         pd.set_option('display.max_rows', None)
         pd.set_option('display.max_columns', None)
     
-#        print(filtered_table[["startDateTime", "SegmentLabel", "Usage", "Cost"]])
-
         grouped = filtered_table.groupby("SegmentLabel")
         print(grouped.sum())
-        
-#        print((zip(usage, rateSegments)))
         
         return sum(filtered_table["Cost"])
         
