@@ -27,10 +27,10 @@ class RateSegment:
         return True if (d.weekday() >= 5) else False
         
 
-    def in_segment(self, d: datetime) -> bool:
+    def in_segment(self, d: datetime, confirm_weekday = True) -> bool:
         same_daytype = (self.weekend and RateSegment.is_weekend(d)) or (not self.weekend and not RateSegment.is_weekend(d))
         
-        if(not same_daytype):
+        if(confirm_weekday and not same_daytype):
             return False
         
         start_minutes = self.start_time * 60

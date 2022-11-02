@@ -19,7 +19,6 @@ class UsageStats:
 class NVenergyUsage:
     def __init__(self, usage_path = USAGE_PATH):
         self.table = pd.read_csv(usage_path)
-        print(self.table.head(12))
         self.table["startDateTime"] = self.table["startTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
         self.table["endDateTime"]=  self.table["endTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
     
@@ -28,10 +27,12 @@ class NVenergyUsage:
     def print(self, n=96):
         print(self.table.head(n))
 
-    def usage_series_for_day(self, d: datetime):
-        fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
+    def usage_series_for_day(self, d: datetime, ratesegment = None):
+        if ratesegment == None:
+            fil = self.table["startDateTime"].apply(lambda x: x.date() == d.date())
+        else:
+            fil = self.table["startDateTime"].apply(lambda x: (x.date() == d.date() and ratesegment.in_segment(x)))            
         filtered_table = self.table[fil]
-        print(len(filtered_table))
         return zip(filtered_table["startDateTime"], filtered_table["Usage"])
 
     def total_cost_for_days(self, rate_plan: RatePlan, start_date: date, end_date: date):
