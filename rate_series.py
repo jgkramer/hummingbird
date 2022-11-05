@@ -119,7 +119,7 @@ class RatePlan:
             self.periods = self.periods.union(set(rs.get_period_names()))
 
             
-    def get_period_names():
+    def get_period_names(self):
         return list(self.periods)
 
     def series(self):
