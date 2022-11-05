@@ -19,7 +19,6 @@ def format_time(x, _):
     hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
     return hm + ("am" if (x%24)<12 else "pm")
 
-
 def get_summer_TOU_peak():
     plans = Region("NV").get_rate_plans()
     plan = ([plan for plan in plans if plan.plan_type == "TOU"])[0]
@@ -105,7 +104,7 @@ def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end
 
     #setting up the data frame
     df = pd.DataFrame()
-    df["Month"] = [d.strftime("%b %Y") for d in monthly_starts]
+    df["Month"] = [d.strftime("%b %y") for d in monthly_starts]
     for period_name in period_names:
         df["Usage_" + period_name] = [0 for d in monthly_starts]
         df["Cost_" + period_name]  = [0 for d in monthly_starts]
@@ -117,29 +116,34 @@ def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end
             df.loc[ix, "Cost_"+usage_stat.label] = round(usage_stat.cost, ndigits = 2)
 
     plt.rcParams.update({'font.size': 8})
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize = (7.5, 3.5))
+    fig.tight_layout(pad = 2.0)
+    ax.set_ylim([0, 5000])
 
     print(df)
     dfsum = df.sum(axis = 0)
     print(dfsum)
     
-
+    path = "post2/post2_monthly_usage_" + plan.plan_name + ".png"
+    
     prev = None
     plots = []
     for period_name in period_names:
         if(prev is None):
-            plots.append(ax.barh(df["Month"], df["Usage_"+period_name]))
+            plots.append(ax.bar(df["Month"], df["Usage_"+period_name], label = period_name))
         else:
-            plots.append(ax.barh(df["Month"], df["Usage_"+period_name], left = prev))
+            plots.append(ax.bar(df["Month"], df["Usage_"+period_name], bottom = prev, label = period_name))
         prev = df["Usage_"+period_name]
 
-    print(plots[-1])
+#    print(plots[-1])
     ax.bar_label(plots[-1], fmt = "%d", padding = 5)
-
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
-    plt.gca().invert_yaxis()
-    plt.show()
+    ax.spines["left"].set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    ax.set_title('Electricity (kWh) Consumed by Month')
+    ax.legend()
+    plt.savefig(path)
 
     
 if __name__ == "__main__":
