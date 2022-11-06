@@ -1,4 +1,4 @@
-﻿Year,Month,State,Data Status,Residential - MWh,Industrial - MWh,Industrial - MWh,Transportation - MWh,Total - MWh
+﻿Year,Month,State,Data Status,Residential,Commercial,Industrial,Transportation - MWh,Total
 2022,8,AK,Preliminary,"144,999","208,813","117,595",0,"471,408"
 2022,7,AK,Preliminary,"145,048","206,271","112,010",0,"463,329"
 2022,6,AK,Preliminary,"137,989","203,069","111,108",0,"452,165"
