@@ -6,12 +6,9 @@ from dateutil.rrule import rrule, MONTHLY
 
 from typing import List
 
-
 from rate_series import RateSegment, RateSeries, RatePlan
 from fetch_seasons import Season
 from region import Region
-
-from state_usage_stats import Sector, StateUsageStats
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, PercentFormatter)
@@ -87,10 +84,8 @@ def plot_usage_chart(NVE: NVenergyUsage,
     plt.savefig(path)
     plt.close()
 
-# return dataframe with "Month" column and "Usage_" and "Cost_" columns for each period
-# e.g., "Month", "Usage_Peak", "Cost_Peak", "Usage_Off-Peak", "Cost_Off-Peak"
-def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
 
+def month_start_ends(start: datetime, end: datetime):
     monthly_starts = list(rrule(freq=MONTHLY, bymonthday = 1, dtstart=start, until=end))
     if(monthly_starts[0].date() != start.date()):
         monthly_starts = [start] + monthly_starts
@@ -99,6 +94,14 @@ def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: 
     if(monthly_ends[-1].date() != end.date()):
         monthly_ends.append(end)
 
+    return monthly_starts, monthly_ends
+
+# return dataframe with "Month" column and "Usage_" and "Cost_" columns for each period
+# e.g., "Month", "Usage_Peak", "Cost_Peak", "Usage_Off-Peak", "Cost_Off-Peak"
+def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
+
+    monthly_starts, monthly_ends = month_start_ends(start, end)
+    
     #setting up the data frame
     df = pd.DataFrame()
     df["Month"] = [d.strftime("%b %y") for d in monthly_starts]
@@ -113,7 +116,6 @@ def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: 
             df.loc[ix, "Cost_"+usage_stat.label] = round(usage_stat.cost, ndigits = 2)
 
     return df
-
 
 def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
     df = get_monthly_table(NVE, plan, start, end)
@@ -146,113 +148,65 @@ def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end
     plt.savefig(path)
     plt.close()
 
-def print_state_table(s: datetime, e: datetime):
-    path = "post2/statewide_usage.png"
+
+def format_time(x, _):
+    hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
+    return hm + ("am" if (x%24)<12 else "pm")
+
+
+def chart_average_day_by_month(NVE: NVenergyUsage, start: datetime, end: datetime):
+    monthly_starts, monthly_ends = month_start_ends(start, end)
+
+
+    _, full_list = NVE.usage_by_hour_for_period(start, end)
+    full_year_average = full_list.sum() / len(full_list)
+    print(full_year_average)
+
+    colors = ["lightcoral", "sandybrown", "dimgray", "lightgreen", "lightblue",
+              "lightcoral", "lavender", "thistle", "darkgreen",
+              "lightgray", "lavender", "thistle"]
+
+    plt.rcParams.update({'font.size': 8})
+    fig, ax = plt.subplots(ncols = 1, nrows = 2, figsize = (7.5, 6))
+    fig.tight_layout(pad = 3.0)
+    ax_summer = ax[0]
+    ax_winter = ax[1]
+    ax_summer.set_title("Summer Months")
+    ax_winter.set_title("Winter Months")
+
+    for a in ax:
+        a.set_ylim([0, 10])
+        a.spines["right"].set_visible(False)
+        a.spines["top"].set_visible(False)
+
+        a.xaxis.set_major_formatter(format_time)
+        a.xaxis.set_ticks(np.arange(0, 24, 3))
+        a.set_ylabel("avg kWh during this hour")
+
+        hours = range(0, 24)
+        a.plot(hours, [full_year_average for h in hours], "-.", color="lightgray")
+        a.plot(hours, [full_year_average * 1.5 for h in hours], "-.", color="lightgray")
+        
+
+    for month_start, month_end in zip(monthly_starts, monthly_ends):
+
+        hours, avg_usage = NVE.usage_by_hour_for_period(month_start, month_end)
+
+        ax_to_plot = ax_winter
+        if(month_start.month in [6, 7, 8, 9]): ax_to_plot = ax_summer
+        ax_to_plot.plot(hours, avg_usage, '-o', label = month_start.strftime("%b"), color=colors[month_start.month-1])
+
+        ax_summer.legend(loc = "upper left")
+        ax_winter.legend(loc = "upper left")
+
     
-    sus = StateUsageStats("NV")
-    nv_residential = sus.time_series(s, e, Sector.RESIDENTIAL)
-    nv_total = sus.time_series(s, e, Sector.TOTAL)
-
-    fig, ax = plt.subplots(figsize = (7.5, 3.5))
-    ax.set_ylim([0, 5])
-    fig.tight_layout(pad = 2.0)
-
-    x_axis = [d.strftime("%b %y") for d in nv_total["Month"]]
-
-    plots = []
-    plots.append(ax.bar(x_axis, nv_total["Usage"], label = "Total", color = "peachpuff"))
-    ax.bar_label(plots[-1], fmt = "%1.1f", padding = 5)
-    plots.append(ax.bar(x_axis, nv_residential["Usage"], label = "Residential", color = "orange"))
-    ax.bar_label(plots[-1], fmt = "%1.1f", padding = 5)
-
-    ax.spines["right"].set_visible(False)
-    ax.spines["top"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-    ax.get_yaxis().set_visible(False)
-
-    ax.set_title('Electricity (TerraWatt Hours) Consumed in NV by Month')
-
-    ax.invert_xaxis()
+    path = "post2/post2_average_usage_by_hour.png"
     plt.savefig(path)
     plt.close()
 
 
-def process(use: float, month: str, may: float, aug: float):
-    if(month == "Jun 22"): return 0.5*(may + aug)
-    if(month == "Jul 22"): return aug
-    return use
-
-def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
-    fig, ax = plt.subplots(figsize = (7.5, 3.5))
-    fig.tight_layout(pad = 2.0)
-    ax.set_ylim([0, .18])
-        
-    df = get_monthly_table(NVE, plan, start, end)
-    df["Kramer"] = df["Usage_All"]/sum(df["Usage_All"])
-
-    sus = StateUsageStats("NV")
-    nv_residential = sus.time_series(start, end, Sector.RESIDENTIAL)
-    nv_residential["Fraction"] = [x/sum(nv_residential["Usage"]) for x in nv_residential["Usage"]]
-
-    nv_total = sus.time_series(start, end, Sector.TOTAL)
-    nv_total["Fraction"] = [x/sum(nv_total["Usage"]) for x in nv_total["Usage"]]
-
-    df["NV Residential"] = nv_residential["Fraction"]
-    df["NV Total"] = nv_total["Fraction"]
-
-    ax.plot(df["Month"], df["Kramer"], '-D', label = "My House", color = "blue")
-    ax.plot(df["Month"], df["NV Residential"], '-D', label = "NV Residential", color = "orange")
-    ax.plot(df["Month"], df["NV Total"], '-D', label = "NV Total", color = "peachpuff")
-    ax.plot(df["Month"], [1/12 for x in df["Month"]], '-', color = "lightgray")
-    ax.legend()
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-
-    ax.yaxis.set_major_formatter(PercentFormatter(xmax = 1, decimals=0))
-    ax.set_title("Each Month's % of Annual Electricity Consumption")
-    
-    path1 = "post2/percent_of_total.png"
-
-    plt.savefig(path1)
-    plt.show()
-    plt.close()
-
-    fig, ax = plt.subplots(figsize = (7.5, 3.5))
-    fig.tight_layout(pad = 2.0)
-    ax.set_ylim([0, 0.18])
-    
-    Kramer_may = df.where(df["Month"] == "May 22")["Usage_All"].sum(skipna = True)
-    Kramer_aug = df.where(df["Month"] == "Aug 22")["Usage_All"].sum(skipna = True)
-    df["Adjusted_Usage"] = [ process(use, month, Kramer_may, Kramer_aug)
-                             for (use, month) in zip(df["Usage_All"], df["Month"])]
-    df["Kramer_Adjusted"] = df["Adjusted_Usage"]/sum(df["Adjusted_Usage"])
-
-    ax.plot(df["Month"], df["Kramer_Adjusted"], '-D', label = "My House", color = "blue")
-    ax.plot(df["Month"], df["NV Residential"], '-D', label = "NV Residential", color = "orange")
-    ax.plot(df["Month"], df["NV Total"], '-D', label = "NV Total", color = "peachpuff")
-    ax.plot(df["Month"], [1/12 for x in df["Month"]], '-', color = "lightgray")
-    ax.legend()
-
-    fmt = '%.0f%%' # Format you want the ticks, e.g. '40%'
-    
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-
-    ax.yaxis.set_major_formatter(PercentFormatter(xmax = 1, decimals=0))
-    ax.set_title("Each Month's % of Annual Electricity Consumption (June-July Hypothetical)")
-    
-
-    path2 = "post2/percent_of_total_adjusted.png"
-
-    plt.savefig(path2)
-    plt.show()
-    plt.close()
-
-    
-
 if __name__ == "__main__":
+
     NVE = NVenergyUsage()
 
 # first part of blog post -- plot the graphs for daily usage charts for specific days. 
@@ -275,30 +229,21 @@ if __name__ == "__main__":
         plot_usage_chart(NVE, date_list, high_temps, low_temps, path)
 
 
-# second part of blog post -- print graphs of my monthly usage.
+# second part of blog
     s = datetime(2021, 9, 1)
     e = datetime(2022, 8, 31)
 
+    chart_average_day_by_month(NVE, s, e)
+
+# third part of blog post -- print graphs of my monthly usage.
+    
     plans = Region("NV").get_rate_plans()
 
     for plan in plans:
         print(plan.plan_name)
         print_monthly_table(NVE, plan, s, e)
 
-# third part of blog post -- print statewide graphs
-    print_state_table(s, e)
 
-# third part of blog post 2 -- normalize my house vs. state resi vs. state total
-    for plan in plans:
-        if(plan.plan_name == "Fixed"):
-            print_normalized_graphs(NVE, plan, s, e)
-
-    
-
-    
-
-
-        
 
     
     

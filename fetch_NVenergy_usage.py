@@ -43,7 +43,7 @@ class NVenergyUsage:
             fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list)
         else:
             fil = self.table["startDateTime"].apply(lambda x: (x.date() in day_list) and ratesegment.in_segment(x))
-        filtered_table = self.table[fil]
+        filtered_table = self.table[fil].copy()
         return zip(filtered_table["startDateTime"], filtered_table["Usage"])
 
     def usage_series_for_day(self, d: datetime, ratesegment = None):
@@ -67,20 +67,27 @@ class NVenergyUsage:
             results.append(UsageStats(label = segment_label, kWh = usage, cost = cost))
 
         return results
+
+    def usage_by_hour_for_period(self, start: datetime, end: datetime):
+        days_in_period = (end.date()-start.date()).days + 1
+
+        list_of_tuples = list(self.usage_series_for_days(start, end))
+        df = pd.DataFrame(list_of_tuples, columns = ["time", "usage"])
+        df["hour"] = [t.hour for t in df["time"]]
+        df["usage"] = df["usage"].apply(lambda x: x/days_in_period)
+        grouped = df.groupby("hour")["usage"].sum()
+        hours = np.unique((df["hour"]))
+        return (hours, grouped)
+        
         
 if __name__ == "__main__":
-    usage = NVenergyUsage()
+    NVE = NVenergyUsage()
     states = ["NV"]
 
-    for state in states:
-        plans = Region(state).get_rate_plans()
-
-        for plan in plans:
-            print(plan)
-            d = datetime(2022, 8, 15)
-            print("State: " + state, "Plan: " + plan.plan_name)
-            print((usage.totals_for_days_by_period(plan, d)))
+    s = datetime(2022, 8, 1)
+    s2 = datetime(2022, 8, 31)
 
 
+    NVE.usage_by_hour_for_period(s, s2)
     
     
