@@ -114,8 +114,6 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     plt.close()
 
 
-
-
 if __name__ == "__main__":
     NVE = NVenergyUsage()
 

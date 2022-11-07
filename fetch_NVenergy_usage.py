@@ -12,7 +12,7 @@ import pdb
 
 from typing import List
 
-USAGE_PATH = "usage_data/Sep21-Aug22energy.csv"
+USAGE_PATH = "usage_data/Aug21-Oct22energy.csv"
 
 @dataclass
 class UsageStats:
@@ -24,12 +24,13 @@ class UsageStats:
 class NVenergyUsage:
     def __init__(self, usage_path = USAGE_PATH):
         self.table = pd.read_csv(usage_path)
-        self.table["startDateTime"] = self.table["startTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
-        self.table["endDateTime"]=  self.table["endTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
+        self.table["startDateTime"] = self.table["startTime"].apply(lambda s: (datetime.strptime(s, "%Y-%m-%d %H:%M:%S")))
+        self.table["endDateTime"]=  self.table["endTime"].apply(lambda s: (datetime.strptime(s, "%Y-%m-%d %H:%M:%S")))
     
         self.table = self.table[["unit", "startDateTime", "endDateTime", "Usage"]]
         self.first_date = min(self.table["startDateTime"])
-        self.last_date = max(self.table["startDateTime"])                     
+        self.last_date = max(self.table["startDateTime"])
+
 
     def print(self, n=96):
         print(self.table.head(n))
@@ -82,11 +83,11 @@ class NVenergyUsage:
         
 if __name__ == "__main__":
     NVE = NVenergyUsage()
+    NVE.print()
     states = ["NV"]
 
     s = datetime(2022, 8, 1)
     s2 = datetime(2022, 8, 31)
-
 
     NVE.usage_by_hour_for_period(s, s2)
     

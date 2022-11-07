@@ -119,21 +119,23 @@ def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: 
 
 def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
     df = get_monthly_table(NVE, plan, start, end)
+    print(df)
+    print(df.sum(axis = 0))
 
     plt.rcParams.update({'font.size': 8})
     fig, ax = plt.subplots(figsize = (7.5, 3.5))
     fig.tight_layout(pad = 2.0)
     ax.set_ylim([0, 5000])
 
-    dfsum = df.sum(axis = 0)
     
     path = "post2/post2_monthly_usage_" + plan.plan_name + ".png"
     
     prev = None
     plots = []
+    names = plan.get_period_names().sort()
     for period_name in plan.get_period_names():
         if(prev is None):
-            plots.append(ax.bar(df["Month"], df["Usage_"+period_name], label = period_name))
+            plots.append(ax.bar(df["Month"], df["Usage_"+period_name], label = period_name, color = "lightblue"))
         else:
             plots.append(ax.bar(df["Month"], df["Usage_"+period_name], bottom = prev, label = period_name))
         prev = df["Usage_"+period_name]
@@ -156,7 +158,6 @@ def format_time(x, _):
 
 def chart_average_day_by_month(NVE: NVenergyUsage, start: datetime, end: datetime):
     monthly_starts, monthly_ends = month_start_ends(start, end)
-
 
     _, full_list = NVE.usage_by_hour_for_period(start, end)
     full_year_average = full_list.sum() / len(full_list)
@@ -230,8 +231,8 @@ if __name__ == "__main__":
 
 
 # second part of blog
-    s = datetime(2021, 9, 1)
-    e = datetime(2022, 8, 31)
+    s = datetime(2021, 11, 1)
+    e = datetime(2022, 10, 31)
 
     chart_average_day_by_month(NVE, s, e)
 
