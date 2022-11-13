@@ -14,13 +14,14 @@ import pdb
 
 from typing import List
 
-NV_USAGE_PATH = "usage_data/Aug21-Oct22energy.csv"
-SD_USAGE_PATH = "usage_data/Marshall_SanDiego_11-1-2021_11_11-2022_2022.csv"
+@dataclass(frozen = True)
+class UsagePaths:
+    NV_Kramer = "usage_data/Aug21-Oct22energy.csv"
+    SD_Marshall = "usage_data/Marshall_SanDiego_11-1-2021_11_11-2022_2022.csv"
 
 
 class NVenergyUsage(HourlyEnergyUsage):
-
-    def process_table(self, usage_path = USAGE_PATH):
+    def process_table(self, usage_path):
         self.table = pd.read_csv(usage_path)
         self.table["startDateTime"] = self.table["startTime"].apply(lambda s: (datetime.strptime(s, "%Y-%m-%d %H:%M:%S")))
     
@@ -29,7 +30,7 @@ class NVenergyUsage(HourlyEnergyUsage):
         self.last_date = max(self.table["startDateTime"])
 
 if __name__ == "__main__":
-    NVE = NVenergyUsage(USAGE_PATH)
+    NVE = NVenergyUsage()
     NVE.print()
     states = ["NV"]
 

@@ -1,4 +1,6 @@
-from fetch_NVenergy_usage import NVenergyUsage
+from specificHourlyUsage import NVenergyUsage, UsagePaths
+from hourlyEnergyUsage import HourlyEnergyUsage
+
 import numpy as np
 import pandas as pd
 from datetime import datetime, date, timedelta
@@ -208,7 +210,7 @@ def chart_average_day_by_month(NVE: NVenergyUsage, start: datetime, end: datetim
 
 if __name__ == "__main__":
 
-    NVE = NVenergyUsage()
+    NVE = NVenergyUsage(UsagePaths.NV_Kramer)
 
 # first part of blog post -- plot the graphs for daily usage charts for specific days. 
     date_lists = [[datetime(2022, 8, 15), datetime(2022, 8, 31)],  # high - 8/15/22
