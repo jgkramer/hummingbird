@@ -35,8 +35,6 @@ class HourlyEnergyUsage(ABC):
 
     def usage_series_for_days(self, start: datetime, end: datetime, ratesegment = None):
         day_list = self.get_day_list(start, end)
-        print(day_list)
-        print(type(day_list))
         if ratesegment == None:
             #only get data for the days that are in the list of days we're looking for
             fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list)
@@ -79,6 +77,9 @@ class HourlyEnergyUsage(ABC):
         grouped = df.groupby("hour")["usage"].sum()
         hours = np.unique((df["hour"]))
         return (hours, grouped)
+
+    def get_monthly_usage(self, plan: RatePlan, start: datetime, end: datetime):
+        
 
 
     

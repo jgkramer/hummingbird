@@ -1,4 +1,6 @@
-from fetch_NVenergy_usage import NVenergyUsage
+from specificHourlyUsage import NVenergyUsage, SDenergyUsage, UsagePaths
+from hourlyEnergyUsage import HourlyEnergyUsage
+
 import numpy as np
 import pandas as pd
 from datetime import datetime, date, timedelta
@@ -8,9 +10,11 @@ from state_usage_stats import Sector, StateUsageStats
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, PercentFormatter)
 
+from rate_series import RateSegment, RateSeries, RatePlan
+from region import Region
 
 def print_state_table(s: datetime, e: datetime):
-    path = "post2/statewide_usage.png"
+    path = "post3/statewide_usage.png"
     
     sus = StateUsageStats("NV")
     nv_residential = sus.time_series(s, e, Sector.RESIDENTIAL)
@@ -75,7 +79,7 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     ax.yaxis.set_major_formatter(PercentFormatter(xmax = 1, decimals=0))
     ax.set_title("Each Month's % of Annual Electricity Consumption")
     
-    path1 = "post2/percent_of_total.png"
+    path1 = "post3/percent_of_total.png"
 
     plt.savefig(path1)
     plt.show()
@@ -107,7 +111,7 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     ax.set_title("Each Month's % of Annual Electricity Consumption (June-July Hypothetical)")
     
 
-    path2 = "post2/percent_of_total_adjusted.png"
+    path2 = "post3/percent_of_total_adjusted.png"
 
     plt.savefig(path2)
     plt.show()
@@ -115,7 +119,12 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
 
 
 if __name__ == "__main__":
-    NVE = NVenergyUsage()
+    NVE = NVenergyUsage(UsagePaths.NV_Kramer)
+
+    s = datetime(2021, 1, 1)
+    e = datetime(2021, 12, 31)
+
+    plans = Region("NV").get_rate_plans()
 
 # first part of blog post -- print statewide graphs NV
     print_state_table(s, e)
