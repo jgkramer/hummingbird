@@ -94,6 +94,13 @@ class HourlyEnergyUsage(ABC):
         month_sums = (filtered_table.groupby("Month"))["Usage"].sum().reset_index()
         return month_sums
 
+    def usage_monthly_average(self, start: datetime = None, end: datetime = None):
+        usage_df = self.usage_by_month(start, end)
+        usage_df["Month Number"] = [d.month for d in usage_df["Month"]]
+        averages = usage_df.groupby("Month Number").mean().reset_index()
+        return averages
+
+
 
     
         

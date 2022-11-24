@@ -52,8 +52,12 @@ if __name__ == "__main__":
     s2 = datetime(2022, 8, 31)
 
     print(NVE.usage_by_month())
+    print(NVE.usage_monthly_average())
 
 #    SDE = SDenergyUsage(UsagePaths.SD_Marshall)
+#    print(SDE.usage_by_month())
+#    print(SDE.usage_monthly_average())
+
     
     
     

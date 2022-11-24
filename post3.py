@@ -45,23 +45,24 @@ def print_state_table(s: datetime, e: datetime):
 
 
 def process(use: float, month: str, may: float, aug: float):
-    if(month == "Jun 22"): return 0.5*(may + aug)
-    if(month == "Jul 22"): return aug
+    if(month == "Jun"): return 0.5*(may + aug)
+    if(month == "Jul"): return aug
     return use
 
-def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
+def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
     fig, ax = plt.subplots(figsize = (7.5, 3.5))
     fig.tight_layout(pad = 2.0)
     ax.set_ylim([0, .18])
         
-    df = get_monthly_table(NVE, plan, start, end)
-    df["Kramer"] = df["Usage_All"]/sum(df["Usage_All"])
+    df = NVE.usage_monthly_average()
+    df["Month"] = df["Month Number"].apply(lambda n: datetime(2022, n, 1).strftime("%b"))
+    df["Kramer"] = df["Usage"]/sum(df["Usage"])
 
     sus = StateUsageStats("NV")
-    nv_residential = sus.time_series(start, end, Sector.RESIDENTIAL)
+    nv_residential = sus.usage_monthly_average(start, end, Sector.RESIDENTIAL)
     nv_residential["Fraction"] = [x/sum(nv_residential["Usage"]) for x in nv_residential["Usage"]]
 
-    nv_total = sus.time_series(start, end, Sector.TOTAL)
+    nv_total = sus.usage_monthly_average(start, end, Sector.TOTAL)
     nv_total["Fraction"] = [x/sum(nv_total["Usage"]) for x in nv_total["Usage"]]
 
     df["NV Residential"] = nv_residential["Fraction"]
@@ -70,7 +71,7 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     ax.plot(df["Month"], df["Kramer"], '-D', label = "My House", color = "blue")
     ax.plot(df["Month"], df["NV Residential"], '-D', label = "NV Residential", color = "orange")
     ax.plot(df["Month"], df["NV Total"], '-D', label = "NV Total", color = "peachpuff")
-    ax.plot(df["Month"], [1/12 for x in df["Month"]], '-', color = "lightgray")
+    ax.plot(df["Month"], [1/12 for x in df["Month Number"]], '-', color = "lightgray")
     ax.legend()
 
     ax.spines["top"].set_visible(False)
@@ -89,10 +90,10 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     fig.tight_layout(pad = 2.0)
     ax.set_ylim([0, 0.18])
     
-    Kramer_may = df.where(df["Month"] == "May 22")["Usage_All"].sum(skipna = True)
-    Kramer_aug = df.where(df["Month"] == "Aug 22")["Usage_All"].sum(skipna = True)
+    Kramer_may = df.where(df["Month"] == "May")["Usage"].sum(skipna = True)
+    Kramer_aug = df.where(df["Month"] == "Aug")["Usage"].sum(skipna = True)
     df["Adjusted_Usage"] = [ process(use, month, Kramer_may, Kramer_aug)
-                             for (use, month) in zip(df["Usage_All"], df["Month"])]
+                             for (use, month) in zip(df["Usage"], df["Month"])]
     df["Kramer_Adjusted"] = df["Adjusted_Usage"]/sum(df["Adjusted_Usage"])
 
     ax.plot(df["Month"], df["Kramer_Adjusted"], '-D', label = "My House", color = "blue")
@@ -110,7 +111,6 @@ def print_normalized_graphs(NVE: NVenergyUsage, plan: RatePlan, start: datetime,
     ax.yaxis.set_major_formatter(PercentFormatter(xmax = 1, decimals=0))
     ax.set_title("Each Month's % of Annual Electricity Consumption (June-July Hypothetical)")
     
-
     path2 = "post3/percent_of_total_adjusted.png"
 
     plt.savefig(path2)
@@ -132,6 +132,5 @@ if __name__ == "__main__":
 # part of blog post 2 -- normalize my house vs. state resi vs. state total
     for plan in plans:
         if(plan.plan_name == "Fixed"):
-            print_normalized_graphs(NVE, plan, s, e)
+            print_normalized_graphs(NVE, s, e)
 
-    
