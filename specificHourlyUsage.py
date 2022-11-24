@@ -38,18 +38,22 @@ class SDenergyUsage(HourlyEnergyUsage):
         self.table = pd.DataFrame({"startDateTime": combined_start,
                                    "Usage": table["Consumption"]})
 
+        self.first_date = min(self.table["startDateTime"])
+        self.last_date = max(self.table["startDateTime"])
+
+
 if __name__ == "__main__":
     NVE = NVenergyUsage(UsagePaths.NV_Kramer)
 #    NVE.print()
     states = ["NV"]
 
 
-    s = datetime(2022, 8, 1)
+    s = datetime(2022, 2, 1)
     s2 = datetime(2022, 8, 31)
 
-#    print(NVE.usage_by_hour_for_period(s, s2))
+    print(NVE.usage_by_month())
 
-    SDE = SDenergyUsage(UsagePaths.SD_Marshall)
+#    SDE = SDenergyUsage(UsagePaths.SD_Marshall)
     
     
     

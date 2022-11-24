@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from rate_series import RateSegment, RateSeries, RatePlan
 from fetch_seasons import Season
 from region import Region
+from dateSupplements import DateSupplements
 
 from abc import ABC, abstractmethod
 
@@ -23,7 +24,6 @@ class HourlyEnergyUsage(ABC):
         pass
 
     def __init__(self, path):
-        self.table = pd.read_csv(path)
         self.process_table(path)
 
     def print(self, n=96):
@@ -54,7 +54,6 @@ class HourlyEnergyUsage(ABC):
 
         day_list = self.get_day_list(start, end)
         print(day_list)
-        print(type(day_list))
         filtered_table = self.table[self.table["startDateTime"].apply(lambda x: x.date() in day_list)].copy()
         filtered_table["Segment"] = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
         segment_labels = set([s.label for s in filtered_table["Segment"]])
@@ -78,8 +77,22 @@ class HourlyEnergyUsage(ABC):
         hours = np.unique((df["hour"]))
         return (hours, grouped)
 
-    def get_monthly_usage(self, plan: RatePlan, start: datetime, end: datetime):
-        
+    def usage_by_month(self, start: datetime = None, end: datetime = None):
+        if(start == None): start = self.first_date
+        if(end == None): end = self.last_date
+
+        month_starts, month_ends = DateSupplements.month_starts_ends(start, end, complete_months_only = True)
+
+        start = max(start, month_starts[0])
+        end = min(end, month_ends[-1])
+       
+        days_to_get = [(d >= start and d <= end) for d in self.table["startDateTime"]]
+
+        filtered_table = (self.table[days_to_get]).copy()
+        filtered_table["Month"] = [datetime(d.year, d.month, 1) for d in filtered_table["startDateTime"]]
+
+        month_sums = (filtered_table.groupby("Month"))["Usage"].sum().reset_index()
+        return month_sums
 
 
     

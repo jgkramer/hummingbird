@@ -17,8 +17,8 @@ def print_state_table(s: datetime, e: datetime):
     path = "post3/statewide_usage.png"
     
     sus = StateUsageStats("NV")
-    nv_residential = sus.time_series(s, e, Sector.RESIDENTIAL)
-    nv_total = sus.time_series(s, e, Sector.TOTAL)
+    nv_residential = sus.usage_by_month(s, e, Sector.RESIDENTIAL)
+    nv_total = sus.usage_by_month(s, e, Sector.TOTAL)
 
     fig, ax = plt.subplots(figsize = (7.5, 3.5))
     ax.set_ylim([0, 5])

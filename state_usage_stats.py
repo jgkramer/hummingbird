@@ -23,25 +23,37 @@ class StateUsageStats:
         self.table["Month"] = [datetime(y, m, 1) for y, m in zip(self.table["Year"], self.table["Month"])]
         self.table.drop("Year", axis = 1, inplace = True)
 
+        self.first = min(self.table["Month"])
+        self.last = max(self.table["Month"])
+
         fil = (self.table["State"] == state)
         self.table = self.table[fil].copy()
         
-    def time_series(self, start_date: datetime, end_date: datetime, sector: Sector = Sector.TOTAL):
+    def usage_by_month(self, start_date: datetime = None, end_date: datetime = None, sector: Sector = Sector.TOTAL):
+        if start_date == None: start_date = self.first
+        if end_date == None: end_date = self.last
+        
         print(start_date.date(), end_date.date())
         fil = [(start_date.date() <= d.date()) and d.date() <= end_date.date() for d in self.table["Month"]]
-        dictionary = dict()
-        dictionary["Month"] = list((self.table[fil])["Month"])
-        
-        dictionary["Usage"] = list((self.table[fil])[sector.name.capitalize()].apply(lambda x: int(x.replace(",", ""))/1e6))
-        if(dictionary["Month"][0] > dictionary["Month"][-1]):
-            dictionary["Month"].reverse()
-            dictionary["Usage"].reverse()
-        
-        return dictionary
 
+        df = pd.DataFrame()
+        df["Month"] = (self.table[fil])["Month"].copy()
+        df["Usage"] = (self.table[fil])[sector.name.capitalize()].apply(lambda x: int(x.replace(",", ""))/1e6)
+        df.sort_values(by = ["Month"], ascending = True, inplace = True)
+        df.reset_index(drop=True, inplace = True) # reset index
+        
+        return df
 
+    def usage_monthly_average(self, start_date: datetime = None, end_date: datetime = None, sector: Sector = Sector.TOTAL):
+        usage_df = self.usage_by_month(start_date, end_date, sector)
+        usage_df["Month Number"] = [d.month for d in usage_df["Month"]]
+        averages = usage_df.groupby("Month Number").mean().reset_index()
+        return averages
+        
+    
 if __name__ == "__main__":
     sus = StateUsageStats(state = "NV")
-    print(sus.time_series(datetime(2022, 1, 15), datetime(2022, 3, 2), Sector.TOTAL))
+    print(sus.usage_by_month(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
+    print(sus.usage_monthly_average(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
 
         
