@@ -16,7 +16,7 @@ from region import Region
 
 from monthlyPlots import MonthlyPlots
 
-def print_state_table(sus: StateUsageStats, s: datetime, e: datetime):
+def print_state_table(sus: StateUsageStats, s: datetime, e: datetime, filepath:str):
     
     nv_residential = sus.usage_monthly_average(s, e, Sector.RESIDENTIAL)
     nv_total = sus.usage_monthly_average(s, e, Sector.TOTAL)
@@ -26,14 +26,13 @@ def print_state_table(sus: StateUsageStats, s: datetime, e: datetime):
     series_labels = ["Total", "Residential"]
     series_colors = ["peachpuff", "orange"]
     
-    filepath = "post3/NV_statewide_usage.png"
-
     MonthlyPlots.monthlyUsageBarChart(x_axis,
                                       y_values_list,
+                                      "TWh / month",
                                       series_labels,
                                       series_colors,
                                       fmt_str = "%1.1f",
-                                      title = "Electricity (TeraWatt Hours) Consumed in NV by Month",
+                                      title = f"Electricity Consumed in {sus.state} by Month (3y Average)",
                                       path = filepath)
 
 
@@ -80,15 +79,20 @@ def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
 if __name__ == "__main__":
     NVE = NVenergyUsage(UsagePaths.NV_Kramer)
 
-    s = datetime(2020, 9, 1)
+    s = datetime(2019, 9, 1)
     e = datetime(2022, 8, 31)
 
 # first part of blog post -- print statewide graphs NV
     susNV = StateUsageStats("NV")
-    print_state_table(susNV, s, e)
+    print_state_table(susNV, s, e, filepath = f"post3/post3_NV_statewide.png")
+    print("Total NV: ", susNV.total_for_period(s, e, Sector.TOTAL))
+    print("Residential NV: ", susNV.total_for_period(s, e, Sector.RESIDENTIAL))
+    print("Months: ", 12*(e.year - s.year) + (e.month - s.month + 1))
+    
+        
 
-    susMA = StateUsageStats("MA")
-    print_state_table(susMA, s, e)
+#    sus2 = StateUsageStats("AK")
+#    print_state_table(sus2, s, e)
 
 # part of blog post 2 -- normalize my house vs. state resi vs. state total
 

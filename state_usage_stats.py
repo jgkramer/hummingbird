@@ -19,6 +19,9 @@ class Sector(Enum):
 
 class StateUsageStats:
     def __init__(self, state, usage_path = USAGE_PATH):
+
+        self.state = state
+
         self.table = pd.read_csv(usage_path)
         self.table["Month"] = [datetime(y, m, 1) for y, m in zip(self.table["Year"], self.table["Month"])]
         self.table.drop("Year", axis = 1, inplace = True)
@@ -33,7 +36,6 @@ class StateUsageStats:
         if start_date == None: start_date = self.first
         if end_date == None: end_date = self.last
         
-        print(start_date.date(), end_date.date())
         fil = [(start_date.date() <= d.date()) and d.date() <= end_date.date() for d in self.table["Month"]]
 
         df = pd.DataFrame()
@@ -47,8 +49,12 @@ class StateUsageStats:
     def usage_monthly_average(self, start_date: datetime = None, end_date: datetime = None, sector: Sector = Sector.TOTAL):
         usage_df = self.usage_by_month(start_date, end_date, sector)
         usage_df["Month Number"] = [d.month for d in usage_df["Month"]]
-        averages = usage_df.groupby("Month Number").mean().reset_index()
+        averages = usage_df.groupby("Month Number").mean(numeric_only = True).reset_index()
         return averages
+
+    def total_for_period(self, start_date: datetime = None, end_date: datetime = None, sector: Sector = Sector.TOTAL):
+        df = self.usage_by_month(start_date, end_date, sector)
+        return (df["Usage"]).sum()
         
     
 if __name__ == "__main__":

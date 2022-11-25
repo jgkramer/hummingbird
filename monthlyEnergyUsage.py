@@ -59,7 +59,7 @@ class MonthlyEnergyUsage(ABC):
     def usage_monthly_average(self, start: datetime = None, end: datetime = None):
         usage_df = self.usage_by_month(start, end)
         usage_df["Month Number"] = [d.month for d in usage_df["Month"]]
-        averages = usage_df.groupby("Month Number").mean().reset_index()
+        averages = usage_df.groupby("Month Number").mean(numeric_only = True).reset_index()
         print(averages)
         return averages
     

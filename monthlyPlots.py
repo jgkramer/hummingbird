@@ -1,6 +1,8 @@
 
 
 import matplotlib.pyplot as plt
+from matplotlib.axis import Tick
+
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, PercentFormatter)
 
 import numpy as np
@@ -11,8 +13,9 @@ from typing import List
 
 class MonthlyPlots:
 
-    def monthlyUsageBarChart(x_values, y_values_list, series_labels, series_colors, fmt_str, title, path):
+    def monthlyUsageBarChart(x_values, y_values_list, y_axis_label, series_labels, series_colors, fmt_str, title, path):
 
+        plt.rcParams.update({'font.size': 8})
         fig, ax = plt.subplots(figsize = (7.5, 3.5))
 
         maxy = max([max(l) for l in y_values_list])
@@ -29,9 +32,14 @@ class MonthlyPlots:
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
         ax.spines["left"].set_visible(False)
-        ax.get_yaxis().set_visible(False)
 
-        ax.legend()
+        ax.tick_params(left = False, labelleft = False)
+        ax.set_ylabel(y_axis_label)
+
+#        ax.get_yaxis().set_visible(False)
+
+
+        ax.legend(loc = "upper right")
 
         ax.set_title(title)
         plt.savefig(path)
@@ -40,6 +48,7 @@ class MonthlyPlots:
         
 
     def monthlyUsageLineChart(x_values, y_values_list, series_labels, series_colors, title, path, show_average:bool = True):
+        plt.rcParams.update({'font.size': 8})
         fig, ax = plt.subplots(figsize = (7.5, 3.5))
         fig.tight_layout(pad = 2.0)
 

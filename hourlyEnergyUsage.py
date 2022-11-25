@@ -73,7 +73,7 @@ class HourlyEnergyUsage(ABC):
         df = pd.DataFrame(list_of_tuples, columns = ["time", "usage"])
         df["hour"] = [t.hour for t in df["time"]]
         df["usage"] = df["usage"].apply(lambda x: x/nDays)
-        grouped = df.groupby("hour")["usage"].sum()
+        grouped = df.groupby("hour")["usage"].sum(numeric_only = True)
         hours = np.unique((df["hour"]))
         return (hours, grouped)
 
@@ -91,7 +91,7 @@ class HourlyEnergyUsage(ABC):
         filtered_table = (self.table[days_to_get]).copy()
         filtered_table["Month"] = [datetime(d.year, d.month, 1) for d in filtered_table["startDateTime"]]
 
-        month_sums = (filtered_table.groupby("Month"))["Usage"].sum().reset_index()
+        month_sums = (filtered_table.groupby("Month"))["Usage"].sum(numeric_only = True).reset_index()
         return month_sums
 
     def usage_monthly_average(self, start: datetime = None, end: datetime = None):
