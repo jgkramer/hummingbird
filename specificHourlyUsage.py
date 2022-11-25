@@ -16,14 +16,14 @@ from typing import List
 
 @dataclass(frozen = True)
 class UsagePaths:
-    NV_Kramer = "usage_data/Aug21-Oct22energy.csv"
+    NV_Kramer = "usage_data/NV_Kramer_22Nov.csv"
     SD_Marshall = "usage_data/Marshall_SanDiego_11-1-2021_11-11-2022_2022.csv"
 
 
 class NVenergyUsage(HourlyEnergyUsage):
     def process_table(self, usage_path):
         table = pd.read_csv(usage_path)
-        table["startDateTime"] = table["startTime"].apply(lambda s: (datetime.strptime(s, "%Y-%m-%d %H:%M:%S")))
+        table["startDateTime"] = table["startTime"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
     
         self.table = table[["startDateTime", "Usage"]].copy()
         self.first_date = min(self.table["startDateTime"])
