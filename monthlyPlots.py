@@ -15,7 +15,7 @@ class MonthlyPlots:
 
     def monthlyUsageBarChart(x_values, y_values_list, y_axis_label, series_labels, series_colors, fmt_str, title, path):
 
-        plt.rcParams.update({'font.size': 8})
+        plt.rcParams.update({'font.size': 9})
         fig, ax = plt.subplots(figsize = (7.5, 3.5))
 
         maxy = max([max(l) for l in y_values_list])

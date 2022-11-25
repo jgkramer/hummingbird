@@ -76,6 +76,28 @@ def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
                                        path = filepath)
 
 
+def key_months(df: pd.DataFrame):
+
+    print(df)
+
+    d = dict()
+
+    d["Min month"] = df["Month Number"].iloc[df["Usage"].idxmin()]
+    d["Min usage"] = min(df["Usage"])
+
+    df_summer = df[ [ m in range(5, 11) for m in df["Month Number"]] ]
+    df_winter = df[ [ m not in range(5, 11) for m in df["Month Number"]] ]
+
+    d["Winter peak month"] = df["Month Number"].iloc[df_winter["Usage"].idxmax()]
+    d["Winter peak usage"] = max(df_winter["Usage"])
+
+    d["Summer peak month"] = df["Month Number"].iloc[df_summer["Usage"].idxmax()]
+    d["Summer peak usage"] = max(df_summer["Usage"])
+
+    print(d)
+
+    return d
+
 if __name__ == "__main__":
     NVE = NVenergyUsage(UsagePaths.NV_Kramer)
 
@@ -85,9 +107,18 @@ if __name__ == "__main__":
 # first part of blog post -- print statewide graphs NV
     susNV = StateUsageStats("NV")
     print_state_table(susNV, s, e, filepath = f"post3/post3_NV_statewide.png")
-    print("Total NV: ", susNV.total_for_period(s, e, Sector.TOTAL))
-    print("Residential NV: ", susNV.total_for_period(s, e, Sector.RESIDENTIAL))
-    print("Months: ", 12*(e.year - s.year) + (e.month - s.month + 1))
+
+#    print("Total NV: ", susNV.total_for_period(s, e, Sector.TOTAL))
+#    print("Residential NV: ", susNV.total_for_period(s, e, Sector.RESIDENTIAL))
+#    print("Months: ", 12*(e.year - s.year) + (e.month - s.month + 1))
+
+
+    avgs = susNV.usage_monthly_average(s, e, Sector.RESIDENTIAL)
+#    print(avgs)
+#    print(max(avgs["Usage"]) / min(avgs["Usage"]))
+    key_months(avgs)
+    
+
     
         
 
