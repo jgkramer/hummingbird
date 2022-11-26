@@ -45,7 +45,7 @@ def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
         
     kramer_df = NVE.usage_monthly_average()
     sus = StateUsageStats("NV")
-        
+    
     kramer_fraction = kramer_df["Usage"]/sum(kramer_df["Usage"])
 
     # adjust June and July
@@ -66,7 +66,8 @@ def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
     y_values_list = [kramer_fraction, kramer_adjusted_fraction, nv_resi_fraction, nv_total_fraction]
     series_labels = ["My House (Unadjusted)", "My House", "NV Residential", "NV Total"]
     series_colors = ["lightblue", "blue", "orange", "peachpuff"]
-    filepath = "post3/percent_of_total.png"
+
+    filepath = "post3/post3_Kramer_vs_NV.png"
 
     MonthlyPlots.monthlyUsageLineChart(x_axis,
                                        y_values_list,
@@ -78,7 +79,6 @@ def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
 
 def key_months(df: pd.DataFrame):
 
-    print(df)
 
     d = dict()
 
@@ -108,19 +108,19 @@ if __name__ == "__main__":
     susNV = StateUsageStats("NV")
     print_state_table(susNV, s, e, filepath = f"post3/post3_NV_statewide.png")
 
-#    print("Total NV: ", susNV.total_for_period(s, e, Sector.TOTAL))
-#    print("Residential NV: ", susNV.total_for_period(s, e, Sector.RESIDENTIAL))
-#    print("Months: ", 12*(e.year - s.year) + (e.month - s.month + 1))
+    print("Total NV: ", susNV.total_for_period(s, e, Sector.TOTAL))
+    print("Residential NV: ", susNV.total_for_period(s, e, Sector.RESIDENTIAL))
+    print("Months: ", 12*(e.year - s.year) + (e.month - s.month + 1))
+
+    avgs = susNV.usage_monthly_average(s, e, Sector.TOTAL)
+    d = key_months(avgs)
+    print(d["Winter peak usage"] / d["Min usage"])
+    print(d["Summer peak usage"] / d["Min usage"])
+
+    print((avgs["Usage"].iloc[5:9]).sum() / avgs["Usage"].sum())
 
 
-    avgs = susNV.usage_monthly_average(s, e, Sector.RESIDENTIAL)
-#    print(avgs)
-#    print(max(avgs["Usage"]) / min(avgs["Usage"]))
-    key_months(avgs)
-    
 
-    
-        
 
 #    sus2 = StateUsageStats("AK")
 #    print_state_table(sus2, s, e)
