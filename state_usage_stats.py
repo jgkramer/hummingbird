@@ -18,19 +18,24 @@ class Sector(Enum):
     TOTAL = 4
 
 class StateUsageStats:
+    MasterTable = pd.read_csv(USAGE_PATH)
+    MasterTable["Month"] = [datetime(y, m, 1) for y, m in zip(MasterTable["Year"], MasterTable["Month"])]
+    MasterTable.drop("Year", axis = 1, inplace = True)
+    
+    def list_all_states():
+        states = list(pd.unique(StateUsageStats.MasterTable["State"]))
+        return states
+
     def __init__(self, state, usage_path = USAGE_PATH):
 
         self.state = state
 
-        self.table = pd.read_csv(usage_path)
-        self.table["Month"] = [datetime(y, m, 1) for y, m in zip(self.table["Year"], self.table["Month"])]
-        self.table.drop("Year", axis = 1, inplace = True)
+        table = StateUsageStats.MasterTable
+        self.first = min(table["Month"])
+        self.last = max(table["Month"])
 
-        self.first = min(self.table["Month"])
-        self.last = max(self.table["Month"])
-
-        fil = (self.table["State"] == state)
-        self.table = self.table[fil].copy()
+        fil = (table["State"] == state)
+        self.table = table[fil].copy()
         
     def usage_by_month(self, start_date: datetime = None, end_date: datetime = None, sector: Sector = Sector.TOTAL):
         if start_date == None: start_date = self.first
@@ -58,8 +63,11 @@ class StateUsageStats:
         
     
 if __name__ == "__main__":
-    sus = StateUsageStats(state = "NV")
-    print(sus.usage_by_month(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
-    print(sus.usage_monthly_average(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
+    pass
+#    l = StateUsageStats.list_all_states()
+#    print(len(l))   
+#    sus = StateUsageStats(state = "NV")
+#    print(sus.usage_by_month(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
+#    print(sus.usage_monthly_average(sector = Sector.TOTAL, start_date = datetime(2019, 9, 1)))
 
         

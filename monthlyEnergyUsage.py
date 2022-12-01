@@ -5,10 +5,11 @@ from datetime import datetime, date, timedelta
 from dataclasses import dataclass
 
 from abc import ABC, abstractmethod
+from timeSeriesEnergyUsage import TimeSeriesEnergyUsage
 
 from dateSupplements import DateSupplements
 
-class MonthlyEnergyUsage(ABC):
+class MonthlyEnergyUsage(TimeSeriesEnergyUsage):
 
     @abstractmethod
     def process_table(self):
@@ -52,7 +53,7 @@ class MonthlyEnergyUsage(ABC):
 
         df = pd.DataFrame(list(zip(months, usage)), columns = ["Month", "Usage"])
 
-        print(df)
+#        print(df)
         return df
 
 
@@ -60,7 +61,7 @@ class MonthlyEnergyUsage(ABC):
         usage_df = self.usage_by_month(start, end)
         usage_df["Month Number"] = [d.month for d in usage_df["Month"]]
         averages = usage_df.groupby("Month Number").mean(numeric_only = True).reset_index()
-        print(averages)
+#        print(averages)
         return averages
     
         

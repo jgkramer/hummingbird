@@ -43,7 +43,7 @@ class MonthlyPlots:
 
         ax.set_title(title)
         plt.savefig(path)
-        plt.show()
+#        plt.show()
         plt.close()
         
 

@@ -10,6 +10,7 @@ from region import Region
 from dateSupplements import DateSupplements
 
 from abc import ABC, abstractmethod
+from timeSeriesEnergyUsage import TimeSeriesEnergyUsage
 
 @dataclass
 class UsageStats:
@@ -17,7 +18,7 @@ class UsageStats:
     kWh: float
     cost: float
 
-class HourlyEnergyUsage(ABC):
+class HourlyEnergyUsage(TimeSeriesEnergyUsage):
 
     @abstractmethod
     def process_table(self):

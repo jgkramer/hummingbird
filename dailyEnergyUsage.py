@@ -5,10 +5,11 @@ from datetime import datetime, date, timedelta
 from dataclasses import dataclass
 
 from abc import ABC, abstractmethod
+from timeSeriesEnergyUsage import TimeSeriesEnergyUsage
 
 from dateSupplements import DateSupplements
 
-class DailyEnergyUsage(ABC):
+class DailyEnergyUsage(TimeSeriesEnergyUsage):
 
     @abstractmethod
     def process_table(self):
