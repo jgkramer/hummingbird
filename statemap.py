@@ -16,7 +16,9 @@ class StateMap:
                             color_continuous_scale = colorscale
                             )
 
-        fig.write_image(filepath, width = 000, height = 500, scale = 5)
+        (fig.layout["margin"])["t"] = 10
+        print(fig.layout)
+        fig.write_image(filepath, width = 900, height = 500, scale = 5)
 #        fig.show()
 
                     
