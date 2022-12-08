@@ -165,7 +165,6 @@ def get_ratios(s: datetime, e: datetime):
 
     map_csv_path = "post3/post3_map.csv"
     df_csv.to_csv(map_csv_path, float_format = "%.2f")
-    
 
     
 
