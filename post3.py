@@ -141,18 +141,33 @@ def key_months(state: str, df: pd.DataFrame):
 def get_ratios(s: datetime, e: datetime):
     states = StateUsageStats.list_all_states()
     winter_peaks = []
+    winter_peaks_ratio = []
     summer_peaks = []
+    summer_peaks_ratio = []
+    min_usage = []
     for state in states:
         dictionary = key_months(state, StateUsageStats(state).usage_monthly_average(s, e, Sector.RESIDENTIAL))
-        winter_peaks.append(dictionary["Winter peak usage"]/dictionary["Min usage"])
-        summer_peaks.append(dictionary["Summer peak usage"]/dictionary["Min usage"])        
+        winter_peaks.append(dictionary["Winter peak usage"])
+        summer_peaks.append(dictionary["Summer peak usage"])
+        min_usage.append(dictionary["Min usage"])
+        
+        winter_peaks_ratio.append(dictionary["Winter peak usage"]/dictionary["Min usage"])
+        summer_peaks_ratio.append(dictionary["Summer peak usage"]/dictionary["Min usage"])        
 
-    df = pd.DataFrame(list(zip(states, winter_peaks, summer_peaks)),
-                      columns = ["State", "Winter Peak", "Summer Peak"])
+    df_map = pd.DataFrame(list(zip(states, winter_peaks_ratio, summer_peaks_ratio)),
+                          columns = ["State", "Winter Peak", "Summer Peak"])
 
-    print(df)
-    StateMap.map_states(df, "State", "Summer Peak", "reds", "post3/post3_summer_map.png")
-    StateMap.map_states(df, "State", "Winter Peak", "blues", "post3/post3_winter_map.png")
+    df_csv = pd.DataFrame(list(zip(states, winter_peaks, summer_peaks, min_usage)),
+                          columns = ["State", "Winter Peak Month (TWh)", "Summer Peak Month (TWh)", "Lowest Usage Month (TWh)"])
+
+    StateMap.map_states(df_map, "State", "Summer Peak", "reds", "post3/post3_summer_map.png")
+    StateMap.map_states(df_map, "State", "Winter Peak", "blues", "post3/post3_winter_map.png")
+
+    map_csv_path = "post3/post3_map.csv"
+    df_csv.to_csv(map_csv_path, float_format = "%.2f")
+    
+
+    
 
 def print_summary_stats(sus: StateUsageStats, s: datetime, e: datetime):
     years = (e.year - s.year) + (e.month - s.month + 1)/12
@@ -166,7 +181,7 @@ def print_summary_stats(sus: StateUsageStats, s: datetime, e: datetime):
     print("Summer peak: ", f"{d['Summer peak usage'] / d['Min usage']:.2f}x")
     print(f"% of Consumption in Summer: {100*(avgs['Usage'].iloc[5:8]).sum() / avgs['Usage'].sum():.1f}%")
     print(f"% of Consumption in Winter: {100*(avgs['Usage'].iloc[[0,1,11]]).sum() / avgs['Usage'].sum():.1f}%")
-
+    
 
 if __name__ == "__main__":
     NVE = NVenergyUsage(UsagePaths.NV_Kramer)
