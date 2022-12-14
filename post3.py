@@ -56,9 +56,7 @@ def print_comp_graphs(susses: List[StateUsageStats], individuals: List[TimeSerie
     y_values_list = [(sus.usage_monthly_average(start, end, Sector.RESIDENTIAL)["Usage"])/sum((sus.usage_monthly_average(start, end, Sector.RESIDENTIAL)["Usage"]))
                          for sus in susses]
     
-                                                                                                 
-
-                        
+                                                                                                                         
 #    state_resi_fraction = [x / sum(state_residential["Usage"]) for x in state_residential["Usage"]]
     y_values_list = y_values_list + [(meu.usage_monthly_average())["Usage"]/sum((meu.usage_monthly_average())["Usage"]) for meu in individuals]
 
