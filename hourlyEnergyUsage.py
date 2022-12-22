@@ -34,7 +34,7 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         day_list = [start + timedelta(days = i) for i in range((end - start).days + 1)]
         return [day.date() for day in day_list]
 
-    def usage_series_for_days(self, start: datetime, end: datetime, ratesegment = None):
+    def usage_series_for_days(self, start: datetime, end: datetime, hoursOnly = False, ratesegment = None):
         day_list = self.get_day_list(start, end)
         if ratesegment == None:
             #only get data for the days that are in the list of days we're looking for
@@ -45,10 +45,18 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
             fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list) and ratesegment.in_segment(x)
 
         filtered_table = self.table[fil]
-        return zip(filtered_table["startDateTime"].copy(), filtered_table["Usage"].copy())
+        if(not hoursOnly):
+            return zip(filtered_table["startDateTime"].copy(), filtered_table["Usage"].copy())
+        
+        else:
+            filtered_table["HourOnly"] = filtered_table["startDateTime"].apply(
+                lambda d: datetime(d.year, d.month, d.day, d.hour))
+            hour_sums = (filtered_table.groupby("HourOnly"))["Usage"].sum(numeric_only = True).reset_index()
+            return zip(hour_sums["HourOnly"].copy(), hour_sums["Usage"].copy())
 
-    def usage_series_for_day(self, d: datetime, ratesegment = None):
-        return self.usage_series_for_days(d, d, ratesegment)
+                                          
+    def usage_series_for_day(self, d: datetime, hoursOnly = False, ratesegment = None):
+        return self.usage_series_for_days(d, d, hoursOnly, ratesegment)
 
     def stats_by_period(self, rate_plan: RatePlan, start: datetime, end: datetime = None):
         if(end == None): end = start
