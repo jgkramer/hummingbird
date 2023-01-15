@@ -18,6 +18,15 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.dates as pltdates
 
+def keyGenerationStats(hourlyValues):
+    stats = {}
+    stats["maxGen"] = max(hourlyValues)
+    stats["totalGen"] = sum(hourlyValues)
+    stats["equivHours"] = stats["totalGen"]/stats["maxGen"]
+    stats["activeHours"] = sum([1 if x > 0.1*stats["maxGen"] else 0 for x in hourlyValues])
+    stats["strongHours"] = sum([1 if x > 0.6*stats["maxGen"] else 0 for x in hourlyValues])
+    print(stats)
+
 def dailyGenerationChart(eiag: EIAGeneration, start: datetime, end: datetime, path: str):
     dates, totals = eiag.dailyTotals(start, end)
     dates2, totals2 = eiag.topNOnly(start, end, N=5)
@@ -79,7 +88,6 @@ if __name__ == "__main__":
     series_labels = []
 
     for month in range(nMonths):
-        print(month)
         s = start + relativedelta(months = month)
         e = s + relativedelta(months = +1)
         _, avgs = eiag.averageDayInPeriod(s, e)
@@ -97,7 +105,7 @@ if __name__ == "__main__":
     # chart 2: first do the december averages
     
 
-    for month in [6, 12]:
+    for month in [12, 6]:
        # month_name = datetime(2022, month, 1).strftime("%B")
         HourlyChart.hourlyLineChart(x_values,
                                     [y_values_list[month-1], y_values_list_filtered[month-1]],
@@ -106,8 +114,13 @@ if __name__ == "__main__":
                                     ["lightblue", "blue"],
                                     f"post4/post4_month{month}_hourly.png",
                                     title = None,
-                                    x_axis_label = "Hour Starting",
+                                    x_axis_label = "Hour Starting (Standard Time)",
                                     annotate = 1)
+        
+        keyGenerationStats(y_values_list_filtered[month-1])
+        keyGenerationStats(y_values_list[month-1])
+
+        
                             
     y_axis_label = "MWh"                            
 

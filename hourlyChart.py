@@ -17,7 +17,7 @@ class HourlyChart:
         return hm + ("am" if (x%24)<12 else "pm")
     
     def prepHourlyChart(yrange: List[float]):
-        fig, ax = plt.subplots(figsize = (7.5, 3))
+        fig, ax = plt.subplots(figsize = (8, 3))
         ax.set_xlim([0, 23])
         ax.set_ylim(yrange)
 
@@ -53,8 +53,7 @@ class HourlyChart:
         if annotate is not None:
             for a, b in zip(x_values, y_values_list[annotate]):
                 if b > 0.1*max(y_values_list[annotate]):
-                    print("hour on chart:" + str(a) + " ; value: " + str(b))
-                    ax.annotate(f"{int(round(b))}", (a - 0.5 + (a-11)/18, b + 150), size = 7)
+                    ax.annotate(f"{int(round(b))}", (a - 0.5 + (a-11)/18, b + 150), size = 8)
 
         
         ax.legend(loc = "upper left")
