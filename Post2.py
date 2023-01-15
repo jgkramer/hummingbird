@@ -16,6 +16,7 @@ from region import Region
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, PercentFormatter)
 
+
 def format_time(x, _):
     hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
     return hm + ("am" if (x%24)<12 else "pm")
@@ -140,11 +141,6 @@ def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end
     ax.legend()
     plt.savefig(path)
     plt.close()
-
-
-def format_time(x, _):
-    hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
-    return hm + ("am" if (x%24)<12 else "pm")
 
 
 def chart_average_day_by_month(HEU: HourlyEnergyUsage, start: datetime, end: datetime):

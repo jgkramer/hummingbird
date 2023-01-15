@@ -13,13 +13,50 @@ from eiaGeneration import EIAGeneration
 
 from hourlyChart import HourlyChart
 
+from matplotlib.axis import Axis  
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+import matplotlib.dates as pltdates
+
+def dailyGenerationChart(eiag: EIAGeneration, start: datetime, end: datetime, path: str):
+    dates, totals = eiag.dailyTotals(start, end)
+    dates2, totals2 = eiag.topNOnly(start, end, N=5)
+
+    plt.rcParams.update({'font.size': 8})
+    fig, ax = plt.subplots(figsize = (7.5, 3))
+
+    ax.set_ylim([0, max(totals)*1.2])
+    ax.plot(dates, totals, label = "All Days")
+    ax.plot(dates2, totals2, label = "Top 5 Days in Month")
+
+    ax.legend()
+    ax.xaxis.set_major_formatter(pltdates.DateFormatter("%d-%b-%y"))
+    ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+
+    ax.set_ylabel("Daily NV Power Solar Generation (MWh)")
+
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+
+    fig.tight_layout()
+
+    plt.savefig(path)
+    plt.show()
+    plt.close()
+
+            
+
 if __name__ == "__main__":
 
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
-    
+
+
     start = datetime(2022, 1, 1)
     end = datetime(2022, 12, 31)
+
+    # read full year data
+    nMonths = 12*(end.year - start.year) + (end.month - start.month) + 1
     paths = []
     d = start
     while d < end:
@@ -28,12 +65,21 @@ if __name__ == "__main__":
 
     eiag = EIAGeneration(paths)
 
+    # chart 1: motivate focusing on top 5 days
+
+    
+    dec_start = datetime(2022, 12, 1)
+    dec_end = datetime(2022, 12, 31)
+    dailyGenerationChart(eiag, dec_start, dec_end, "post4/post4_december.png")
+
+    # prep: generate the monthly line charts. 
     x_values = [x for x in range(0, 24)]
     y_values_list = []
     y_values_list_filtered = []
     series_labels = []
 
-    for month in range(12):
+    for month in range(nMonths):
+        print(month)
         s = start + relativedelta(months = month)
         e = s + relativedelta(months = +1)
         _, avgs = eiag.averageDayInPeriod(s, e)
@@ -48,39 +94,34 @@ if __name__ == "__main__":
     cmap = mpl.cm.get_cmap('Paired')
     series_colors = [cmap(((i)%12)/11) for i in range(12)]
 
-    y_axis_label = "Average MWh"
-    title = "title"
-    path1 = "test1.png"
-    path2 = "test2.png"
+    # chart 2: first do the december averages
+    
 
-    HourlyChart.hourlyLineChart(x_values,
-                                y_values_list,
-                                y_axis_label,
-                                series_labels,
-                                series_colors,
-                                title,
-                                path1)
+    for month in [6, 12]:
+       # month_name = datetime(2022, month, 1).strftime("%B")
+        HourlyChart.hourlyLineChart(x_values,
+                                    [y_values_list[month-1], y_values_list_filtered[month-1]],
+                                    "Average Hourly NV Solar Generation (MWh)",
+                                    ["Average of all Days", "Average of top 5 Days"],
+                                    ["lightblue", "blue"],
+                                    f"post4/post4_month{month}_hourly.png",
+                                    title = None,
+                                    x_axis_label = "Hour Starting",
+                                    annotate = 1)
+                            
+    y_axis_label = "MWh"                            
 
     HourlyChart.hourlyLineChart(x_values,
                                 y_values_list_filtered,
                                 y_axis_label,
                                 series_labels,
                                 series_colors,
-                                title,
-                                path2)
+                                "post4/post4_all_months_hourly.png",
+                                title = None,
+                                x_axis_label = "Hour Starting",
+                                annotate = None)
 
-    dates, totals = eiag.dailyTotals(start, end)
-    dates2, totals2 = eiag.topNOnly(start, end, N=5)
-    fig, ax = plt.subplots(figsize = (7.5, 4))
-    ax.set_ylim([0, max(totals)*1.2])
-    ax.plot(dates, totals)
-    ax.plot(dates2, totals2)
-    plt.show()
-    plt.close()
-                
-#    eiag.topNOnly(start, end)
-    
-    fig.tight_layout(pad = 2.0)
+
 
 
     

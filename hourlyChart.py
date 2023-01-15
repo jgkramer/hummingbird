@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from typing import List
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import seaborn as sns
 
 class HourlyChart:
@@ -16,36 +17,57 @@ class HourlyChart:
         return hm + ("am" if (x%24)<12 else "pm")
     
     def prepHourlyChart(yrange: List[float]):
-        fig, ax = plt.subplots(figsize = (7.5, 4))
-        fig.tight_layout(pad = 2.0)
-        ax.set_xlim([0, 24])
+        fig, ax = plt.subplots(figsize = (7.5, 3))
+        ax.set_xlim([0, 23])
         ax.set_ylim(yrange)
 
-        ax.xaxis.set_ticks(np.arange(0, 24+1, 3))
+        ax.xaxis.set_ticks(np.arange(0, 24, 3))
+        ax.xaxis.set_major_formatter(HourlyChart.format_time)
+        ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+
+        ax.spines["right"].set_visible(False)
+        ax.spines["top"].set_visible(False)
 
         return fig, ax
                                
     def hourlyLineChart(x_values,
                         y_values_list,
-                        y_axis_label,
+                        y_axis_label: str,
                         series_labels,
                         series_colors,
-                        title,
-                        path):
+                        path: str,
+                        title: str = None,
+                        x_axis_label:str = None,
+                        annotate: int = None):
 
 #        print(series_colors)
         
-        maxy = max([max(l) for l in y_values_list])        
+        maxy = 2000 #max([max(l) for l in y_values_list])        
         miny = min([min(l) for l in y_values_list])
 
-        fig, ax = HourlyChart.prepHourlyChart([min(0, 1.2*miny), 1.2*maxy])
+        fig, ax = HourlyChart.prepHourlyChart([min(0, 1.25*miny), 1.125*maxy])
 
         for y_values, label, color in zip(y_values_list, series_labels, series_colors):
             ax.plot(x_values, y_values, label = label, color = color)
 
-        ax.legend(loc = "upper left")
+        if annotate is not None:
+            for a, b in zip(x_values, y_values_list[annotate]):
+                if b > 0.1*max(y_values_list[annotate]):
+                    print("hour on chart:" + str(a) + " ; value: " + str(b))
+                    ax.annotate(f"{int(round(b))}", (a - 0.5 + (a-11)/18, b + 150), size = 7)
+
         
-        plt.show()
+        ax.legend(loc = "upper left")
+        ax.set_ylabel(y_axis_label)
+
+        if title is not None: ax.set_title(title)
+        if x_axis_label is not None: ax.set_xlabel(x_axis_label)
+
+        
+
+        fig.tight_layout(pad = 1.0)
+  
         plt.savefig(path)
+        plt.show()
         plt.close()
 
