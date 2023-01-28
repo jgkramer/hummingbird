@@ -67,6 +67,13 @@ class EIAGeneration:
         return (hour_N_highest_avg["Hour"].copy(), hour_N_highest_avg["Solar Generation (MWh)"])   
 
 
+    def maxOutput(self, N = 1):
+        top_N = self.df["Solar Generation (MWh)"].nlargest(n = N)
+        results = top_N.mean(numeric_only = True)
+        print(f"Max output N = {N}: {results:.1f}")
+        return results
+        
+
     def dailyTotalsDF(self, start: datetime, end: datetime):
         fil = self.df["Start Time"].apply(lambda d: start <= d and d < end)
         df_filtered = self.df[fil]

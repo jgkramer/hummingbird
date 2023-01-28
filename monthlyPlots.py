@@ -19,7 +19,6 @@ class PlotType(Enum):
     OTHER = 2
 
 class MonthlyPlots:
-
     def monthlyUsageBarChart(x_values, y_values_list, y_axis_label, series_labels, series_colors, fmt_str, title, path,
                              show_y_axis = False):
 
@@ -46,7 +45,6 @@ class MonthlyPlots:
 
 #       ax.get_yaxis().set_visible(False)
 
-
         ax.legend(loc = "upper right")
 
         ax.set_title(title)
@@ -54,8 +52,6 @@ class MonthlyPlots:
         plt.show()
         plt.close()
         
-
-    
 
     def monthlyUsageLineChart(x_values,
                               y_values_list,
@@ -99,7 +95,7 @@ class MonthlyPlots:
             ax.set_ylabel(y_axis_label)
         
         if title is not None:
-            ax.set_title(title)
+            ax.set_title(title, fontsize = 8)
         
         plt.savefig(path)
         plt.show()

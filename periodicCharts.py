@@ -24,8 +24,12 @@ class HourlyChart:
 
         ax.xaxis.set_ticks(np.arange(0, 24, 3))
         ax.xaxis.set_major_formatter(HourlyChart.format_time)
-        ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
 
+        if yrange[1] > 10:
+            ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+        else:
+            ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.1f}"))
+        
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
 

@@ -30,7 +30,19 @@ def keyGenerationStats(hourlyValues):
     return stats
 
 
+def prepChart(dims):
+    fig, ax = plt.subplots(figsize = dims)
+    plt.rcParams.update({'font.size': 8})
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+
+    return fig, ax
+
+
+
 def dailyGenerationChart(eiag: EIAGeneration, starts: List[datetime], ends: List[datetime], plot_titles: List[str], path: str):
+    print("daily generation chart, hello")
+    
     plots = len(starts)
     fig, axes = plt.subplots(nrows = 1, ncols = plots, sharey = True, figsize = (8, 3))
 
@@ -93,6 +105,8 @@ if __name__ == "__main__":
 
     # read full year data for NV
     eiag = getEIAGeneration(BAname, start, end)
+
+
 
     # chart 1: every day vs. top 3 days in each month
     daily_starts = [datetime(2022, 1, 1)]
@@ -181,10 +195,11 @@ if __name__ == "__main__":
                                 height_scale = 1.25)
 
  # chart 5: HTML table for June and December Data
-    max_hour = max([max(l) for l in y_values_list_top])
+    
+    max_hour = eiag.maxOutput(3)
 
  
-    for month in [6, 12]:
+    for month in [3, 6, 12]:
         capacity_stats = keyGenerationStats(y_values_list_top[month-1])
         active_hours = sum([1 if g >= 0.1*capacity_stats["maxGen"] else 0 for g in y_values_list_top[month-1]])
 
@@ -201,7 +216,7 @@ if __name__ == "__main__":
 
     row_html = ["<tr>\n"]
     row_html.append('<th scope="col" style="background-color: #D6EEEE">24h of Max. Summer Sun</th>/n')
-    row_html.append(f'<td>{24*max_hour:,.0f}</td> <td>{max_hour:,.0f}</td><td>-</td><td>-</td><td>24</td>')
+    row_html.append(f'<td>{24h x Max. Physical Output:,.0f}</td> <td>{max_hour:,.0f}</td><td>-</td><td>-</td><td>24</td>')
     row_html.append('</tr>\n')
     print("".join(row_html))
 
@@ -232,59 +247,121 @@ if __name__ == "__main__":
     # loop over multiple states
 
     BAs = ["NVPower", "DukeEast", "ERCOT", "DukeFL"]
-    States = ["Nevada", "North Carolina", "Texas", "Florida"]
+    States = ["Nevada", "NC (Duke Progress East)", "Texas", "Florida (Duke)"]
 
     nMonths = 12*(end.year - start.year) + (end.month - start.month)
     month_names = [(start + relativedelta(months = month)).strftime("%b") for month in range(nMonths)]
 
     absolute_max = dict()
+    capacities_lists = dict()
+    actuals_lists = dict()
+    
     capacity_by_month = dict()
     actual_by_month = dict()
-
-    days_quality = dict()
-    # 90+, 60-90, 30-60, 1-30
-
-    daily_percent_full = dict()
+    total_capacity = dict()
+    total_actual = dict()
 
     for BA in BAs:
-        absolute_max[BA] = 0
+
+        eiag = getEIAGeneration(BA, start, end)
+        
+        absolute_max[BA] = eiag.maxOutput(3)
+
         capacity_by_month[BA] = []
         actual_by_month[BA] = []
 
-        actuals_lists = list()
-        capacities_lists = list()
-        
+        actuals_lists[BA] = list()
+        capacities_lists[BA] = list()
+
         #read data for this state
-        eiag = getEIAGeneration(BA, start, end)
 
         for month in range(nMonths):
-#            print("month " + str(month))
             s = start + relativedelta(months = month)
             e = s + relativedelta(months = +1)
             _, avgs = eiag.averageDayInPeriod(s, e)
             _, avgs_top = eiag.averageDayInPeriodFilteredHourly(s, e, 3)
-            actuals_lists.append(avgs)
-            capacities_lists.append(avgs_top)
-#            print("len of capacities_list" + str(len(capacities_lists)))
+            actuals_lists[BA].append(avgs)
+            capacities_lists[BA].append(avgs_top)
             
             if max(avgs_top) > absolute_max[BA]: absolute_max[BA] = max(avgs_top)
 
-        print("absolute max for " + BA + " " + str(absolute_max[BA]))
-        capacity_by_month[BA] = [sum(l)/absolute_max[BA] for l in capacities_lists]
+        print("\nMax. Physical Output for " + BA + " " + str("{:,.2f}".format(absolute_max[BA])))
+        capacity_by_month[BA] = [sum(l)/absolute_max[BA] for l in capacities_lists[BA]]
         print("capacity by month is:")
-        print(capacity_by_month[BA])
-        actual_by_month[BA] = [sum(l)/absolute_max[BA] for l in actuals_lists]
+        print(" ".join("{:.2f}".format(x) for x in capacity_by_month[BA]))
+
+        actual_by_month[BA] = [sum(l)/absolute_max[BA] for l in actuals_lists[BA]]
+        print("actual by month is:")
+        print(" ".join("{:.2f}".format(x) for x in actual_by_month[BA]))
+
+        total_capacity[BA] = sum([(capacity_by_month[BA])[month] * calendar.monthrange(start.year, month+1)[1] for month in range(12)])/365
+        total_actual[BA] = sum([(actual_by_month[BA])[month] * calendar.monthrange(start.year, month+1)[1] for month in range(12)])/365
+        
 
     MonthlyPlots.monthlyUsageLineChart(months,
                                        [capacity_by_month[BA] for BA in BAs],
                                        States,
                                        ["lightblue", "blue", "green", "purple"],
-                                       "Generation",
+                                       "Perfect-Weather Capacity by Month and Locale",
                                        f"post4/post4_multi_state.png",
                                        show_average = False,
                                        text_label_list = None,
                                        plottype = PlotType.OTHER,
                                        y_axis_label = "Hours of Max. Output per Day")
+
+
+    JUNE = 5 # June
+
+    normalized_hourlies = [(capacities_lists[BA])[JUNE]/max((capacities_lists[BA])[JUNE]) for BA in BAs]
+    above_75 = [f"{sum([1 if x >= 0.9 else 0 for x in normalized_hourly]):.2f}" for normalized_hourly in normalized_hourlies]
+    print("Hours generating at least 75% of max power:")
+    print(BAs, above_75)
+    
+    HourlyChart.hourlyLineChart(x_values,
+                                normalized_hourlies, 
+                                "Hourly Capacity in June (scaled to max.)",
+                                States,
+                                ["lightblue", "blue", "green", "purple"],
+                                f"post4/post4_multi_state_june_hours.png",
+                                title = None,
+                                x_axis_label = "Hour Starting (Standard Time)",
+                                annotate = None,
+                                ymax = None,
+                                series_styles = None,
+                                height_scale = 1.0)
+    
+
+
+    #ugh a bar chart
+    fig, ax = prepChart(dims = (7, 3.5))
+    plots = []
+    plots.append(ax.bar(States, [total_capacity[BA] for BA in BAs], label = "Capacity", color = "lightblue"))
+    #ax.bar_label(plots[-1], fmt = fmt_str, padding = 5)
+
+    plots.append(ax.bar(States, [total_actual[BA] for BA in BAs], label = "Actual (% of Capacity)", color = "slategray"))
+    ax.bar_label(plots[-1],
+                 labels = [f"{total_actual[BA]/total_capacity[BA]*100:.0f}%" for BA in BAs],
+                 padding = -15,
+                 color = "white",
+                 fontweight = "bold")
+
+    print(total_capacity)
+    print(total_actual)
+    
+                 
+    ax.set_ylim([0, 1.2*max(total_capacity.values())])
+    ax.set_ylabel("Avg. Hours of Max. Output per Day")
+    ax.legend(loc = "upper right")
+    fig.tight_layout(pad = 1.0)
+    #ax.set_title(title)
+    plt.savefig(f"post4/post4_multi_state_bar.png")
+    plt.show()
+    plt.close()
+
+
+    
+
+    
 
 
         
