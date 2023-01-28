@@ -82,7 +82,7 @@ class HourlyChart:
         ax.legend(loc = "upper left")
         ax.set_ylabel(y_axis_label)
 
-        if title is not None: ax.set_title(title)
+        if title is not None: ax.set_title(title, fontsize = 8)
         if x_axis_label is not None: ax.set_xlabel(x_axis_label)
 
         fig.tight_layout(pad = 1.0)

@@ -25,8 +25,7 @@ def keyGenerationStats(hourlyValues):
     stats["totalGen"] = sum(hourlyValues)
     stats["equivHours"] = stats["totalGen"]/stats["maxGen"]
     stats["activeHours"] = sum([1 if x > 0.1*stats["maxGen"] else 0 for x in hourlyValues])                        
-    stats["strongHours"] = sum([1 if x > 0.6*stats["maxGen"] else 0 for x in hourlyValues])                        
-                 
+    stats["strongHours"] = sum([1 if x > 0.6*stats["maxGen"] else 0 for x in hourlyValues])                                
     return stats
 
 
@@ -41,8 +40,6 @@ def prepChart(dims):
 
 
 def dailyGenerationChart(eiag: EIAGeneration, starts: List[datetime], ends: List[datetime], plot_titles: List[str], path: str):
-    print("daily generation chart, hello")
-    
     plots = len(starts)
     fig, axes = plt.subplots(nrows = 1, ncols = plots, sharey = True, figsize = (8, 3))
 
@@ -179,7 +176,7 @@ if __name__ == "__main__":
                
 
     # chart 4: line chart for every month
-    y_axis_label = f"Hourly {StateName} Solar Generation Capacity (MWh)"                            
+    y_axis_label = f"{StateName} Ideal Solar Generation by Hour of Day(MWh)"                            
 
     HourlyChart.hourlyLineChart(x_values,
                                 y_values_list_top, ## HOURS!
@@ -215,8 +212,8 @@ if __name__ == "__main__":
         print("".join(row_html))
 
     row_html = ["<tr>\n"]
-    row_html.append('<th scope="col" style="background-color: #D6EEEE">24h of Max. Summer Sun</th>/n')
-    row_html.append(f'<td>{24h x Max. Physical Output:,.0f}</td> <td>{max_hour:,.0f}</td><td>-</td><td>-</td><td>24</td>')
+    row_html.append('<th scope="col" style="background-color: #D6EEEE">24h x Max. Physical Output</th>/n')
+    row_html.append(f'<td>{24*max_hour:,.0f}</td> <td>{max_hour:,.0f}</td><td>-</td><td>-</td><td>24</td>')
     row_html.append('</tr>\n')
     print("".join(row_html))
 
@@ -229,7 +226,7 @@ if __name__ == "__main__":
 
     MonthlyPlots.monthlyUsageLineChart(months,
                                        [capacities_by_month, actuals_by_month],
-                                       ["Month's Perfect-Weather Capacity", "2022 Actual (% of Month's Capacity)"],
+                                       ["Month's Ideal Solar Generation", "2022 Actual (% of Month's Capacity)"],
                                        ["lightblue", "blue"],
                                        None,
                                        f"post4/post4_{BAname}_monthly.png",
@@ -247,7 +244,7 @@ if __name__ == "__main__":
     # loop over multiple states
 
     BAs = ["NVPower", "DukeEast", "ERCOT", "DukeFL"]
-    States = ["Nevada", "NC (Duke Progress East)", "Texas", "Florida (Duke)"]
+    States = ["Nevada", "NC", "Texas", "Florida"]
 
     nMonths = 12*(end.year - start.year) + (end.month - start.month)
     month_names = [(start + relativedelta(months = month)).strftime("%b") for month in range(nMonths)]
@@ -302,7 +299,7 @@ if __name__ == "__main__":
                                        [capacity_by_month[BA] for BA in BAs],
                                        States,
                                        ["lightblue", "blue", "green", "purple"],
-                                       "Perfect-Weather Capacity by Month and Locale",
+                                       "Ideal Solar Generation by Month and Locale",
                                        f"post4/post4_multi_state.png",
                                        show_average = False,
                                        text_label_list = None,
@@ -319,11 +316,11 @@ if __name__ == "__main__":
     
     HourlyChart.hourlyLineChart(x_values,
                                 normalized_hourlies, 
-                                "Hourly Capacity in June (scaled to max.)",
+                                "Ideal Generation by Hour of Day (normalized)",
                                 States,
                                 ["lightblue", "blue", "green", "purple"],
                                 f"post4/post4_multi_state_june_hours.png",
-                                title = None,
+                                title = "June 2022",
                                 x_axis_label = "Hour Starting (Standard Time)",
                                 annotate = None,
                                 ymax = None,
@@ -335,10 +332,10 @@ if __name__ == "__main__":
     #ugh a bar chart
     fig, ax = prepChart(dims = (7, 3.5))
     plots = []
-    plots.append(ax.bar(States, [total_capacity[BA] for BA in BAs], label = "Capacity", color = "lightblue"))
+    plots.append(ax.bar(States, [total_capacity[BA] for BA in BAs], label = "Ideal Solar Generation", color = "lightblue"))
     #ax.bar_label(plots[-1], fmt = fmt_str, padding = 5)
 
-    plots.append(ax.bar(States, [total_actual[BA] for BA in BAs], label = "Actual (% of Capacity)", color = "slategray"))
+    plots.append(ax.bar(States, [total_actual[BA] for BA in BAs], label = "Actual (% of Ideal)", color = "slategray"))
     ax.bar_label(plots[-1],
                  labels = [f"{total_actual[BA]/total_capacity[BA]*100:.0f}%" for BA in BAs],
                  padding = -15,
@@ -353,7 +350,7 @@ if __name__ == "__main__":
     ax.set_ylabel("Avg. Hours of Max. Output per Day")
     ax.legend(loc = "upper right")
     fig.tight_layout(pad = 1.0)
-    #ax.set_title(title)
+
     plt.savefig(f"post4/post4_multi_state_bar.png")
     plt.show()
     plt.close()
