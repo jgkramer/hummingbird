@@ -342,8 +342,8 @@ if __name__ == "__main__":
                  color = "white",
                  fontweight = "bold")
 
-    print(total_capacity)
-    print(total_actual)
+    print("ideal solar generation " + str(total_capacity))
+    print("actual generation " + str(total_actual))
     
                  
     ax.set_ylim([0, 1.2*max(total_capacity.values())])
