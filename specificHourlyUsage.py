@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 
 from dataclasses import dataclass
 
@@ -29,6 +30,7 @@ class NVenergyUsage(HourlyEnergyUsage):
         self.table = table[["startDateTime", "Usage"]].copy()
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
+        self.units = "kWh"
 
 
 class SDenergyUsage(HourlyEnergyUsage):
@@ -41,13 +43,17 @@ class SDenergyUsage(HourlyEnergyUsage):
 
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
+        self.units = "kWh"
 
 
 class EIARegionUsage(HourlyEnergyUsage):
 
     def timeparse(s):
-#        dst = True if s.split(". ", 1)[1] == "PDT" else False
+        # we'll stick with local time because we're not being super precise about times of day
+        
+        # dst = True if s.split(". ", 1)[1] == "PDT" else False
         time = datetime.strptime((s.split("m", 1)[0] + "m").replace(".", ""), "%m/%d/%Y %I %p")
+        # because these CSV files specify the end of the hour rather than beginning
         return time + relativedelta(hours = -1)
     
     def process_table(self, usage_paths):
@@ -57,11 +63,14 @@ class EIARegionUsage(HourlyEnergyUsage):
             df = pd.read_csv(path)
             dfs.append(df)
         
-        self.table = pd.concat(dfs)
-        self.table
-            
-        
-    
+        table = pd.concat(dfs)
+        table["startDateTime"] = table["Timestamp (Hour Ending)"].apply(EIARegionUsage.timeparse)
+        table["Usage"] = table["Demand (MWh)"]
+        table.drop_duplicates(subset = ["startDateTime"], inplace = True)
+        self.table = table[["startDateTime", "Usage"]].copy()
+        self.first_date = min(self.table["startDateTime"])
+        self.last_date = max(self.table["startDateTime"])
+        self.units = "MWh"
 
 
 if __name__ == "__main__":

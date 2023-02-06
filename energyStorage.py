@@ -1,5 +1,5 @@
 
-from specificHourlyUsage import NVenergyUsage, SDenergyUsage, UsagePaths
+from specificHourlyUsage import NVenergyUsage, SDenergyUsage, UsagePaths, EIARegionUsage
 from hourlyEnergyUsage import HourlyEnergyUsage
 
 import matplotlib.pyplot as plt
@@ -11,6 +11,7 @@ import math
 import numpy as np
 import pandas as pd
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 
 from typing import List, Callable
 
@@ -108,4 +109,21 @@ if __name__ == "__main__":
     end = datetime(2021, 9, 15)
     
     analyzer = StorageAnalyzer(hourly, start, end)
-    analyzer.apply_supply(lambda: analyzer.supplyGenerator.percent_of_max(0.70)) 
+    analyzer.apply_supply(lambda: analyzer.supplyGenerator.percent_of_max(0.70))
+
+
+    jan122 = datetime(2022, 1, 1)
+    jan123 = datetime(2023, 1, 1)
+    paths = []
+    d = jan122
+    while d < jan123:
+        paths.append(f"./statewide_demand/NVPower_demand_{d.year}_{d.month:02}.csv")
+        d = d + relativedelta(months = +1)
+    hourly2 = EIARegionUsage(paths)
+
+    analyzer2 = StorageAnalyzer(hourly2, datetime(2022, 11, 1), datetime(2022, 12, 14))
+    analyzer2.apply_supply(lambda: analyzer2.supplyGenerator.percent_of_max(0.9))
+
+    
+
+

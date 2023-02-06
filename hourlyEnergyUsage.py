@@ -27,6 +27,7 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         pass
 
     def __init__(self, path):
+        self.units = ""
         self.process_table(path)
 
     def print(self, n=96):
@@ -46,9 +47,9 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         else:
             fil = self.table["startDateTime"].apply(lambda x: x.date() in day_list) and ratesegment.in_segment(x)
 
-        filtered_table = self.table[fil]
+        filtered_table = self.table[fil].copy()
         if(not hoursOnly):
-            return zip(filtered_table["startDateTime"].copy(), filtered_table["Usage"].copy())
+            return zip(filtered_table["startDateTime"], filtered_table["Usage"])
         
         else:
             filtered_table["HourOnly"] = filtered_table["startDateTime"].apply(
