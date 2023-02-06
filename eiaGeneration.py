@@ -10,7 +10,7 @@ import pytz
 
 
 def timeparse(s):
-    dst = True if s.split(". ", 1)[1] == "PDT" else False
+    dst = True if s.split(". ", 1)[1] in ["PDT", "EDT", "MDT", "CDT"] else False
     time = datetime.strptime((s.split("m", 1)[0] + "m").replace(".", ""), "%m/%d/%Y %I %p")
     if(dst):
         return time + relativedelta(hours = -2)

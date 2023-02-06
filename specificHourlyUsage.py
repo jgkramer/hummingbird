@@ -12,7 +12,8 @@ from hourlyEnergyUsage import HourlyEnergyUsage, UsageStats
 
 import pdb
 
-from typing import List
+
+
 
 @dataclass(frozen = True)
 class UsagePaths:
@@ -40,6 +41,27 @@ class SDenergyUsage(HourlyEnergyUsage):
 
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
+
+
+class EIARegionUsage(HourlyEnergyUsage):
+
+    def timeparse(s):
+#        dst = True if s.split(". ", 1)[1] == "PDT" else False
+        time = datetime.strptime((s.split("m", 1)[0] + "m").replace(".", ""), "%m/%d/%Y %I %p")
+        return time + relativedelta(hours = -1)
+    
+    def process_table(self, usage_paths):
+        assert isinstance(usage_paths, list)
+        dfs = []
+        for path in usage_paths:
+            df = pd.read_csv(path)
+            dfs.append(df)
+        
+        self.table = pd.concat(dfs)
+        self.table
+            
+        
+    
 
 
 if __name__ == "__main__":

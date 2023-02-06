@@ -12,6 +12,8 @@ from dateSupplements import DateSupplements
 from abc import ABC, abstractmethod
 from timeSeriesEnergyUsage import TimeSeriesEnergyUsage
 
+from typing import List
+
 @dataclass
 class UsageStats:
     label: str
