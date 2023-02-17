@@ -66,11 +66,19 @@ class EIARegionUsage(HourlyEnergyUsage):
         table = pd.concat(dfs)
         table["startDateTime"] = table["Timestamp (Hour Ending)"].apply(EIARegionUsage.timeparse)
         table["Usage"] = table["Demand (MWh)"]
+        table["Forecast"] = table["Demand Forecast (MWh)"]
         table.drop_duplicates(subset = ["startDateTime"], inplace = True)
-        self.table = table[["startDateTime", "Usage"]].copy()
+        self.table = table[["startDateTime", "Usage", "Forecast"]].copy()
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
         self.units = "MWh"
+
+    def forecast_v_actual(self, start: datetime, end: datetime):
+        fil = self.table["startDateTime"].apply(lambda d: start <= d and d < end)
+        filtered = self.table[fil]
+
+
+        return zip(filtered["startDateTime"].copy(), filtered["Usage"].copy(), filtered["Forecast"].copy())
 
 
 if __name__ == "__main__":

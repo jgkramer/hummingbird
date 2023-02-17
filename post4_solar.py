@@ -149,6 +149,9 @@ if __name__ == "__main__":
     dates_by_month = []
     totals_by_month = []
 
+    df = pd.DataFrame()
+    df["Hour Start"] = range(0, 24)
+
     nMonths = 12*(end.year - start.year) + (end.month - start.month)
     for month in range(nMonths):
         s = start + relativedelta(months = month)
@@ -159,12 +162,16 @@ if __name__ == "__main__":
         _, avgs_hour = eiag.averageDayInPeriodFilteredHourly(s, e, 3)
         y_values_list_top.append(avgs_hour)
 
+        df[s.strftime("%b")] = avgs_hour
+
         series_labels.append(s.strftime("%b-%y"))
 
         # this is the list for each month of the daily totals, will use this later
         dates, totals = eiag.dailyTotals(s, e)
         dates_by_month.append(dates)
         totals_by_month.append(totals)
+
+    df.to_csv("post4/NV_ideal_solar_capacity.csv", index = False)
 
         
     cmap = mpl.cm.get_cmap('tab20c')
