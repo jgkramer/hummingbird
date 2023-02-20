@@ -61,15 +61,28 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
     def usage_series_for_day(self, d: datetime, hoursOnly = False, ratesegment = None):
         return self.usage_series_for_days(d, d, hoursOnly, ratesegment)
 
-    def stats_by_period(self, rate_plan: RatePlan, start: datetime, end: datetime = None):
+
+    def stats_by_period(self, rate_plan: RatePlan, start: datetime, end: datetime = None, daily_average = False):
         if(end == None): end = start
 
+            
         day_list = self.get_day_list(start, end)
-        print(day_list)
         filtered_table = self.table[self.table["startDateTime"].apply(lambda x: x.date() in day_list)].copy()
         filtered_table["Segment"] = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
         segment_labels = set([s.label for s in filtered_table["Segment"]])
-        filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
+
+        if not daily_average:
+            filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
+
+        else:
+            filtered_table["Date"] = [dt.date() for dt in filtered_table["startDateTime"]]
+            daily_averages = filtered_table.groupby("Date").mean(numeric_only = True).reset_index()
+            print(daily_averages.columns)
+#            print(daily_averages)
+            filtered_table["Usage"] = [(daily_averages.loc[daily_averages["Date"] == dt.date(), "Usage"].iloc[0]) for dt in filtered_table["startDateTime"]]
+            filtered_table["Cost"] = [(u * r.rate) for u, r in zip(filtered_table["Usage"], filtered_table["Segment"])]
+#            print(filtered_table)
+            
         results = []
         for segment_label in segment_labels:
             usage = sum(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)

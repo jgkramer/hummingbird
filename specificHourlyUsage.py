@@ -20,6 +20,7 @@ import pdb
 class UsagePaths:
     NV_Kramer = "usage_data/NV_Kramer_22Nov.csv"
     SD_Marshall = "usage_data/Marshall_SanDiego_11-1-2021_11-11-2022_2022.csv"
+    MA_Littlefield = "usage_data/Wellesley-30_Bellevue-15MIN.csv"
 
 
 class NVenergyUsage(HourlyEnergyUsage):
@@ -43,6 +44,14 @@ class SDenergyUsage(HourlyEnergyUsage):
 
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
+        self.units = "kWh"
+
+class LittlefieldEnergyUsage(HourlyEnergyUsage):
+    def process_table(self, usage_path):
+        table = pd.read_csv(usage_path)
+        table["startDateTime"] = table["Time Bucket (America/New_York)"].apply(lambda s: (datetime.strptime(s, "%m/%d/%y %H:%M")))
+        table["Usage"] = table["30 Bellevue-Mains_A (kWatts)"] + table["30 Bellevue-Mains_B (kWatts)"] - table["30 Bellevue-Electric Vehicle/RV-Tesla Charger (kWatts)"]
+        self.table = table[["startDateTime", "Usage"]].copy()
         self.units = "kWh"
 
 

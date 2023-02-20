@@ -92,7 +92,7 @@ def plot_usage_chart(NVE: NVenergyUsage,
 # return dataframe with "Month" column and "Usage_" and "Cost_" columns for each period
 # e.g., "Month", "Usage_Peak", "Cost_Peak", "Usage_Off-Peak", "Cost_Off-Peak"
 def get_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end: datetime):
-    monthly_starts, monthly_ends = DateSupplements.month_start_ends(start, end)
+    monthly_starts, monthly_ends = DateSupplements.month_starts_ends(start, end)
     
     #setting up the data frame
     df = pd.DataFrame()
@@ -144,7 +144,7 @@ def print_monthly_table(NVE: NVenergyUsage, plan: RatePlan, start: datetime, end
 
 
 def chart_average_day_by_month(HEU: HourlyEnergyUsage, start: datetime, end: datetime):
-    monthly_starts, monthly_ends = month_start_ends(start, end)
+    monthly_starts, monthly_ends = DateSupplements.month_starts_ends(start, end)
 
     _, full_list = HEU.usage_by_hour_for_period(start, end)
     full_year_average = full_list.sum() / len(full_list)
