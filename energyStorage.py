@@ -25,7 +25,7 @@ class SupplyGenerator:
         
     def period_average(self, multiplier = 1.0):
         period_average = np.average(self.usage)
-        print(f"period average {period_average:0.1f}") 
+        print(f"period average {period_average:0.2f}") 
         function = [multiplier * period_average for dt in self.times]
         return function
 
@@ -67,10 +67,14 @@ class SupplyGenerator:
         return function
 
 
-    def solar_function(self, path: str, multiplier = 1.0):
+    def solar_function(self, path: str, multiplier = 1.0, night_generation_shift = True):
         total_usage = sum(self.usage)
-        
+
         df_solar = pd.read_csv(path)
+
+        if night_generation_shift:
+            df_solar = df_solar.apply(lambda x: x - x.min())
+            df_solar.to_csv("test.csv")
 
         timezone = pytz.timezone("America/Los_Angeles")
         months = [dt.strftime("%b") for dt in self.times]
@@ -94,11 +98,14 @@ class SupplyGenerator:
 class StorageAnalyzer():
 
     def plotStorageAnalysis(self,
+                            datetimes: List,
+                            usage,
                             supply_series: List,
                             storage_balance_series: List,
                             labels: List[str] = None,
                             colors: List = None,
                             legend_position: str = "upper left",
+                            periodicity_label = "Hourly",
                             path: str = None):
 
         if colors is None:
@@ -115,7 +122,7 @@ class StorageAnalyzer():
         fig.tight_layout(pad = 2.5)
 
         max_supply = max([max(x) for x in supply_series])
-        ax[0].set_ylim((0,1.2*max(max(self.usage), max_supply)))
+        ax[0].set_ylim((0,1.2*max(max(usage), max_supply)))
         ax[0].set_xlim(self.times[0], self.times[-1])
         ax[1].set_xlim(self.times[0], self.times[-1])
                         
@@ -133,22 +140,20 @@ class StorageAnalyzer():
         ax[1].set_ylabel(self.units)
 
         ax[0].xaxis.set_major_formatter(DateFormatter('%-m/%-d/%y'))
-#        ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
 
         ax[1].xaxis.set_major_formatter(DateFormatter('%-m/%-d/%y'))
-#        ax[1].xaxis.set_major_locator(plt.MaxNLocator(6))
 
 
         # plot usage once, applies to all
 
         for supply, storage_balance, color, label in zip(supply_series, storage_balance_series, colors, labels):
-            ax[0].step(self.times, supply, where = "post", label = label, color = color, linewidth=1)
-            ax[1].step(self.times, storage_balance, where = "post", color = color, linewidth=1)
+            ax[0].step(datetimes, supply, where = "post", label = label, color = color, linewidth=1.0)
+            ax[1].step(datetimes, storage_balance, where = "post", color = color, linewidth=1)
 
-        ax[0].step(self.times, self.usage, where = "post", label = "Usage", color = "blue", linewidth=1)
+        ax[0].step(datetimes, usage, where = "post", label = "Usage", color = "blue", linewidth=1)
 
         ax[0].legend(loc = legend_position)
-        ax[0].set_title("Hourly Supply/Usage", fontsize = 8)
+        ax[0].set_title(f"{periodicity_label} Supply/Usage", fontsize = 8)
         ax[1].set_title("Storage Drawdown from Maximum", fontsize = 8)
 
         if path is not None:
@@ -177,9 +182,15 @@ class StorageAnalyzer():
                      legend_position = "upper left",
                      path: str = None,
                      colors: List[str] = None,
-                     print_series = False):
+                     hourly = True, # hourly if True, daily if False
+                     print_summary = False,
+                     print_hourly = False):
+
         supply_series = []
         storage_balance_series = []
+        usage = self.usage
+        datetimes = self.times
+                    
         for generator_function in generator_functions:
             supply = generator_function()
             net_to_storage = [s - u for (s, u) in zip(supply, self.usage)]
@@ -189,32 +200,51 @@ class StorageAnalyzer():
                 prev = 0 if i == 0 else storage_balance[i-1]
                 storage_balance[i] = min(0, prev + net_to_storage[i])
 
-            supply_series.append(supply)
-            storage_balance_series.append(storage_balance)
-            
 
-            if print_series:
-                df = pd.DataFrame({"Times": self.times,
-                                   "Date": [t.date() for t in self.times],
-                                   "Usage": self.usage,
-                                   "Supply": supply,
-                                   "Storage Balance": storage_balance})
-                
-                grouped =  df.groupby("Date")["Usage"].sum(numeric_only = True).reset_index()
-                print(grouped[["Date", "Usage"]])
+            # prep Data Frame
+            df = pd.DataFrame({"Time": self.times,
+                               "Date": [t.date() for t in self.times],
+                               "Usage": self.usage,
+                               "Supply": supply,
+                               "Storage Balance": storage_balance})
+                                         
+            if hourly == True:
+                supply_series.append(supply)
+                storage_balance_series.append(storage_balance)
+            else: # group by day
+                grouped = df.groupby("Date").agg({"Usage": "sum", "Supply": "sum", "Storage Balance": "min"}).reset_index()
+                datetimes = list(grouped["Date"])
+                usage = list(grouped["Usage"])
+                supply_series.append(list(grouped["Supply"]))
+                storage_balance_series.append(list(grouped["Storage Balance"]))
 
-            print(f"Largest Storage Drawdown: {min(storage_balance):.1f} {self.units} ")
-            print(f"Sum usage: {sum(self.usage):,.1f} {self.units}")
-            print(f"Max usage: {max(self.usage):,.1f} {self.units}")
-            print(f"Sum supply: {sum(supply):,.1f} {self.units}")
-            print(f"Average supply: {np.average(supply):,.1f} {self.units}")
+            if print_hourly:
+                print(df)
+
+            if print_summary:                
+                grouped = df.groupby("Date").agg({"Usage": "sum", "Supply": "sum", "Storage Balance": "min"}).reset_index()
+                print(f"Largest Storage Drawdown: {min(storage_balance):.1f} {self.units} ")
+                print(f"Sum usage: {sum(self.usage):,.2f} {self.units}")
+                print(f"Average usage: {np.mean(self.usage):,.2f} {self.units}")
+                print(f"Max Hour usage: {max(self.usage):,.2f} {self.units}")
+                print(f"Sum supply: {sum(supply):,.1f} {self.units}")
+                print(f"Average supply: {np.average(supply):,.2f} {self.units}")
+                print(f"Max hourly supply: {np.max(supply):,.2f} {self.units}")
+                usage_days_above_supply = len([1 for u, s in zip(grouped["Usage"], grouped["Supply"]) if u > s])
+                print(f"Usage days above supply: {usage_days_above_supply}")
+                non_zero_storage_days = len([1 for sb in grouped["Storage Balance"] if sb < 0])
+                print(f"Non-zero storage days: {non_zero_storage_days}\n")
 
 
-        self.plotStorageAnalysis(supply_series,
+        periodicity_label = "Hourly" if hourly else "Daily"
+        self.plotStorageAnalysis(datetimes,
+                                 usage,
+                                 supply_series,
                                  storage_balance_series,
                                  labels = labels,
                                  legend_position = legend_position,
                                  path = path,
+                                 periodicity_label = periodicity_label,
                                  colors = colors)
 
   

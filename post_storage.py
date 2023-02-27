@@ -39,64 +39,72 @@ if __name__ == "__main__":
     start = datetime(2021, 8, 1)
     end = datetime(2021, 8, 31)
 
-    
     analyzer_kramer = StorageAnalyzer(kramer_hourly, start, end, "kWh")
     analyzer_kramer.apply_supply([lambda: analyzer_kramer.supplyGenerator.typical_daily_peak(1.0)],
-                          ["Typical Daily Peak"],
-                          path = f"post5/post5_KramerMedianPeak.png",
-                          print_series = False)
+                                 ["Typical Daily Peak"],
+                                 path = f"post5/post5_KramerMedianPeak.png",
+                                 hourly = True,
+                                 print_summary = False,
+                                 print_hourly = True)
     
     solar_data_path = "post4/NV_ideal_solar_capacity.csv"
     
-    analyzer_kramer.apply_supply([lambda: analyzer_kramer.supplyGenerator.solar_function(solar_data_path, 1.3),
-                           lambda: analyzer_kramer.supplyGenerator.solar_function(solar_data_path, 1.1)],
-                          labels = ["Solar @ 130%", "Solar @ 110%"],
-                          colors = ["coral", "plum"],
-                          path = f"post5/post5_KramerSolar.png",
-                          print_series = False
-                          )
+    analyzer_kramer.apply_supply([lambda: analyzer_kramer.supplyGenerator.solar_function(solar_data_path, 1.35),
+                                  lambda: analyzer_kramer.supplyGenerator.solar_function(solar_data_path, 1.1)],
+                                 labels = ["Solar @ 135%", "Solar @ 110%"],
+                                 colors = ["coral", "plum"],
+                                 path = f"post5/post5_KramerSolar.png",
+                                 print_summary = True
+                                 )
     
 
-#    start = datetime(2022, 1, 1)
-#    end = datetime(2022, 12, 31)
-
-#    analyzer = StorageAnalyzer(kramer_hourly, start, end, "kWh")
-#    analyzer.apply_supply([lambda: analyzer.supplyGenerator.typical_daily_peak(1.0, statistic = "average"),
-#                           lambda: analyzer.supplyGenerator.typical_daily_peak(1.0, statistic = "average", date_subset = [datetime(2022, 6, 1), datetime(2022, 9, 30)]),
-#                           lambda: analyzer.supplyGenerator.typical_daily_peak(1.2, statistic = "average", date_subset = [datetime(2022, 6, 1), datetime(2022, 9, 30)])],
-#                          labels = ["1.0x Full Year Avg. Peak", "1.0x Summer Avg. Peak", "1.2x Summer Avg. Peak"])
-
-
-
-    jan122 = datetime(2021, 11, 1)
-    jan123 = datetime(2023, 2, 1)
+    year_start = datetime(2021, 11, 1)
+    year_end = datetime(2022, 11, 1)
     paths = []
-    d = jan122
-    while d < jan123:
+    d = year_start
+    while d < year_end:
         paths.append(f"./statewide_demand/NVPower_demand_{d.year}_{d.month:02}.csv")
         d = d + relativedelta(months = +1)
     hourly_NV = EIARegionUsage(paths)
 
-    analyzer_NV = StorageAnalyzer(hourly_NV, datetime(2021, 11, 1), datetime(2022, 11, 1), hourly_NV.units)
+    analyzer_NV = StorageAnalyzer(hourly_NV, year_start, year_end, hourly_NV.units)
     analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.typical_daily_peak(1.0, statistic = "average", date_subset = [datetime(2022, 6, 1), datetime(2022, 9, 30)]),
                               lambda: analyzer_NV.supplyGenerator.top_percentile_days(percentile = 0.95)],
-                             labels = ["Average Summer Daily Peak", "95th Percentile Peaks"],
+                             labels = ["Avg. Summer Daily Peak (163%)", "95th Percentile Peak (186%)"],
                              colors = ["coral", "plum"],
-                             path = f"post5/post5_NVPeaks.png",
-                             print_series = False)
-    
-    ratio = 1.4
+                             path = f"post5/post5_NV_HighFixed.png",
+                             hourly = True,
+                             print_summary = True)
 
-    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.period_average(ratio)],
-                             labels = [f"Fixed @ {100*ratio:.0f}%"],
-                             colors = ["coral"])
-                             
-    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.solar_function(solar_data_path, ratio)],
-                             labels = [f"Solar @ {100*ratio:.0f}%"],
-                             colors = ["coral"])
-    
-    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.blend_fixed_solar(solar_data_path, ratio, solar_share = 0.5)],
-                             labels = [f"50/50 Solar and Fixed @ {100*ratio:.0f}%"],
-                             colors = ["coral"])
+    ratio1 = 1.5
+    ratio2 = 1.35
+
+    print(f"\n Fixed @ {100*ratio1:.0f}% and {100*ratio2:.0f}%")
+    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.period_average(ratio1),
+                              lambda: analyzer_NV.supplyGenerator.period_average(ratio2)],
+                             labels = [f"Fixed @ {100*ratio1:.0f}% average", f"Fixed @ {100*ratio2:.0f}% average"],
+                             colors = ["slateblue", "limegreen"],
+                             path = f"post5/post5_NV_MediumFixed.png",
+                             hourly = False,
+                             print_summary = True)
+
+
+    print(f"\n Solar @ {100*ratio1:.0f}% and {100*ratio2:.0f}%")
+    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.solar_function(solar_data_path, ratio1),
+                              lambda: analyzer_NV.supplyGenerator.solar_function(solar_data_path, ratio2)],
+                             labels = [f"Solar @ {100*ratio1:.0f}% average", f"Solar @ {100*ratio2:.0f}% average"],
+                             colors = ["slateblue", "limegreen"],
+                             path = f"post5/post5_NV_MediumSolar.png",
+                             hourly = False,
+                             print_summary = True)
+
+
+    print(f"\n Blend @ {100*ratio1:.0f}%")
+    analyzer_NV.apply_supply([lambda: analyzer_NV.supplyGenerator.blend_fixed_solar(solar_data_path, ratio1, solar_share = 0.2)],
+                             labels = [f"20% Solar / 80% Fixed @ {100*ratio1:.0f}%"],
+                             colors = ["purple"],
+                             hourly = False,
+                             path = f"post5/post5_NV_80-20.png",
+                             print_summary = True)
 
     

@@ -38,6 +38,7 @@ def prepChart(dims):
     return fig, ax
 
 
+TOP_N = 3
 
 def dailyGenerationChart(eiag: EIAGeneration, starts: List[datetime], ends: List[datetime], plot_titles: List[str], path: str):
     plots = len(starts)
@@ -50,7 +51,7 @@ def dailyGenerationChart(eiag: EIAGeneration, starts: List[datetime], ends: List
 
     for start, end, ax, title in zip(starts, ends, axes, plot_titles):
         dates, totals = eiag.dailyTotals(start, end)
-        dates2, totals2 = eiag.topNOnly(start, end, N=3)
+        dates2, totals2 = eiag.topNOnly(start, end, N=TOP_N)
         if max(totals) > maxy: maxy = max(totals)
 
         ax.tick_params(axis =  "both", which = "major", labelsize = 7)
@@ -116,9 +117,12 @@ if __name__ == "__main__":
 
     days, generations = eiag.allHoursInDays(july1, aug1)
     _, avgs = eiag.averageDayInPeriod(july1, aug1)
-    _, avgs_top = eiag.averageDayInPeriodFiltered(july1, aug1, 3)
-    _, avgs_hour = eiag.averageDayInPeriodFilteredHourly(july1, aug1, 3)
+    _, avgs_top = eiag.averageDayInPeriodFiltered(july1, aug1, TOP_N)
+    _, avgs_hour = eiag.averageDayInPeriodFilteredHourly(july1, aug1, TOP_N)
 
+    print(avgs)
+    print(avgs_top)
+    print(avgs_hour)
     
     y_values = generations + [avgs, avgs_top, avgs_hour]
     
@@ -159,7 +163,7 @@ if __name__ == "__main__":
         _, avgs = eiag.averageDayInPeriod(s, e)
         y_values_list.append(avgs)
         
-        _, avgs_hour = eiag.averageDayInPeriodFilteredHourly(s, e, 3)
+        _, avgs_hour = eiag.averageDayInPeriodFilteredHourly(s, e, TOP_N)
         y_values_list_top.append(avgs_hour)
 
         df[s.strftime("%b")] = avgs_hour
@@ -283,7 +287,7 @@ if __name__ == "__main__":
             s = start + relativedelta(months = month)
             e = s + relativedelta(months = +1)
             _, avgs = eiag.averageDayInPeriod(s, e)
-            _, avgs_top = eiag.averageDayInPeriodFilteredHourly(s, e, 3)
+            _, avgs_top = eiag.averageDayInPeriodFilteredHourly(s, e, TOP_N)
             actuals_lists[BA].append(avgs)
             capacities_lists[BA].append(avgs_top)
             
@@ -316,7 +320,7 @@ if __name__ == "__main__":
 
     JUNE = 5 # June
 
-    normalized_hourlies = [(capacities_lists[BA])[JUNE]/max((capacities_lists[BA])[JUNE]) for BA in BAs]
+    normalized_hourlies = [np.divide((capacities_lists[BA])[JUNE], max((capacities_lists[BA])[JUNE])) for BA in BAs]
     above_75 = [f"{sum([1 if x >= 0.9 else 0 for x in normalized_hourly]):.2f}" for normalized_hourly in normalized_hourlies]
     print("Hours generating at least 75% of max power:")
     print(BAs, above_75)

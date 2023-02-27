@@ -55,7 +55,6 @@ class EIAGeneration:
         fil = self.df["Start Time"].apply(lambda d: (start <= d and d < end and include_day[d.date()]))
         df_filtered = self.df[fil]
         hour_averages = (df_filtered.groupby("Hour"))["Solar Generation (MWh)"].mean(numeric_only = True).reset_index()
-        
         return (hour_averages["Hour"].copy(), hour_averages["Solar Generation (MWh)"].copy())
 
 
@@ -64,7 +63,14 @@ class EIAGeneration:
         df_filtered = self.df[fil]
         hour_N_highest = (df_filtered.groupby("Hour"))["Solar Generation (MWh)"].nlargest(n = N).reset_index()
         hour_N_highest_avg = (hour_N_highest.groupby("Hour"))["Solar Generation (MWh)"].mean(numeric_only = True).reset_index().copy()
-        return (hour_N_highest_avg["Hour"].copy(), hour_N_highest_avg["Solar Generation (MWh)"])   
+
+        __, regular_averages = self.averageDayInPeriod(start, end)
+        daily_max = max(regular_averages)
+
+
+#        night_corrected = [(reg if reg < 0.05*daily_max else peak) for reg, peak in zip(regular_averages, hour_N_highest_avg["Solar Generation (MWh)"])]
+       
+        return (hour_N_highest_avg["Hour"].copy(), hour_N_highest_avg["Solar Generation (MWh)"])
 
 
     def maxOutput(self, N = 1):
