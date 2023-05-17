@@ -1,45 +1,48 @@
-﻿State,Utility,Plan Type,Season,Time Period,Day Type,Time Segments,Source
-NV,NV Energy,TOU,Summer,On-Peak,Weekday,13-19;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Summer,Off-Peak,Weekday,0-13; 19-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Winter,Off-Peak,Weekday,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-CT,Eversource,TOU,All,On-Peak,Weekday,12-20;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-CT,Eversource,TOU,All,Off-Peak,Weekday,0-12; 20-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-CT,Eversource,TOU,All,Off-Peak,Weekend,0-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-FL,FPL,TOU,Summer,On-Peak,Weekday,12-21;,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,TOU,Summer,Off-Peak,Weekday,0-12; 21-24,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,TOU,Winter,On-Peak,Weekday,6-10; 18-22,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,TOU,Winter,Off-Peak,Weekday,0-6; 10-18; 22-24,https://www.fpl.com/rates/time-of-use.html
-FL,FPL,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.fpl.com/rates/time-of-use.html
-MD,Baltimore Gas & Electric,TOU,Summer,Peak,Weekday,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Summer,Intermediate,Weekday,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekday,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Winter,Peak,Weekday,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Winter,Intermediate,Weekday,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Winter,Off-Peak,Weekday,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Summer,Peak,Weekday,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Summer,Intermediate,Weekday,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Summer,Off-Peak,Weekday,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Winter,Peak,Weekday,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Winter,Intermediate,Weekday,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Winter,Off-Peak,Weekday,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,EV,Winter,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-PA,PECO,TOU,All,Peak,Weekday,14-18;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx
-PA,PECO,TOU,All,Off-Peak,Weekday,6-14; 18-24;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx
-PA,PECO,TOU,All,Super Off-Peak,Weekday,0-6;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx
-PA,PECO,TOU,All,Off-Peak,Weekend,6-24;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx
-PA,PECO,TOU,All,Super Off-Peak,Weekend,0-6;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx
-GA,Georgia Power,EV,Summer,Peak,Weekday,14-19;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Summer,Off-Peak,Weekday,7-14; 19-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Summer,Super Off-Peak,Weekday,0-7; 23-24,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Summer,Off-Peak,Weekend,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Summer,Super Off-Peak,Weekend,0-7; 23-24,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Winter,Off-Peak,Weekday,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Winter,Super Off-Peak,Weekday,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Winter,Off-Peak,Weekend,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
-GA,Georgia Power,EV,Winter,Super Off-Peak,Weekend,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf
+﻿State,Utility,Plan Type,Season,Time Period,Day Type,Time Segments,Source,,,,,,,,,
+NV,NV Energy,TOU,Summer,On-Peak,Weekday,13-19;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf,,,,,,,,,
+NV,NV Energy,TOU,Summer,Off-Peak,Weekday,0-13; 19-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf,,,,,,,,,
+NV,NV Energy,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf,,,,,,,,,
+NV,NV Energy,TOU,Winter,Off-Peak,Weekday,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf,,,,,,,,,
+NV,NV Energy,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf,,,,,,,,,
+CT,Eversource,TOU,All,On-Peak,Weekday,12-20;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56,,,,,,,,,
+CT,Eversource,TOU,All,Off-Peak,Weekday,0-12; 20-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56,,,,,,,,,
+CT,Eversource,TOU,All,Off-Peak,Weekend,0-24;,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56,,,,,,,,,
+FL,FPL,TOU,Summer,On-Peak,Weekday,12-21;,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+FL,FPL,TOU,Summer,Off-Peak,Weekday,0-12; 21-24;,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+FL,FPL,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+FL,FPL,TOU,Winter,On-Peak,Weekday,6-10; 18-22,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+FL,FPL,TOU,Winter,Off-Peak,Weekday,0-6; 10-18; 22-24;,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+FL,FPL,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.fpl.com/rates/time-of-use.html,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Summer,Peak,Weekday,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Summer,Intermediate,Weekday,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekday,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Winter,Peak,Weekday,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Winter,Intermediate,Weekday,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Winter,Off-Peak,Weekday,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Winter,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Summer,Peak,Weekday,10-20;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Summer,Intermediate,Weekday,7-10; 20-23;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Summer,Off-Peak,Weekday,0-7; 23-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,TOU,Summer,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Winter,Peak,Weekday,7-11; 17-21;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Winter,Intermediate,Weekday,11-17;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Winter,Off-Peak,Weekday,0-7; 21-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+MD,Baltimore Gas & Electric,EV,Winter,Off-Peak,Weekend,0-24;,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf,,,,,,,,,
+PA,PECO,TOU,All,Peak,Weekday,14-18;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx,,,,,,,,,
+PA,PECO,TOU,All,Off-Peak,Weekday,6-14; 18-24;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx,,,,,,,,,
+PA,PECO,TOU,All,Super Off-Peak,Weekday,0-6;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx,,,,,,,,,
+PA,PECO,TOU,All,Off-Peak,Weekend,6-24;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx,,,,,,,,,
+PA,PECO,TOU,All,Super Off-Peak,Weekend,0-6;,https://www.peco.com/SmartEnergy/InnovationTechnology/Pages/TOUFAQ.aspx,,,,,,,,,
+GA,Georgia Power,EV,Summer,Peak,Weekday,14-19;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Summer,Off-Peak,Weekday,7-14; 19-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Summer,Super Off-Peak,Weekday,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Summer,Off-Peak,Weekend,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Summer,Super Off-Peak,Weekend,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Winter,Off-Peak,Weekday,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Winter,Super Off-Peak,Weekday,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Winter,Off-Peak,Weekend,7-23;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+GA,Georgia Power,EV,Winter,Super Off-Peak,Weekend,0-7; 23-24;,https://www.georgiapower.com/content/dam/georgia-power/pdfs/electric-service-tariff-pdfs/TOU-PEV-9.pdf,,,,,,,,,
+MA,Naitonal Grid,TOU,All,Peak,Weekday,8-21;,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates,,,,,,,,,
+MA,National Grid,TOU,All,Off-Peak,Weekday,0-8; 21-24;,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates,,,,,,,,,
+MA,National Grid,TOU,All,Off-Peak,Weekend,0-24;,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates,,,,,,,,,

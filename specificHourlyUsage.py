@@ -14,11 +14,10 @@ from hourlyEnergyUsage import HourlyEnergyUsage, UsageStats
 import pdb
 
 
-
-
 @dataclass(frozen = True)
 class UsagePaths:
     NV_Kramer = "usage_data/NV_Kramer_22Nov.csv"
+    NV_Kramer_23May = "usage_data/NV_Kramer_22Nov.csv"
     SD_Marshall = "usage_data/Marshall_SanDiego_11-1-2021_11-11-2022_2022.csv"
     MA_Littlefield = "usage_data/Wellesley-30_Bellevue-15MIN.csv"
 
@@ -32,6 +31,7 @@ class NVenergyUsage(HourlyEnergyUsage):
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
         self.units = "kWh"
+        self.minutes = 15
 
 
 class SDenergyUsage(HourlyEnergyUsage):

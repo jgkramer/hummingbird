@@ -1,0 +1,19 @@
+﻿State,Utility,Plan Name,Business,Plan Type,Demand,TOU,Size,Season,Time Period,Monthly Charge,Energy Charge (kWh),Demand Charge (kW),Effective Date,Source
+MA,National Grid,G-1,Yes,Fixed,No,No,Small (< 10k kWH / month),All,All,10,0.115,0,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA,National Grid,G-2,Yes,Fixed,Yes,No,"Medium (Use > 10k kWh, Demand < 200 kW)",All,All,30,0.062,12.47,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA ,National Grid,G-3,Yes,TOU,Yes,Yes,Large (Demand > 200 kW),All,Peak,223,0.053,8.98,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA ,National Grid,G-3,Yes,TOU,Yes,Yes,Large (Demand > 200 kW),All,Off-Peak,223,0.051,8.98,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+FL,FPL,GS-1,Yes,Fixed,No,No,,All,All,12.68,0.117,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,GST-1,Yes,TOU,No,Yes,,All,Peak,12.68,0.181,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,GST-1,Yes,TOU,No,Yes,,All,Off-Peak,12.68,0.089,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,GSD-1,Yes,Fixed,Yes,No,,All,All,29.98,0.068,11.29,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,GSDT-1,Yes,TOU,Yes,Yes,,All,Peak,29.98,0.1,11.29,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,GSDT-1,Yes,TOU,Yes,Yes,,All,Off-Peak,29.98,0.055,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+NV,NV Energy,GS,Yes,Fixed,No,No,Small (< 3.5k kWH / month),All,All,25.5,0.116,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OGS-TOU,Yes,TOU,No,Yes,Small (< 3.5k kWH / month),Summer,Peak,25.5,0.161,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OGS-TOU,Yes,TOU,No,Yes,Small (< 3.5k kWH / month),Summer,Off-Peak,25.5,0.113,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OGS-TOU,Yes,TOU,No,Yes,Small (< 3.5k kWH / month),Winter,All,25.5,0.092,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,LGS-1,Yes,Fixed,Yes,No,"Medium (Use > 3.5k kWh, demand < 299 kW)",All,All,15.8,0.114,7.69,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OLGS-1-TOU,Yes,TOU,Yes,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",Summer,Peak,15.8,0.209,11.28,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OLGS-1-TOU,Yes,TOU,Yes,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",Summer,Off-Peak,15.8,0.106,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,OLGS-1-TOU,Yes,TOU,Yes,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",Winter,All,15.8,0.105,3.97,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf

@@ -19,6 +19,7 @@ class UsageStats:
     label: str
     kWh: float
     cost: float
+    peak_demand: float = 0
 
 class HourlyEnergyUsage(TimeSeriesEnergyUsage):
 
@@ -28,6 +29,7 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
 
     def __init__(self, path):
         self.units = ""
+        self.minutes = 60
         self.process_table(path)
 
     def print(self, n=96):
@@ -54,6 +56,7 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         else:
             filtered_table["HourOnly"] = filtered_table["startDateTime"].apply(
                 lambda d: datetime(d.year, d.month, d.day, d.hour))
+            
             hour_sums = (filtered_table.groupby("HourOnly"))["Usage"].sum(numeric_only = True).reset_index()
             return zip(hour_sums["HourOnly"].copy(), hour_sums["Usage"].copy())
 
@@ -64,7 +67,6 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
 
     def stats_by_period(self, rate_plan: RatePlan, start: datetime, end: datetime = None, daily_average = False):
         if(end == None): end = start
-
             
         day_list = self.get_day_list(start, end)
         filtered_table = self.table[self.table["startDateTime"].apply(lambda x: x.date() in day_list)].copy()
@@ -87,7 +89,8 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         for segment_label in segment_labels:
             usage = sum(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)
             cost = sum(c for (c, s) in zip(filtered_table["Cost"], filtered_table["Segment"]) if s.label == segment_label)
-            results.append(UsageStats(label = segment_label, kWh = usage, cost = cost))
+            demand = max(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)
+            results.append(UsageStats(label = segment_label, kWh = usage, cost = cost, peak_demand = (demand * 60 / self.minutes)))
 
         return results
 

@@ -10,6 +10,14 @@ from fetch_times import TimesData
 
 import pdb
 
+# Demand is a class rather than a basic strucutre because this can later be turned into a more complicated formula that may be
+# dependent on multiple months worth of prior demands, by having charge be a function rather than a field
+@dataclass(frozen = True)
+class Demand:
+    label: str
+    charge: float
+    
+
 @dataclass(frozen = True)
 class RateSegment:
     start_time: int
@@ -26,7 +34,6 @@ class RateSegment:
     def is_weekend(d: datetime) -> bool:
         return True if (d.weekday() >= 5) else False
         
-
     def in_segment(self, d: datetime, confirm_weekday = True) -> bool:
         same_daytype = (self.weekend and RateSegment.is_weekend(d)) or (not self.weekend and not RateSegment.is_weekend(d))
         
@@ -47,8 +54,11 @@ class RateSeries:
     def _add_segments(self):
         segs = []
         rate_dict = self.rd.rate_dictionary(self.state, self.plan_name, self.season.name)
+#        print("in _add_segments.  plan name: ", self.plan_name, "season: ", self.season.name, " rate_dict: ", rate_dict)
+
+#        print("period names: ", self.period_names)
         for period_name in self.period_names:
-            daytypes = self.td.list_daytypes(self.state, self.plan_name, self.season.name, period_name)
+            daytypes = self.td.list_daytypes(self.state, self.plan_type, self.season.name, period_name)
             for daytype in daytypes:
                 segments = self.td.list_time_segments(self.state, self.plan_type, self.season.name, period_name, daytype)
                 for segment in segments:
@@ -60,17 +70,31 @@ class RateSeries:
                     segs.append(seg)
         return sorted(segs, key = RateSegment.sorter)
 
-    def __init__(self, state: str, season: Season, plan_type: str, plan_name: str, td: TimesData, rd: RatesData):
+    def _add_demand(self):
+        demands_raw = self.rd.demand_dictionary(self.state, self.plan_name, self.season.name)
+        demands = dict()
+        for key in demands_raw.keys():
+            demands[key] = Demand(label = key, charge = demands_raw[key])
+        return demands
+    
+
+    def __init__(self, state: str, season: Season, plan_type: str, plan_name: str, td: TimesData, rd: RatesData, is_demand: bool = False):
         self.state = state
         self.season = season
         self.plan_type = plan_type
         self.plan_name = plan_name
         self.td = td
         self.rd = rd
+        self.is_demand = is_demand
 
         self.period_names = self.td.list_period_names(self.state, self.plan_type, self.season.name)
         if(len(self.period_names) == 0): self.period_names.add("All")    
+
         self.rate_segments = self._add_segments()
+
+        self.demands = self._add_demand() if self.is_demand else dict()
+        print("season: ", self.season.name, " demands:", self.demands)
+
 
     def start_times(self, weekend: bool):
         return [seg.start_time for seg in self.rate_segments if seg.weekend == weekend]
@@ -82,6 +106,9 @@ class RateSeries:
         for seg in self.rate_segments:
             if(seg.in_segment(d)): return seg
 
+ #       print("cannot find datetime: ", d, " in the following segments")
+ #       for seg in self.rate_segments:
+ #           print(seg)
         raise ValueError("Time is not in any segment in this RateSeries")
 
     def get_period_names(self):
@@ -95,28 +122,39 @@ class RateSeries:
         s.append("segments: ")
         for seg in self.rate_segments:
             s.append(str(seg))
+
         return "\n".join(s)
 
 
 # fully defines a TOU-based plan.  All seasons in a plan, consists of multiple series.
 class RatePlan:
-    def __init__(self, state: str, plan_type: str, plan_name: str, td: TimesData, rd: RatesData, sd: SeasonsData):
+    def __init__(self, state: str, plan_name: str, td: TimesData, rd: RatesData, sd: SeasonsData):
         self.state = state
-        self.plan_type = plan_type
         self.plan_name = plan_name
+        
         self.td = td
         self.rd = rd
         self.sd = sd
         self.rate_series_list = []
 
-        season_names = rd.seasons_for_plan(state, plan_name)
+        self.plan_type = rd.get_plan_type(state, plan_name)
+        
+        self.is_demand = rd.is_demand_plan(state, plan_name)
+
+        season_names = rd.seasons_for_plan_type(state, self.plan_type)
+        
         seasons = [sd.season_from_name(state, s) for s in season_names]
-        self.rate_series_list = [RateSeries(state, season, plan_type, plan_name, td, rd) for season in seasons]
+        self.rate_series_list = [RateSeries(state, season, self.plan_type, self.plan_name, td, rd, self.is_demand) for season in seasons]
 
         self.periods = set()
         for rs in self.rate_series_list:
             pds = rs.get_period_names()
             self.periods = self.periods.union(set(rs.get_period_names()))
+
+#        print("plan: ", plan_name, ", type: ", self.plan_type, " demand: ", self.is_demand)
+#        for s in self.rate_series_list:
+#            print(s)
+#        print("")
 
             
     def get_period_names(self):

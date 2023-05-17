@@ -1,42 +1,60 @@
-﻿State,Utility,Plan Type,Plan Name,Season,Time Period,Tier,Rate,Effective Date,Source
-NV,NV Energy,Fixed,Fixed,All,All,All,0.1429,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Time of Use,Summer,On-Peak,All,0.3999,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Time of Use,Summer,Off-Peak,All,0.0906,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-NV,NV Energy,TOU,Time of Use,Winter,Off-Peak,All,0.0971,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
-CT,Eversource,Fixed,Rate 1,All,All,All,0.2398,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-CT,Eversource,TOU,Rate 7,All,On-Peak,All,0.30897,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-CT,Eversource,TOU,Rate 7,All,Off-Peak,All,0.2073,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
-FL,FPL,Fixed,RS1,All,All,1st,0.1086,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
-FL,FPL,Fixed,RS1,All,All,2nd,0.1286,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
-FL,FPL,TOU,RTR-1,Summer,On-Peak,1st,0.2319,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
-FL,FPL,TOU,RTR-1,Summer,On-Peak,2nd,0.2519,,
-FL,FPL,TOU,RTR-1,Summer,Off-Peak,1st,0.0547,,
-FL,FPL,TOU,RTR-1,Summer,Off-Peak,2nd,0.0747,,
-FL,FPL,TOU,RTR-1,Winter,On-Peak,1st,0.2319,,
-FL,FPL,TOU,RTR-1,Winter,On-Peak,2nd,0.2519,,
-FL,FPL,TOU,RTR-1,Winter,Off-Peak,1st,0.0547,,
-FL,FPL,TOU,RTR-1,Winter,Off-Peak,2nd,0.0747,,
-MD,Baltimore Gas & Electric,Fixed,R,Summer,All,All,0.13919,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,Fixed,R,Winter,All,All,0.13919,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_R.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Summer,Peak,All,0.16058,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Summer,Intermediate,All,0.10187,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Summer,Off-Peak,All,0.08724,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Winter,Peak,All,0.16264,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Winter,Intermediate,All,0.14424,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,TOU,RL,Winter,Off-Peak,All,0.12961,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Summer,Peak,All,0.18559,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Summer,Intermediate,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Summer,Off-Peak,All,0.08411,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Winter,Peak,All,0.24207,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Winter,Intermediate,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-MD,Baltimore Gas & Electric,EV,EV,Winter,Off-Peak,All,0.10668,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
-PA,PECO,Fixed,R,All,All,All,0.08465,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-PA,PECO,TOU,R-TOU,All,Peak,All,0.23655,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-PA,PECO,TOU,R-TOU,All,Off-Peak,All,0.05898,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-PA,PECO,TOU,R-TOU,All,Super Off-Peak,All,0.0393,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
-GA,Georgia Power,Fixed,Standard Residuential,Winter,All,1st,0.058366,,
-GA,Georgia Power,Fixed,Standard Residuential,Winter,All,2nd,0.050062,,
-GA,Georgia Power,Fixed,Standard Residuential,Winter,All,3rd,0.049143,,
-GA,Georgia Power,Fixed,Standard Residuential,Summer ,All,1st,0.058366,,
-GA,Georgia Power,Fixed,Standard Residuential,Summer ,All,2nd,0.096943,,
-GA,Georgia Power,Fixed,Standard Residuential,Summer ,All,3rd,0.100336,,
+﻿State,Utility,Business,Size,Plan Type,Demand,Plan Name,Season,Time Period,Tier,Monthly Charge,Rate,Demand Charge,Effective Date,Source
+NV,NV Energy,No,,Fixed,No,Residential Fixed,All,All,All,,0.1429,,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,No,,TOU,No,Residential TOU,Summer,On-Peak,All,,0.3999,,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,No,,TOU,No,Residential TOU,Summer,Off-Peak,All,,0.0906,,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+NV,NV Energy,No,,TOU,No,Residential TOU,Winter,Off-Peak,All,,0.0971,,7/1/22,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2022/07_jul/np_res_rate_1_31.pdf
+CT,Eversource,No,,Fixed,No,Rate 1,All,All,All,,0.2398,,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+CT,Eversource,No,,TOU,No,Rate 7,All,On-Peak,All,,0.30897,,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+CT,Eversource,No,,TOU,No,Rate 7,All,Off-Peak,All,,0.2073,,9/1/22,https://www.eversource.com/content/docs/default-source/rates-tariffs/ct-electric/ct-electric-rates.pdf?sfvrsn=2d9afe62_56
+FL,FPL,No,,Fixed,No,RS1,All,All,1st,,0.1086,,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+FL,FPL,No,,Fixed,No,RS1,All,All,2nd,,0.1286,,6/1/22,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+FL,FPL,No,,TOU,No,RTR-1,Summer,On-Peak,1st,,0.2319,,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/res-june-2022.pdf
+FL,FPL,No,,TOU,No,RTR-1,Summer,On-Peak,2nd,,0.2519,,,
+FL,FPL,No,,TOU,No,RTR-1,Summer,Off-Peak,1st,,0.0547,,,
+FL,FPL,No,,TOU,No,RTR-1,Summer,Off-Peak,2nd,,0.0747,,,
+FL,FPL,No,,TOU,No,RTR-1,Winter,On-Peak,1st,,0.2319,,,
+FL,FPL,No,,TOU,No,RTR-1,Winter,On-Peak,2nd,,0.2519,,,
+FL,FPL,No,,TOU,No,RTR-1,Winter,Off-Peak,1st,,0.0547,,,
+FL,FPL,No,,TOU,No,RTR-1,Winter,Off-Peak,2nd,,0.0747,,,
+MD,Baltimore Gas & Electric,No,,Fixed,No,R,Summer,All,All,,0.13919,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,Fixed,No,R,Winter,All,All,,0.13919,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_R.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Summer,Peak,All,,0.16058,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Summer,Intermediate,All,,0.10187,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Summer,Off-Peak,All,,0.08724,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/P3_SCH_RL.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Winter,Peak,All,,0.16264,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Winter,Intermediate,All,,0.14424,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,TOU,No,RL,Winter,Off-Peak,All,,0.12961,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Summer,Peak,All,,0.18559,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Summer,Intermediate,All,,0.10668,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Summer,Off-Peak,All,,0.08411,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Winter,Peak,All,,0.24207,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Winter,Intermediate,All,,0.10668,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+MD,Baltimore Gas & Electric,No,,EV,No,EV,Winter,Off-Peak,All,,0.10668,,6/1/22,https://www.bge.com/MyAccount/MyBillUsage/Documents/Electric/Rdr_1.pdf
+PA,PECO,No,,Fixed,No,R,All,All,All,,0.08465,,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+PA,PECO,No,,TOU,No,R-TOU,All,Peak,All,,0.23655,,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+PA,PECO,No,,TOU,No,R-TOU,All,Off-Peak,All,,0.05898,,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+PA,PECO,No,,TOU,No,R-TOU,All,Super Off-Peak,All,,0.0393,,9/1/22,https://www.peco.com/SiteCollectionImages/FINAL_Residential%20PTC_06012022.pdf
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Winter,All,1st,,0.058366,,,
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Winter,All,2nd,,0.050062,,,
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Winter,All,3rd,,0.049143,,,
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Summer ,All,1st,,0.058366,,,
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Summer ,All,2nd,,0.096943,,,
+GA,Georgia Power,No,,Fixed,No,Standard Residential,Summer ,All,3rd,,0.100336,,,
+MA,National Grid,Yes,Small (< 10k kWH / month),Fixed,No,G-1,All,All,All,10,0.115,0,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA,National Grid,Yes,"Medium (Use > 10k kWh, Demand < 200 kW)",Fixed,Yes,G-2,All,All,All,30,0.062,12.47,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA ,National Grid,Yes,Large (Demand > 200 kW),TOU,Yes,G-3,All,Peak,All,223,0.053,8.98,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+MA ,National Grid,Yes,Large (Demand > 200 kW),TOU,Yes,G-3,All,Off-Peak,All,223,0.051,8.98,,https://www.nationalgridus.com/MA-Business/Rates/Service-Rates
+FL,FPL,Yes,,Fixed,No,GS-1,All,All,All,12.68,0.117,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,Yes,,TOU,No,GST-1,All,Peak,All,12.68,0.181,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,Yes,,TOU,No,GST-1,All,Off-Peak,All,12.68,0.089,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,Yes,,Fixed,Yes,GSD-1,All,All,All,29.98,0.068,11.29,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,Yes,,TOU,Yes,GSDT-1,All,Peak,All,29.98,0.1,11.29,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+FL,FPL,Yes,,TOU,Yes,GSDT-1,All,Off-Peak,All,29.98,0.055,0,,https://www.fpl.com/content/dam/fplgp/us/en/rates/pdf/bus-jan-2023.pdf
+NV,NV Energy,Yes,Small (< 3.5k kWH / month),Fixed,No,GS,All,All,All,25.5,0.116,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,Small (< 3.5k kWH / month),TOU,No,OGS-TOU,Summer,On-Peak,All,25.5,0.161,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,Small (< 3.5k kWH / month),TOU,No,OGS-TOU,Summer,Off-Peak,All,25.5,0.113,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,Small (< 3.5k kWH / month),TOU,No,OGS-TOU,Winter,Off-Peak,All,25.5,0.092,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",Fixed,Yes,LGS-1,All,All,All,15.8,0.114,7.69,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",TOU,Yes,OLGS-1-TOU,Summer,On-Peak,All,15.8,0.209,11.28,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",TOU,Yes,OLGS-1-TOU,Summer,Off-Peak,All,15.8,0.106,0,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf
+NV,NV Energy,Yes,"Medium (Use > 3.5k kWh, demand < 299 kW)",TOU,Yes,OLGS-1-TOU,Winter,Off-Peak,All,15.8,0.105,3.97,,https://www.nvenergy.com/publish/content/dam/nvenergy/bill_inserts/2023/04_apr/np_com_rate_1_29.pdf

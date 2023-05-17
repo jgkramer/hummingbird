@@ -17,8 +17,8 @@ class Region:
         self.state = state
 
         plan_names = RD.plans_for_state(self.state)
-        self.rate_plans = [RatePlan(self.state, plan, plan, TD, RD, SD) for plan in plan_names]
-
+        print(plan_names)
+        self.rate_plans = [RatePlan(self.state, plan, TD, RD, SD) for plan in plan_names]
         self.seasons = SD.seasons_for_state(state)
         
 
