@@ -21,13 +21,23 @@ class DailyPlots:
                            date_list: List[datetime],
                            path: str,
                            table_cells = None, table_rows = None, table_columns = None,
-                           colors_list: List[str] = None
+                           colors_list: List[str] = None,
+                           data_labels_max = False,
+                           ymax = None
                            ):
+
+         plt.rcParams.update({'font.size': 9})
+          
          fig, ax = plt.subplots(figsize = (7.5, 4))
          fig.tight_layout(pad = 2.0)
 
+         ax.spines['top'].set_visible(False)
+         ax.spines['right'].set_visible(False)
+        
+
          ax.set_xlim([0, 24])
-         ax.set_ylim([0, 5])
+         y_limit = 4 if ymax is None else ymax
+         ax.set_ylim([0, y_limit])
          ax.set_ylabel("kWh consumed (15m windows)")
 
          ax.yaxis.set_major_formatter(FormatStrFormatter('%1.1f'))
@@ -48,8 +58,17 @@ class DailyPlots:
              series_label = d.strftime("%a %b %-d, %Y")
 
              ax.step(hours, usage, where = "post", label = series_label, color = c, linewidth = 1.0)
-             ax.legend(loc = "upper left")
 
+             # data label for max value
+             if data_labels_max:
+                 usage_max = max(usage)
+                 max_index = usage.index(usage_max)
+                 hours_max = hours[max_index]
+                 ax.text(hours_max, usage_max, f"{usage_max:.2f}", ha="center", va="bottom")
+
+         print("hello")
+         
+         ax.legend(loc = "upper left", ncol=2)
          if(path == None):
              plt.show()
          else:

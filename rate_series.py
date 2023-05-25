@@ -24,7 +24,9 @@ class RateSegment:
     end_time: int
     rate: float
     label: str
+    season: Season
     weekend: bool = False
+
     # datetime .weekday() returns 0-4 for M-F, and 5-6 for Sa-Su
 
     # this is broken
@@ -66,6 +68,7 @@ class RateSeries:
                                       end_time = segment[1],
                                       rate = rate_dict[period_name],
                                       label = period_name,
+                                      season = self.season,
                                       weekend = True if daytype == "Weekend" else False)
                     segs.append(seg)
         return sorted(segs, key = RateSegment.sorter)
@@ -102,13 +105,18 @@ class RateSeries:
     def rates(self, weekend: bool):
         return [seg.rate for seg in self.rate_segments if seg.weekend == weekend]
 
+    def demand_for_datetime(self, d: datetime):
+        if not self.is_demand: return None
+        for seg in self.rate_segments:
+            if seg.in_segment(d):
+                return self.demands[seg.label]
+        raise ValueError("Time is not in any segment in this RateSeries")
+
+
     def segment_for_datetime(self, d: datetime):
         for seg in self.rate_segments:
-            if(seg.in_segment(d)): return seg
-
- #       print("cannot find datetime: ", d, " in the following segments")
- #       for seg in self.rate_segments:
- #           print(seg)
+            if seg.in_segment(d):
+                return seg
         raise ValueError("Time is not in any segment in this RateSeries")
 
     def get_period_names(self):
@@ -173,7 +181,16 @@ class RatePlan:
 
         raise ValueError("No season in this rate plan for this date")
 
+
+    def has_demand(self):
+        return self.is_demand
     
+    def demand_from_datetime(self, d: datetime):
+        for rs in self.rate_series_list:
+            if rs.season.in_season(d):
+                return rs.demand_for_datetime(d)
+
+        raise ValueError("No season in this rate plan for this date")
         
             
     

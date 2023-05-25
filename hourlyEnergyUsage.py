@@ -4,7 +4,7 @@ from datetime import datetime, date, timedelta
 
 from dataclasses import dataclass
 
-from rate_series import RateSegment, RateSeries, RatePlan
+from rate_series import RateSegment, RateSeries, RatePlan, Demand
 from fetch_seasons import Season
 from region import Region
 from dateSupplements import DateSupplements
@@ -20,6 +20,7 @@ class UsageStats:
     kWh: float
     cost: float
     peak_demand: float = 0
+    demand_charge: float = 0
 
 class HourlyEnergyUsage(TimeSeriesEnergyUsage):
 
@@ -71,6 +72,8 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         day_list = self.get_day_list(start, end)
         filtered_table = self.table[self.table["startDateTime"].apply(lambda x: x.date() in day_list)].copy()
         filtered_table["Segment"] = filtered_table["startDateTime"].apply(rate_plan.ratesegment_from_datetime)
+
+        # i use segment labels here, and not segments, because there may be multiple segments with the same label (e.g., morning and night for off-peak)
         segment_labels = set([s.label for s in filtered_table["Segment"]])
 
         if not daily_average:
@@ -89,8 +92,20 @@ class HourlyEnergyUsage(TimeSeriesEnergyUsage):
         for segment_label in segment_labels:
             usage = sum(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)
             cost = sum(c for (c, s) in zip(filtered_table["Cost"], filtered_table["Segment"]) if s.label == segment_label)
-            demand = max(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)
-            results.append(UsageStats(label = segment_label, kWh = usage, cost = cost, peak_demand = (demand * 60 / self.minutes)))
+            max_demand = (60 / self.minutes) * max(u for (u, s) in zip(filtered_table["Usage"], filtered_table["Segment"]) if s.label == segment_label)
+            
+            demand_cost = 0
+            if rate_plan.has_demand():
+                dates_for_segment = [sdt for (sdt, s) in zip(filtered_table["startDateTime"], filtered_table["Segment"]) if s.label == segment_label]
+                d = dates_for_segment[0]
+                demand = rate_plan.demand_from_datetime(d)
+                demand_cost = demand.charge * max_demand
+            
+            results.append(UsageStats(label = segment_label,
+                                      kWh = usage,
+                                      cost = cost,
+                                      peak_demand = max_demand,
+                                      demand_charge = demand_cost))
 
         return results
 
