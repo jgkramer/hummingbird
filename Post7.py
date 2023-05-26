@@ -33,14 +33,6 @@ if __name__ == "__main__":
 
     DailyPlots.plot_intraday_usage(NVE, date_list, path = "post7/post7_august_comparison.png", colors_list = colors_list, data_labels_max = True)
 
-    date_list2 = []
-    current = datetime(2022, 10, 5)
-    for i in range(5):
-        date_list2.append(current)
-        current = current + timedelta(days = 1)
-    
-    DailyPlots.plot_intraday_usage(SDE, date_list2, path = None, colors_list = None, data_labels_max = False, ymax = 3.5)
-
     plans = Region("NV").get_rate_plans()
     for plan in plans:
         if not plan.has_demand(): continue
@@ -48,6 +40,8 @@ if __name__ == "__main__":
         for d in date_list:
             print("date: ", d)
             usage_stats = NVE.stats_by_period(plan, d)
+
+            print(usage_stats)
 
             ndays = 30
             
@@ -61,6 +55,25 @@ if __name__ == "__main__":
             print(summary)
             sums = summary[["kWh cost", "Demand Charge"]].sum()
             print(sums, "\n total: ", round(sum(sums), 2), "\n")
+
+
+    date_list2 = []
+    for i in range(6):
+        date_list2.append(datetime(2022, 10, 4) + timedelta(days = i))
+    
+    DailyPlots.plot_intraday_usage(SDE,
+                                   date_list2,
+                                   path = "post7/post7_overlap.png",
+                                   colors_list = ["purple", "orange", "green", "red", "pink", "blue"],
+                                   data_labels_max = False,
+                                   ymax = 3.25)
+
+
+    print("Marshall 10/6/22 only: ", SDE.stats_by_period(plans[0], datetime(2022, 10, 6)))
+    print("Marshall full week: ", SDE.stats_by_period(plans[0], date_list2[0], date_list2[-1]))
+
+    
+    
 
     
 
