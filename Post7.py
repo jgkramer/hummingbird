@@ -21,6 +21,45 @@ from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, PercentForma
 from hourlyEnergyUsage import UsageStats, HourlyEnergyUsage
 from specificHourlyUsage import NVenergyUsage
 
+
+def plot_demand(demand_costs: List, energy_costs: List, labels: List, path = None):
+
+    ndays = 30
+    max_demand = max(demand_costs)
+    ymax = np.ceil((max_demand / (ndays * 1.5)) /.05) * 0.05
+
+    plt.rcParams.update({'font.size': 8})
+    fig, ax = plt.subplots(figsize = (7, 3.5))
+
+    ax.set_xlim([0, 24])
+    ax.set_xticks(range(0, 28, 4))
+    ax.set_xlabel("Energy Consumption, in Avg. Hours per Day at Peak Demand")
+
+    ax.set_ylim([0, ymax])
+    ax.set_ylabel("Blended Cost of Energy per kWh", labelpad = 5)
+
+    ax.yaxis.set_major_formatter(FormatStrFormatter('$%1.2f'))
+
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    fig.tight_layout(pad = 0.75)
+
+    
+    hours = [(i+1)/4 for i in range(24*4)]
+    for (d, e, l) in zip(demand_costs, energy_costs, labels):
+        costs = [e + d/(h*ndays) for h in hours]
+        ax.plot(hours, costs, label = l)
+
+    ax.legend(loc = "upper right", frameon=False)
+    if path == None:
+        plt.show()
+    else:
+        plt.savefig(path)
+    plt.close()
+
+
 if __name__ == "__main__":
     NVE = NVenergyUsage(UsagePaths.NV_Kramer)
     SDE = SDenergyUsage(UsagePaths.SD_Marshall)
@@ -72,9 +111,11 @@ if __name__ == "__main__":
     print("Marshall 10/6/22 only: ", SDE.stats_by_period(plans[0], datetime(2022, 10, 6)))
     print("Marshall full week: ", SDE.stats_by_period(plans[0], date_list2[0], date_list2[-1]))
 
+    plot_demand([7.69, 11.29, 15.33],
+                [0.114, 0.068, 0.041],
+                ["NV Non-TOU (\$7.69 / \$0.114)", "FL Non-TOU (\$11.29 / \$0.068)", "VA Large--Peak (\$15.33 / \$0.041)"],
+                path = "post7/post7_blended_kWh.png")
     
-    
-
     
 
         

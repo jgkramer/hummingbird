@@ -45,6 +45,7 @@ class SDenergyUsage(HourlyEnergyUsage):
         self.first_date = min(self.table["startDateTime"])
         self.last_date = max(self.table["startDateTime"])
         self.units = "kWh"
+        self.minutes = 15
 
 class LittlefieldEnergyUsage(HourlyEnergyUsage):
     def process_table(self, usage_path):
