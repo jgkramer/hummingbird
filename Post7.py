@@ -22,7 +22,7 @@ from hourlyEnergyUsage import UsageStats, HourlyEnergyUsage
 from specificHourlyUsage import NVenergyUsage
 
 
-def plot_demand(demand_costs: List, energy_costs: List, labels: List, path = None):
+def plot_demand(demand_costs: List, energy_costs: List, labels: List, data_labels: List = None, path = None):
 
     ndays = 30
     max_demand = max(demand_costs)
@@ -48,9 +48,22 @@ def plot_demand(demand_costs: List, energy_costs: List, labels: List, path = Non
 
     
     hours = [(i+1)/4 for i in range(24*4)]
-    for (d, e, l) in zip(demand_costs, energy_costs, labels):
+    if data_labels is None:
+        data_labels = [None] * len(d)
+        
+    for (d, e, l, dl) in zip(demand_costs, energy_costs, labels, data_labels):
         costs = [e + d/(h*ndays) for h in hours]
-        ax.plot(hours, costs, label = l)
+        line, = ax.plot(hours, costs, label = l)
+        if dl is not None:
+            selected_hours = [4, 8, 16]
+            for hour in selected_hours:
+                x_coord = 4*hour - 1
+                ax.annotate(f'${costs[x_coord]:1.3f}',
+                            (hour, costs[x_coord]),
+                            color = line.get_color(),
+                            textcoords="offset points", xytext=dl, ha='center')
+
+                    
 
     ax.legend(loc = "upper right", frameon=False)
     if path == None:
@@ -111,10 +124,13 @@ if __name__ == "__main__":
     print("Marshall 10/6/22 only: ", SDE.stats_by_period(plans[0], datetime(2022, 10, 6)))
     print("Marshall full week: ", SDE.stats_by_period(plans[0], date_list2[0], date_list2[-1]))
 
+    #path = None
+    path = "post7/post7_blended_kWh.png"
     plot_demand([7.69, 11.29, 15.33],
                 [0.114, 0.068, 0.041],
                 ["NV Non-TOU (\$7.69 / \$0.114)", "FL Non-TOU (\$11.29 / \$0.068)", "VA Large--Peak (\$15.33 / \$0.041)"],
-                path = "post7/post7_blended_kWh.png")
+                data_labels = [(2, 8), None, (-5, -15)],
+                path = path)
     
     
 
