@@ -18,7 +18,10 @@ class HourlyChart:
         return hm + ("am" if (x%24)<12 else "pm")
     
     def prepHourlyChart(yrange: List[float], dims):
+        plt.rcParams["font.size"] = 8
         fig, ax = plt.subplots(figsize = dims)
+
+
         ax.set_xlim([0, 23])
         ax.set_ylim(yrange)
 
