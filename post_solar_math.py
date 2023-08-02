@@ -59,6 +59,8 @@ def read_solar_angles(path: str) -> pd.DataFrame:
 
 
 
+
+
 if __name__ == "__main__":
     pd.options.display.max_rows = None
 
