@@ -100,7 +100,7 @@ if __name__ == "__main__":
                                 "Las Vegas \"Clearsky\" DNI (W/m^2)",
                                 [calendar.month_abbr[m] for m in months],
                                 series_colors,
-                                path = "post8/NV_dni_modeled_by_month.png",
+                                path = "post8/post8_NV_dni_by_month.png",
                                 series_styles = series_styles)
 
     HourlyChart.hourlyLineChart(np.arange(0, 24, 0.5),
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                                 "Modeled Output (scaled to max)",
                                 [calendar.month_abbr[m] for m in months],
                                 series_colors,
-                                path = "post8/NV_modeled_by_month.png", 
+                                path = "post8/post8_NV_modeled_by_month.png", 
                                 x_axis_label = "Time of Day (Standard Time)",
                                 ymax = 1.2,
                                 series_styles = series_styles, 
