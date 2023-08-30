@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime, date, timedelta
 import calendar
 import math
+import itertools
  
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -72,7 +73,7 @@ if __name__ == "__main__":
     vegasSolarPosition = SolarPosition(lat = 36.17, long = -115.14, timezone = -8)
 
     dfs = dict()
-    months = [6, 8, 10, 12]
+    months = [4, 6, 8, 10, 12]
 
     radiance = SolarRadiance()
 
@@ -113,8 +114,24 @@ if __name__ == "__main__":
                                 ymax = 1.2,
                                 series_styles = series_styles, 
                                 height_scale = 1.25)
-
     
+    for m in [6, 9, 12]:
+        df = vegasSolarPosition.solar_position_series([datetime(2023, m, 15, h, 0, 0) for h in [8, 10, 12, 14, 16]])
+        #print(" ".join(list(df["datetime"])))
+        print("<td>", "</td><td>".join([str(round(x, 1)) + "&deg;" for x in list(df["elevation"])]), "</td>")
+        print("<td>", "</td><td>".join([str(round(x, 1)) + "&deg;" for x in list(df["azimuth"])]), "</td>")
+
+
+
+print(dfs[4][["datetime", "cos beta", "radiance"]])
+print(dfs[8][["datetime", "cos beta", "radiance"]])
+
+
+
+
+
+
+
 
 
 
