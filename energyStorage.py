@@ -143,7 +143,6 @@ class StorageAnalyzer():
 
         ax[1].xaxis.set_major_formatter(DateFormatter('%-m/%-d/%y'))
 
-
         # plot usage once, applies to all
 
         for supply, storage_balance, color, label in zip(supply_series, storage_balance_series, colors, labels):

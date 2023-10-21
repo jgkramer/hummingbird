@@ -18,18 +18,25 @@ class DownloadReactorStatus:
             data = []
             for ix, table in enumerate(tables):
                 start = 0 if ix == 0 else 1  # for the first table, grab the header row, for others, skip it
+
                 rows = table.find_all("tr")[start:]
                 for row in rows: 
                     cols = row.find_all(["td", "th"])
                     cols = [ele.text.strip() for ele in cols]
+                    #print(d, cols)
                     data.append(cols)
-
+                    
+            #for row in data:
+            #    print(row)
+            #             
             df = pd.DataFrame(data[1:], columns = data[0]) 
             self.df = df
+            self.df.drop_duplicates(subset = "Unit", inplace = True)
+            #print(self.df[["Unit", "Power"]])
+
             self.df.reset_index(inplace = True)
             self.df.set_index("Unit", inplace = True)
-
-        print("Downloaded ", d)
+            print("Downloaded ", d)
 
     def check_reactors(self, plants: List[str]):
         return [(p in self.df.index) for p in plants]
@@ -40,7 +47,7 @@ class DownloadReactorStatus:
                 
 class DownloadReactorSeries:
     def __init__(self, start: datetime, end: datetime):
-        assert(end > start)
+        assert(end >= start)
         current = start.date()
         self.date_list = []
         while current <= end.date():
@@ -77,7 +84,7 @@ if "__main__" == __name__:
     reactorSeries = DownloadReactorSeries(start, end)
     plants = ["Farley 1", "Farley 2", "Hatch 1", "Hatch 2", "Vogtle 1", "Vogtle 2", "Vogtle 3"]
 
-    print(reactorSeries.series_for_reactors(plants, path = "./reactorStatus_21Oct23.csv"))
+    reactorSeries.series_for_reactors(plants, path = "./reactorStatus_21Oct23.csv")
 
 
 
