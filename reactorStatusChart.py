@@ -22,7 +22,7 @@ class DailyChart:
 
         ax.set_xlim(xrange)
         ax.set_ylim(yrange)
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d/%Y"))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d/%y"))
         plt.xticks(rotation = 45)
 
         if yrange[1] > 10:
@@ -44,21 +44,26 @@ class DailyChart:
                         series_colors = None,
                         ymax = None,
                         title = None,
-                        series_styles = None):
+                        series_styles = None, 
+                        series_width = None, 
+                        second_axis: List[bool] = None):
         
 #        print(y_values_list[0])
 
+        if second_axis is None: second_axis = [False] * len(y_values_list)
+
         maxy = ymax if ymax is not None else 1.125*max([max(l) for l in y_values_list])
         miny = 0
-        dims = (7.5, 3.5)
+        dims = (7.5, 2.5)
 
         fig, ax = DailyChart.prepDailyChart([date_list[0], date_list[-1]], [miny, maxy], dims)
         
         if series_styles is None: series_styles = ["solid"] * len(y_values_list)        
         if series_colors is None: series_colors = list(mcolors.TABLEAU_COLORS.values())[:len(y_values_list)]
+        if series_width is None: series_width = [1] * len(y_values_list)
 
-        for y_values, label, color, style in zip(y_values_list, series_labels, series_colors, series_styles):
-            ax.plot(date_list, y_values, label = label, color = color, linestyle = style)
+        for y_values, label, color, style, width, second in zip(y_values_list, series_labels, series_colors, series_styles, series_width, second_axis):
+            ax.plot(date_list, y_values, label = label, color = color, linestyle = style, linewidth = width)
 
         ax.legend(loc = "upper left")
         ax.set_ylabel(y_axis_label)

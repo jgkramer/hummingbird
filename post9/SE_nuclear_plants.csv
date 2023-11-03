@@ -1,14 +1,8 @@
-﻿Plant,State,Capacity (MWe),,4-Sep,15-Sep,,30-Mar
-Farley 1,AL,874,,100,100,,100
-Farley 2,AL,883,,100,100,,100
-Hatch 1,GA,876,,100,100,,100
-Hatch 2,GA,883,,100,100,,20
-Vogtle 1,GA,1150,,100,100,,0
-Vogtle 2,GA,1152,,90,0,,100
-Vogtle 3,GA,1117,,100,100,,
-,,,,,,,
-,,,,,,,
-NRC,,,,6819.8,5783,,3961.6
-EIA - daily,,,,165470,140259,,96211
-,,,,6895,5844,,4009
-,,,,1%,1%,,1%
+﻿Unit,State,Capacity
+Farley 1,AL,874
+Farley 2,AL,896
+Hatch 1,GA,876
+Hatch 2,GA,883
+Vogtle 1,GA,1150
+Vogtle 2,GA,1152
+Vogtle 3,GA,1117
