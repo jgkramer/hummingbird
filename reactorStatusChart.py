@@ -5,6 +5,7 @@ from datetime import datetime, date, timedelta
 
 from typing import List
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.dates as mdates
@@ -54,19 +55,23 @@ class DailyChart:
 
         maxy = ymax if ymax is not None else 1.125*max([max(l) for l in y_values_list])
         miny = 0
-        dims = (7.5, 2.5)
+        dims = (9, 3)
 
         fig, ax = DailyChart.prepDailyChart([date_list[0], date_list[-1]], [miny, maxy], dims)
         
+
         if series_styles is None: series_styles = ["solid"] * len(y_values_list)        
         if series_colors is None: series_colors = list(mcolors.TABLEAU_COLORS.values())[:len(y_values_list)]
         if series_width is None: series_width = [1] * len(y_values_list)
 
+
+
         for y_values, label, color, style, width, second in zip(y_values_list, series_labels, series_colors, series_styles, series_width, second_axis):
             ax.plot(date_list, y_values, label = label, color = color, linestyle = style, linewidth = width)
 
-        ax.legend(loc = "upper left")
+        ax.legend(loc = "lower left", ncol = 2)
         ax.set_ylabel(y_axis_label)
+        ax.tick_params(axis='x', labelsize=7)
 
         if title is not None: ax.set_title(title, fontsize = 8)
         

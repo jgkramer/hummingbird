@@ -25,15 +25,14 @@ class ReactorStatus:
         #print(self.df.index)
         #print(self.df)
 
-    def computeCapacityFactor(self, in_range: List, excl: List[str] = None):
-        included_reactors = [reactor for reactor in self.reactors if reactor not in excl]
-        print(included_reactors)
-        df_filtered = self.powers_df[in_range]
-        total_capacity = sum([self.capacity_dict[reactor] for reactor in included_reactors])
-        capacity_factor = (df_filtered[included_reactors].sum(axis = 1) / total_capacity).to_list()
-        return capacity_factor
+    def computeTotal(self, df_filtered, excl_before = dict()):
+        df_copy = df_filtered.copy()
+        for col, excl_date in excl_before.items():
+            df_copy.loc[df_copy.index <= excl_date, col] = 0
+        sums = df_copy.sum(axis = 1).to_list()
+        return sums
 
-    def plotStatus(self, start: datetime = None, end: datetime = None):
+    def plotStatus(self, start: datetime = None, end: datetime = None, excl_before = dict()):
 
         if start is None: start = self.date_list[0]
         if end is None: end = self.date_list[-1]
@@ -45,13 +44,26 @@ class ReactorStatus:
         y_values_list = [(df_filtered[column]).tolist() for column in df_filtered.columns]
         y_values_labels = self.powers_df.columns.tolist()
 
-        capacity_factor = self.computeCapacityFactor(in_range, ["Vogtle 3"])
-        y_values_list.append(capacity_factor)
-        y_values_labels.append("% Capacity")
+        totals = self.computeTotal(df_filtered, excl_before)
 
-        colors = ["mediumpurple", "purple", "orangered", "red", "steelblue", "navy", "royalblue", "gray"]
-        styles = ["solid", "dashed", "solid", "dashed", "solid", "dashed", "dotted", "solid"]
-        width = [1, 1, 1, 1, 1, 1, 2, 1]
+        date_breakpoints = sorted([d for d in excl_before.values() if d in pd.date_range(start, end)] + [start, end + timedelta(days = 1)])
+        date_ranges = [(s, e + timedelta(days = -1)) for (s, e) in zip(date_breakpoints[:-1], date_breakpoints[1:])]
+
+        averages = []
+        capacities = []
+
+        for date_range in date_ranges:
+            date_range_list = pd.date_range(date_range[0], date_range[1])
+            print(date_range)
+            total_in_range = sum([t if d in date_range_list else 0 for t, d in zip(totals, dates_in_range)])
+            average_in_range = total_in_range / len(date_range_list)
+            averages = averages + ([average_in_range] * len(date_range_list))
+            capacity_in_range = sum([self.capacity_dict[r] for r in self.reactors if r not in excl_before.keys() or date_range[0] >= excl_before[r]])
+            capacities = capacities + ([capacity_in_range] * len(date_range_list))
+            
+        colors = ["mediumpurple", "purple", "orangered", "red", "steelblue", "navy", "limegreen"]
+        styles = ["solid", "dashed", "solid", "dashed", "solid", "dashed", "dashed"]
+        width = [1, 1, 1, 1, 1, 1, 2]
         second_axis = [False] * len(y_values_labels)
         second_axis[-1] = True
 
@@ -59,20 +71,31 @@ class ReactorStatus:
                                   y_values_list,
                                   "Reactor Power (MW)",
                                   y_values_labels,
-                                  "./test_chart.png", 
+                                  "./post9_2022_2023_single_plants.png", 
                                   series_colors = colors,
                                   series_styles = styles, 
                                   series_width = width)
+        
+        DailyChart.dailyLineChart(dates_in_range,
+                                  [totals, averages, capacities],
+                                  "MW Generation Online",
+                                  ["Daily", "Average of Active Fleet", "Capacity of Active Fleet"],
+                                  "./post9_2022_2023_aggregate.png",    
+                                  series_colors = ["gray", "blue", "gray"], 
+                                  series_styles = ["solid", "solid", "dashed"])
         
                                   
 if "__main__" == __name__:
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
 
-    data_path = "./reactorStatus_21Oct23.csv"
+    data_path = "./post9/reactorStatus_2Nov23.csv"
     capacity_path = "./post9/SE_nuclear_plants.csv"
     rs = ReactorStatus(data_path, capacity_path)
-    rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31))
+    #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31))
+    #rs.plotStatus(start = datetime(2021, 1, 1), end = datetime(2021, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
+    #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
+    rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2023, 10, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
 
 
 
