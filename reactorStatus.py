@@ -54,12 +54,13 @@ class ReactorStatus:
 
         for date_range in date_ranges:
             date_range_list = pd.date_range(date_range[0], date_range[1])
-            print(date_range)
             total_in_range = sum([t if d in date_range_list else 0 for t, d in zip(totals, dates_in_range)])
             average_in_range = total_in_range / len(date_range_list)
             averages = averages + ([average_in_range] * len(date_range_list))
             capacity_in_range = sum([self.capacity_dict[r] for r in self.reactors if r not in excl_before.keys() or date_range[0] >= excl_before[r]])
             capacities = capacities + ([capacity_in_range] * len(date_range_list))
+            print(date_range)
+            print(f"average: {average_in_range:.1f}, capacity: {capacity_in_range:.1f}, percent: {(average_in_range / capacity_in_range * 100):.1f}")
             
         colors = ["mediumpurple", "purple", "orangered", "red", "steelblue", "navy", "limegreen"]
         styles = ["solid", "dashed", "solid", "dashed", "solid", "dashed", "dashed"]
@@ -85,7 +86,7 @@ class ReactorStatus:
                                   series_styles = ["solid", "solid", "dashed"])
         
                                   
-if "__main__" == __name__:
+if "__main__" == __name__:  
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
 
@@ -95,7 +96,7 @@ if "__main__" == __name__:
     #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31))
     #rs.plotStatus(start = datetime(2021, 1, 1), end = datetime(2021, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
     #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
-    rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2023, 10, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
+    rs.plotStatus(start = datetime(2021, 8, 1), end = datetime(2023, 10, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
 
 
 
