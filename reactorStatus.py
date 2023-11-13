@@ -32,7 +32,8 @@ class ReactorStatus:
         sums = df_copy.sum(axis = 1).to_list()
         return sums
 
-    def plotStatus(self, start: datetime = None, end: datetime = None, excl_before = dict()):
+    def plotStatus(self, individual_path: str, aggregate_path: str, 
+                   start: datetime = None, end: datetime = None, excl_before = dict()):
 
         if start is None: start = self.date_list[0]
         if end is None: end = self.date_list[-1]
@@ -72,7 +73,7 @@ class ReactorStatus:
                                   y_values_list,
                                   "Reactor Power (MW)",
                                   y_values_labels,
-                                  "./post9_2022_2023_single_plants.png", 
+                                  individual_path, 
                                   series_colors = colors,
                                   series_styles = styles, 
                                   series_width = width)
@@ -81,22 +82,10 @@ class ReactorStatus:
                                   [totals, averages, capacities],
                                   "MW Generation Online",
                                   ["Daily", "Average of Active Fleet", "Capacity of Active Fleet"],
-                                  "./post9_2022_2023_aggregate.png",    
+                                  aggregate_path,
                                   series_colors = ["gray", "blue", "gray"], 
                                   series_styles = ["solid", "solid", "dashed"])
         
                                   
 if "__main__" == __name__:  
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
-
-    data_path = "./post9/reactorStatus_2Nov23.csv"
-    capacity_path = "./post9/SE_nuclear_plants.csv"
-    rs = ReactorStatus(data_path, capacity_path)
-    #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31))
-    #rs.plotStatus(start = datetime(2021, 1, 1), end = datetime(2021, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
-    #rs.plotStatus(start = datetime(2022, 1, 1), end = datetime(2022, 12, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
-    rs.plotStatus(start = datetime(2021, 8, 1), end = datetime(2023, 10, 31), excl_before = {"Vogtle 3": datetime(2023, 8, 1)})
-
-
-
+    pass
