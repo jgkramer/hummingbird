@@ -1,4 +1,4 @@
-﻿"BA Code","Timestamp (Hour Ending)","Demand (MWh)","Demand Forecast (MWh)","Net Generation (MWh)","Total Interchange (MWh)"
+﻿BA Code,Timestamp (Hour Ending),Demand (MWh),Demand Forecast (MWh),Net Generation (MWh),Total Interchange (MWh)
 SOCO,"1/1/2022, Central Time",534264,529744,531511,-2753
 SOCO,"1/2/2022, Central Time",525832,514534,537451,11619
 SOCO,"1/3/2022, Central Time",710173,674557,710500,327
@@ -364,4 +364,3 @@ SOCO,"12/28/2022, Central Time",719513,711553,728844,9331
 SOCO,"12/29/2022, Central Time",590513,582585,591627,1114
 SOCO,"12/30/2022, Central Time",539407,540236,547524,8117
 SOCO,"12/31/2022, Central Time",499898,501999,510113,10215
-SOCO,"1/1/2023, Central Time",,,,

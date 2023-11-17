@@ -1,4 +1,4 @@
-﻿"Region Code","Timestamp (Hour Ending)","Demand (MWh)","Demand Forecast (MWh)","Net Generation (MWh)","Total Interchange (MWh)"
+﻿Region Code,Timestamp (Hour Ending),Demand (MWh),Demand Forecast (MWh),Net Generation (MWh),Total Interchange (MWh)
 SE,"1/1/2021, Central Time",497787,510417,512910,15127
 SE,"1/2/2021, Central Time",511279,509917,530162,18868
 SE,"1/3/2021, Central Time",579899,583503,591825,11907
@@ -364,4 +364,3 @@ SE,"12/28/2021, Central Time",552448,549976,574864,20507
 SE,"12/29/2021, Central Time",560460,552769,587688,25757
 SE,"12/30/2021, Central Time",562356,559113,582508,18745
 SE,"12/31/2021, Central Time",543841,541790,557656,12440
-SE,"1/1/2022, Central Time",,,,

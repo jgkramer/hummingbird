@@ -1,4 +1,4 @@
-﻿"BA Code","Timestamp (Hour Ending)","Wind Generation (MWh)","Solar Generation (MWh)","Hydro Generation (MWh)","Other Generation (MWh)","Petroleum Generation (MWh)","Natural gas Generation (MWh)","Coal Generation (MWh)","Nuclear Generation (MWh)"
+﻿BA Code,Timestamp (Hour Ending),Wind Generation (MWh),Solar Generation (MWh),Hydro Generation (MWh),Other Generation (MWh),Petroleum Generation (MWh),Natural gas Generation (MWh),Coal Generation (MWh),Nuclear Generation (MWh)
 SOCO,"1/1/2023, Central Time",0,14357,15341,8315,-12,250041,63379,140660
 SOCO,"1/2/2023, Central Time",0,11237,17171,8222,-11,274322,75644,140443
 SOCO,"1/3/2023, Central Time",0,7533,21762,7928,-15,292360,80688,139779
@@ -297,10 +297,10 @@ SOCO,"10/22/2023, Central Time",0,21198,9676,4805,-13,254015,77052,147505
 SOCO,"10/23/2023, Central Time",0,28206,13000,4627,-10,296972,78664,148133
 SOCO,"10/24/2023, Central Time",0,27427,12514,4635,33,292875,92688,147845
 SOCO,"10/25/2023, Central Time",0,21560,12784,4593,-13,294918,103686,147144
-SOCO,"10/26/2023, Central Time",0,22087,10933,4478,-11,290712,120270,146926
+SOCO,"10/26/2023, Central Time",0,22079,10935,4801,-11,290442,120270,146926
 SOCO,"10/27/2023, Central Time",0,18656,11871,4685,-12,287065,117789,147037
 SOCO,"10/28/2023, Central Time",0,11145,11903,434,-8,285033,89794,147002
 SOCO,"10/29/2023, Central Time",0,12128,12588,440,-12,299227,81307,144832
 SOCO,"10/30/2023, Central Time",0,10153,12613,435,-11,315972,80703,143434
 SOCO,"10/31/2023, Central Time",0,8615,9636,330,29,322096,102020,145601
-SOCO,"11/1/2023, Central Time",,,,,,,,
+SOCO,"11/1/2023, Central Time",0,13675,12882,545,-13,375292,115600,129669
