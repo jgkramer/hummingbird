@@ -16,8 +16,8 @@ def bars_for_months(eiag: EIAGeneration, path: str):
     for ax, month, firstplot, monthname in zip(axes, [8, 9, 10], [True, False, False], ["August", "September", "October"]):
         result = eiag.get_monthly_by_source(monthlist = [month])
         eiag.stackedbar(result, ax, ymax = 28, firstplot = firstplot, title = monthname)
-    plt.show()
     plt.savefig(path)
+    plt.show()
 
 def linear_regression_plot(eiag: EIAGeneration, path: str):
     fig, ax = plt.subplots(figsize = (8, 4))
@@ -37,8 +37,8 @@ def linear_regression_plot(eiag: EIAGeneration, path: str):
     print("\n2021 linear regression")
     eiag.linear_model_by_dates(ax = ax, startdate = datetime(2021, 8, 1), enddate = datetime(2021, 10, 31), color = "violet")
 
-    plt.show()
     plt.savefig(path)
+    plt.show()
 
 
 if "__main__" == __name__: 
