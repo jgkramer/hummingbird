@@ -41,9 +41,6 @@ class EIAGeneration:
         self.df = merged_df
         print(merged_df.head())
 
-        fig, ax = plt.subplots()
-        self.ax = ax
-
     def total_mw_by_source(self, source: str, startdate: datetime, enddate: datetime):
         selected_dates = self.df[self.df["date"].between(startdate, enddate)]
         source_total = selected_dates[EIAGeneration.column_map[source]].sum()
@@ -51,7 +48,7 @@ class EIAGeneration:
         #print(source_total)
         return source_total    
     
-    def linear_model_by_dates(self, startdate: datetime, enddate: datetime, color: str):
+    def linear_model_by_dates(self, ax, startdate: datetime, enddate: datetime, color: str):
         selected_dates = self.df[self.df["date"].between(startdate, enddate)].copy()
         selected_dates["total"] = selected_dates[["solar", "hydro", "natural gas", "coal", "nuclear"]].sum(axis = 1)
         selected_dates["coal+gas"] = selected_dates[["coal", "natural gas"]].sum(axis = 1)
@@ -60,19 +57,18 @@ class EIAGeneration:
         y = selected_dates["coal+gas"]/24000
         model = LinearRegression().fit(X, y)
 
-
-        self.ax.scatter(selected_dates["total"]/24000, y, label = str(startdate.year), s = 10, color = color)
+        ax.scatter(selected_dates["total"]/24000, y, label = str(startdate.year), s = 10, color = color)
 
         X_line = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)  # Generate many points for a smooth line
         y_line = model.predict(X_line)
 
-        self.ax.plot(X_line, y_line, color = color, linestyle = "--")
-
-        self.ax.legend(loc = "upper left")
+        ax.plot(X_line, y_line, color = color, linestyle = "--")
+        ax.legend(loc = "upper left")
 
         print(f'Coefficients: {model.coef_}')
         print(f'Intercept: {model.intercept_}')
         print(f'R-Squared: {model.score(X, y)}')
+
 
     def get_monthly_by_source(self, monthlist: List = None):
         result = self.df.groupby([self.df["date"].apply(lambda d: d.replace(day=1))]).sum().reset_index()
@@ -109,9 +105,11 @@ class EIAGeneration:
         df.index.name = None        
         
         df.plot(kind='bar', stacked=True, ax = ax, color = colors, legend = firstplot)
-        ax.set_xlabel(title)
+        ax.set_xlabel(title, fontweight = "bold")
         ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
         
+        if firstplot: 
+            ax.set_ylabel("TWh Generation")
         if not firstplot:
             print("hiding axis!")
             ax.spines["left"].set_visible(False)
@@ -136,32 +134,7 @@ class EIAGeneration:
             ax.text(i, total, f'{total:.1f}', va='bottom', ha='center', fontweight = "bold")
      
 if __name__ == "__main__":
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
-
-    generation_path_list = [f"./post9/SE_daily_generation_{year}.csv" for year in [2021, 2022, 2023]]
-    eiag = EIAGeneration(generation_path_list)
-
-    plt.rcParams.update({'font.size': 8})
-    fig, axes = plt.subplots(1, 3, figsize = (10, 4))
-    
-    for ax, month, firstplot, monthname in zip(axes, [8, 9, 10], [True, False, False], ["August", "September", "October"]):
-        result = eiag.get_monthly_by_source(monthlist = [month])
-        eiag.stackedbar(result, ax, ymax = 28, firstplot = firstplot, title = monthname)
-
-    plt.show()
-
-
-    print("\n2023 linear regression")
-    eiag.linear_model_by_dates(startdate = datetime(2023, 8, 1), enddate = datetime(2023, 10, 31), color = "blue")
-
-    print("\n2022 linear regression")
-    eiag.linear_model_by_dates(startdate = datetime(2022, 8, 1), enddate = datetime(2022, 10, 31), color = "green")
-
-    print("\n2021 linear regression")
-    eiag.linear_model_by_dates(startdate = datetime(2021, 8, 1), enddate = datetime(2021, 10, 31), color = "violet")
-
-#    plt.show()
+    print("what's up chickens")
 
 
 
