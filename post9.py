@@ -11,10 +11,11 @@ from EIADailyFiles import EIAGeneration
 
 def bars_for_months(eiag: EIAGeneration, path: str):
     
-    fig, axes = plt.subplots(1, 3, figsize = (10, 4))
+    fig, axes = plt.subplots(1, 3, figsize = (9, 4))
     
     for ax, month, firstplot, monthname in zip(axes, [8, 9, 10], [True, False, False], ["August", "September", "October"]):
         result = eiag.get_monthly_by_source(monthlist = [month])
+        print(result)
         eiag.stackedbar(result, ax, ymax = 28, firstplot = firstplot, title = monthname)
     plt.savefig(path)
     plt.show()
