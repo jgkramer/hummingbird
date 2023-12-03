@@ -77,16 +77,15 @@ if "__main__" == __name__:
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
 
-    
-    start = datetime(2021, 1, 1)
+    start = datetime(2023, 11, 1)
 
     d = datetime.now()
-    end = datetime(d.year, d.month, d.day - 1)
+    end = datetime(d.year, d.month, d.day - 2)
     
     reactorSeries = DownloadReactorSeries(start, end)
     plants = ["Farley 1", "Farley 2", "Hatch 1", "Hatch 2", "Vogtle 1", "Vogtle 2", "Vogtle 3"]
 
-    reactorSeries.series_for_reactors(plants, path = "./post9/reactorStatus_2Nov23.csv")
+    reactorSeries.series_for_reactors(plants, path = "./post9/reactorStatus_3Dec23.csv")
 
 
 

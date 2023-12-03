@@ -39,16 +39,13 @@ class EIAGeneration:
             merged_df.rename(columns={value: key}, inplace = True)
 
         self.df = merged_df
-        print(merged_df.head())
+        #print(merged_df.head())
 
-    def total_mw_by_source(self, source: str, startdate: datetime, enddate: datetime):
-        selected_dates = self.df[self.df["date"].between(startdate, enddate)]
-        source_total = selected_dates[EIAGeneration.column_map[source]].sum()
-        #print(selected_dates)
-        #print(source_total)
-        return source_total    
-    
-    def linear_model_by_dates(self, ax, startdate: datetime, enddate: datetime, color: str):
+        self.startdate = min(self.df["date"])
+        self.enddate = max(self.df["date"])
+        print(self.startdate, self.enddate)
+       
+    def linear_model_by_dates(self, ax, startdate: datetime, enddate: datetime, color: str, fitX: float):
         selected_dates = self.df[self.df["date"].between(startdate, enddate)].copy()
         selected_dates["total"] = selected_dates[["solar", "hydro", "natural gas", "coal", "nuclear"]].sum(axis = 1)
         selected_dates["coal+gas"] = selected_dates[["coal", "natural gas"]].sum(axis = 1)
@@ -62,12 +59,16 @@ class EIAGeneration:
         X_line = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)  # Generate many points for a smooth line
         y_line = model.predict(X_line)
 
+        prediction = model.predict(np.linspace(fitX, fitX, 1).reshape(-1, 1))[0]
+
         ax.plot(X_line, y_line, color = color, linestyle = "--")
         ax.legend(loc = "upper left")
 
         print(f'Coefficients: {model.coef_}')
         print(f'Intercept: {model.intercept_}')
         print(f'R-Squared: {model.score(X, y)}')
+
+        return prediction
 
 
     def get_monthly_by_source(self, monthlist: List = None):
@@ -82,8 +83,12 @@ class EIAGeneration:
         else:
             result = result
         
-        print(result[["date", "wind", "solar", "hydro", "natural gas", "coal", "nuclear", "total"]])
+        #print(result[["date", "wind", "solar", "hydro", "natural gas", "coal", "nuclear", "total"]])
         return result
+
+    def get_total_by_source(self, source: str):
+        colsum = self.df[source].sum()
+        return colsum
 
     def stackedbar(self, df, ax, ymax = None, firstplot = True, title = None):
         df = df.copy()
@@ -97,7 +102,7 @@ class EIAGeneration:
 
         df.set_index('date', inplace=True)
         df = df.sort_index()
-        print(df)
+        #print(df)
         
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
@@ -111,7 +116,6 @@ class EIAGeneration:
         if firstplot: 
             ax.set_ylabel("TWh Generation")
         if not firstplot:
-            print("hiding axis!")
             ax.spines["left"].set_visible(False)
             ax.yaxis.set_visible(False)
 
@@ -134,7 +138,8 @@ class EIAGeneration:
             ax.text(i, total, f'{total:.1f}', va='bottom', ha='center', fontweight = "bold")
      
 if __name__ == "__main__":
-    print("what's up chickens")
+    pass
+
 
 
 

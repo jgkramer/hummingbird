@@ -12,7 +12,7 @@ class ReactorStatus:
         self.reactors = self.percent_df.columns
 
         strdates = self.percent_df.index.tolist()
-        self.percent_df.index = [datetime.strptime(s, "%Y-%m-%d") for s in strdates]
+        self.percent_df.index = [datetime.strptime(s, "%m/%d/%y") for s in strdates]
         self.date_list = self.percent_df.index.to_list()
 
         self.capacity_df = pd.read_csv(capacity_path, index_col = "Unit")
