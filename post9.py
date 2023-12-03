@@ -39,7 +39,7 @@ def linear_regression_plot(eiag: EIAGeneration, path: str):
     print("\n2021 linear regression")
     fit[2021] = eiag.linear_model_by_dates(ax = ax, startdate = datetime(2021, 8, 1), enddate = datetime(2021, 11, 30), color = "violet", fitX = 29)
 
-    table_data = [["", "Regression at 28 GW"]]
+    table_data = [["", "Regression at 29 GW"]]
     for year in [2021, 2022, 2023]:
         table_data.append([year, f"{fit[year]:0.2f} GW"])
 
