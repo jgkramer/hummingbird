@@ -64,8 +64,6 @@ class DailyChart:
         if series_colors is None: series_colors = list(mcolors.TABLEAU_COLORS.values())[:len(y_values_list)]
         if series_width is None: series_width = [1] * len(y_values_list)
 
-
-
         for y_values, label, color, style, width, second in zip(y_values_list, series_labels, series_colors, series_styles, series_width, second_axis):
             ax.plot(date_list, y_values, label = label, color = color, linestyle = style, linewidth = width)
 
