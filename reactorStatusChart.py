@@ -55,7 +55,7 @@ class DailyChart:
 
         maxy = ymax if ymax is not None else 1.125*max([max(l) for l in y_values_list])
         miny = 0
-        dims = (9, 3)
+        dims = (9, 3) 
 
         fig, ax = DailyChart.prepDailyChart([date_list[0], date_list[-1]], [miny, maxy], dims)
         
