@@ -10,4 +10,5 @@ import matplotlib as mpl
 import os
 
 if __name__ == "__main__":
-    print("hello")
+    key = os.getenv("EIA_API_KEY")
+    print(key)
