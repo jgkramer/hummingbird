@@ -1,14 +1,13 @@
 
-import pandas as pd
+import numpy
+import pandas
+import os
+
 from datetime import datetime, timedelta
+
+import matplotlib as mpl
 
 import os
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-
-if __name__ == "main":
-    key = os.getenv("EIA_API_KEY")
-    print(key)
-    
-
+if __name__ == "__main__":
+    print("hello")
