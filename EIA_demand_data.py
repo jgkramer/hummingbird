@@ -11,7 +11,6 @@ import matplotlib as mpl
 
 import os
 
-
 def data_frame_from_request(url):
     results = requests.get(url)
 
@@ -41,9 +40,6 @@ def eia_single_request_other(region: str, start_date: datetime, end_date: dateti
     return df
 
     
-
-
-
 def eia_single_request_subba(region: str, start_date: datetime, end_date: datetime):
     api_key = os.getenv("EIA_API_KEY")
     url_data = "https://api.eia.gov/v2/electricity/rto/region-sub-ba-data/data/?frequency=hourly&data[0]=value&facets[subba][]={}&start={}T00&end={}T23&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
@@ -70,7 +66,6 @@ def eia_request_data(region: str, sub_ba: bool, start_date: datetime, end_date: 
         start_date = start_date + relativedelta(months = 6)
         df_list.append(df)
         
-
     full_df = pd.concat(df_list, ignore_index = True)
     full_df.sort_values(by = "period", inplace = True)
     return full_df
