@@ -114,7 +114,7 @@ def plot_growth_vs_datacenters(growth_df, path = "a.png"):
         plt.annotate(f'{df["Data Centers GW"][i]:0.2f}' + est, (i, df["Data Centers GW"][i]), textcoords="offset points", xytext=(0,+10), ha='center', color = "darkorange", fontweight = "bold")
 
     plt.gca().set_title("Growth (in GW) since 2019", loc = "center", pad = -10, fontsize = 8) 
-    plt.legend(loc = "lower right")
+    plt.legend(loc = "lower right", frameon=False)
     plt.tight_layout()
     plt.savefig(path)
     plt.show()
@@ -149,7 +149,8 @@ def visualize(df_list, cumulative_growth = True, title_list = [], path = "a.png"
         ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
         ax.tick_params(axis="both", labelsize = 8)
         
-        if(index == 0): ax.legend(loc = "upper left", ncol = 2)
+        legend_loc = "upper left" if cumulative_growth else "lower left"
+        if(index == 0): ax.legend(loc = legend_loc, ncol = 2, frameon=False)
     
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
