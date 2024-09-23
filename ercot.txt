@@ -1,0 +1,1195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Data Product Details</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link rel="shortcut icon" href="/static-assets/images/favicon.ico" />
+<link rel="stylesheet" href="/static-assets/css/application.css">
+<link rel="stylesheet" href="/static-assets/css/fontawesome-all.css">
+<link rel="stylesheet" href="/static-assets/css/daterangepicker.css" />
+<link rel="stylesheet" href="/static-assets/css/migration.css" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FXKMNQ0Z72"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FXKMNQ0Z72');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PH5D2W5');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Hotjar Tracking Code -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:3782343,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+
+<script type="text/javascript">
+    var pageProxyContext = "";
+    var pageProxyStaticContext = "";
+    var pageProxySecureContextRequest = "https://mis.ercot.com/secure/data-products/data-product-details?id=np4-765-er";
+    var dataProductsPathPublic = "/mp/data-products";
+    var dataProductsPathSecure = "/data-products";
+    var isMIS = false
+    var pageWWWBase = "";
+</script>
+<script src="/static-assets/js/vendor/jquery-3.7.1.min.js"></script>
+<script src="/static-assets/js/app/scripts.js"></script>
+<script src="/static-assets/js/app/application-scripts.js"></script>
+<script src="/static-assets/js/vendor/fontawesome-all.min.js"></script>
+<script src="/static-assets/js/vendor/popper.min.js"></script>
+<script src="/static-assets/js/vendor/bootstrap.min.js"></script>
+<script src="/static-assets/js/vendor/moment.min.js"></script>
+<script src="/static-assets/js/vendor/daterangepicker.js"></script>
+<script src="/static-assets/js/app/migration.js"></script>
+
+<script>
+  function showTab(parent_id, anchor_tag) {
+    if ($(parent_id).length > 0) {
+      let tab_id = anchor_tag.split('#')[1];
+
+      // default is first tab
+      if (tab_id === undefined) {
+        tab_id = $(parent_id + ' .tabNav li a').first().attr('href').replace('#','');
+      }
+
+      // reset active tab
+      $(parent_id + ' .tabNav li').removeClass();
+
+      // set active tab
+      $(parent_id + ' .tabNav a[href="#' + tab_id + '"]').parent().attr('class', 'active');
+
+      // show content for tab
+      $('#tab-' + tab_id).show().siblings().hide();
+    }
+  }
+  $(function() {
+    showTab('#tabsBar', window.location.href);
+    $("ul.tabNav li a").click(function() { showTab('#tabsBar', this.href); });
+    $(".tabs a.nav").click(function() { showTab('#tabsBar', this.href); });
+  });
+</script>
+
+<style type="text/css">
+    
+</style>
+<script type="text/javascript">
+    
+</script>
+    <link rel="stylesheet" href="/static-assets/css/product-details.css">
+</head>
+
+<body>
+<div class="wrapper--main" id="helpnav">
+    <div class="page--content">
+<header class="combined container-fluid px-0">
+  <utility>
+      <a href="#"
+ onclick="navigate(pageProxySecureContextRequest);"
+      >MIS LOG IN</a>
+      <script>
+      function searchSubmit(){
+        var theSearchQuery = document.frmSearch.sQuery.value;
+        if (theSearchQuery) {
+          document.frmSearch.q.value = utils.mask(theSearchQuery);
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    </script>
+    <div class="searchBox">
+      <form id="frmSearch" name="frmSearch" action="/search" method="get" onsubmit="searchSubmit()" class="no-filter-form">
+        <input type="text" class="text" id="sQuery" maxlength="250" value="" placeholder="Search" required>
+        <button type="submit" class="button" id="searchBtn" alt="Search"><svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 18 18">
+            <path class="searchicon"
+              d="M7.127,0a7.127,7.127,0,0,0,0,14.254,7,7,0,0,0,3.655-1.019l4.8,4.517a.915.915,0,0,0,1.3-.053l.183-.208a.917.917,0,0,0-.052-1.306l-4.6-4.307A7.116,7.116,0,0,0,7.127,0Zm0,2.062A5.065,5.065,0,1,1,2.062,7.127,5.052,5.052,0,0,1,7.127,2.062Z">
+            </path>
+          </svg></button>
+        <input type="hidden" name="q" value="">
+      </form>
+
+    </div>
+    
+  </utility>
+  <mainheader class="combined--header">
+    <a id="hlogo" href="https://www.ercot.com">
+
+
+
+<img src="https://www.ercot.com/files/assets/2023/07/14/ERCOT-logo-122x45.svg" title="ERCOT home" alt="Electric Reliability Council of Texas" />    </a>
+
+    <button id="menuon" onclick="navToggle()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path fill="#2D3338"
+          d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z">
+        </path>
+      </svg></button>
+    <button id="menuoff" onclick="navToggle()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path fill="#ffffff"
+          d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z">
+        </path>
+      </svg></button>
+
+
+
+<nav><ul>
+  <li class="">
+    <a class="" href="/about">About ERCOT</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/about">About ERCOT</a></li>
+          <li class="">
+            <a class="" href="/about/profile">Company Profile</a>
+            <ul>
+                <li class=""><a class="" href="/about/profile/vision">Vision and Mission</a></li>
+                <li class=""><a class="" href="/about/profile/community">Community Involvement</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/governance">Governance</a>
+            <ul>
+                <li class=""><a class="" href="/about/governance/directors">Board of Directors</a></li>
+                <li class=""><a class="" href="/about/governance/executives">Executive Team</a></li>
+                <li class=""><a class="" href="/about/governance/members">Membership</a></li>
+                <li class=""><a class="" href="/about/governance/ethics">Ethics</a></li>
+                <li class=""><a class="" href="/about/governance/FinancialInformation">Financial Information</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/hb4492securitization">HB 4492 Securitization</a>
+            <ul>
+                <li class=""><a class="" href="/about/hb4492securitization/subchapterm">Subchapter M Default Balance Securitization</a></li>
+                <li class=""><a class="" href="/about/hb4492securitization/subchaptern">Subchapter N Uplift Balance Securitization </a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/about/legal">Legal Policies and Notices</a>
+            <ul>
+                <li class=""><a class="" href="/about/legal/brazos">Proposed Brazos and ERCOT Bankruptcy Settlement</a></li>
+                <li class=""><a class="" href="/about/legal/boardethicsagmts">Board Ethics Agreements</a></li>
+                <li class=""><a class="" href="/about/legal/legal_notices">Legal Notices</a></li>
+                <li class=""><a class="" href="/about/legal/february2021">February 2021 Extreme Weather Event</a></li>
+                <li class=""><a class="" href="/about/legal/doe202c">September 7, 2023 DOE 202(c) Order</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/news">News and Publications</a>
+            <ul>
+                <li class=""><a class="" href="/about/news/mediakit">Media Kit</a></li>
+                <li class=""><a class="" href="/about/news/presentations">Helpful Resources</a></li>
+                <li class=""><a class="" href="/about/news/releases">News Releases</a></li>
+                <li class=""><a class="" href="/about/news/trendingtopics">Trending Topics</a></li>
+                <li class=""><a class="" href="/about/news/summer">Summer 2024</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/about/redesign">ERCOT Mobile App & Website Redesign</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/reliability-monitor">ERCOT Reliability Monitor Program</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/careers">Careers</a>
+            <ul>
+                <li class=""><a class="" href="/about/careers/culture">Life at ERCOT</a></li>
+                <li class=""><a class="" href="/about/careers/programs">Development Programs</a></li>
+                <li class=""><a class="" href="/about/careers/ercotinternship">Internship Program</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/procurement">Procurement</a>
+            <ul>
+                <li class=""><a class="" href="/about/procurement/rfp">Request for Proposal</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/locations">Locations</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/contact">Contact Us</a>
+            <ul>
+                <li class=""><a class="" href="/about/contact/inforequest">Information Request</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/about/summit">ERCOT Innovation Summit</a>
+            <ul>
+            </ul>
+          </li>
+        </ul>
+
+            <div>
+
+
+
+<img src="https://www.ercot.com/files/assets/uploadTesting/tranding-topic.jpg" title="tranding-topic.jpg" alt="tranding-topic.jpg" />              <p>Trending Topics</p>
+              <a  href="/news/trendingtopics">Read about current issues involving the ERCOT grid</a>
+            </div>
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/services">Services</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/services">Services</a></li>
+          <li class="">
+            <a class="" href="/services/client_svcs">Client Services</a>
+            <ul>
+                <li class=""><a class="" href="/services/client_svcs/acctmgmt">Account Management</a></li>
+                <li class=""><a class="" href="/services/client_svcs/mktsupport">Market Support</a></li>
+                <li class=""><a class="" href="/services/client_svcs/mktrk_info">MarkeTrak Information</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/services/comm">Market Participant Communications</a>
+            <ul>
+                <li class=""><a class="" href="/services/comm/archives">Market Notice Archives</a></li>
+                <li class=""><a class="" href="/services/comm/opsmessages">Operations Messages</a></li>
+                <li class=""><a class="" href="/services/comm/pobs">Power Operations Bulletins</a></li>
+                <li class=""><a class="" href="/services/comm/notices">Public Notices</a></li>
+                <li class=""><a class="" href="/services/comm/outage_notices">System Outage Notices</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/services/programs">Programs</a>
+            <ul>
+                <li class=""><a class="" href="/services/programs/load">Demand Response</a></li>
+                <li class=""><a class="" href="/services/programs/firmfuelsupply">Firm Fuel Supply Service</a></li>
+                <li class=""><a class="" href="/services/programs/qse">QSE Services Available on Short Notice</a></li>
+                <li class=""><a class="" href="/services/programs/rec">Renewable Energy Credit</a></li>
+                <li class=""><a class="" href="/services/programs/tcmp">Texas Cybersecurity Monitor Program</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/services/projects">Projects</a>
+            <ul>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/services/rq">Registration and Qualification</a>
+            <ul>
+                <li class=""><a class="" href="/services/rq/crr">Congestion Revenue Rights Account Holder</a></li>
+                <li class=""><a class="" href="/services/rq/credit">Credit</a></li>
+                <li class=""><a class="" href="/services/rq/imre">Independent Market Information System Registered Entity</a></li>
+                <li class=""><a class="" href="/services/rq/lse">Load Serving Entities</a></li>
+                <li class=""><a class="" href="/services/rq/qse">Qualified Scheduling Entities</a></li>
+                <li class=""><a class="" href="/services/rq/re">Resource Entities</a></li>
+                <li class=""><a class="" href="/services/rq/integration">Resource Integration</a></li>
+                <li class=""><a class="" href="/services/rq/tdsp">Transmission/Distribution Service Providers</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/services/sla">Service Level Agreements</a>
+            <ul>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/services/training">Training</a>
+            <ul>
+                <li class=""><a class="" href="/services/training/courses">Course Catalog</a></li>
+                <li class=""><a class="" href="/services/training/recommendations">Course Recommendations</a></li>
+                <li class=""><a class="" href="/services/training/exams">ERCOT System Operator Certification Exam</a></li>
+                <li class=""><a class="" href="/services/training/archives">Archived Workshop Materials</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/services/mdt">Market Data Transparency</a>
+            <ul>
+                <li class=""><a class="" href="/services/mdt/ddls">DDLs</a></li>
+                <li class=""><a class="" href="/services/mdt/userguides">User Guides</a></li>
+                <li class=""><a class="" href="/services/mdt/webservices">Digital Certificate Security Information</a></li>
+                <li class=""><a class="" href="/services/mdt/xsds">XSDs</a></li>
+                <li class=""><a class="" href="/services/mdt/data-portal">ERCOT Public API Applications</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/committees">Committees and Groups</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/committees">Committees and Groups</a></li>
+          <li class="">
+            <a class="" href="/committees/calendar">Meeting Calendar</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/puct">PUCT</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/board">Board of Directors</a>
+            <ul>
+                <li class=""><a class="" href="/committees/board/finance_audit">Finance and Audit Committee</a></li>
+                <li class=""><a class="" href="/committees/board/hr_governance">HR and Governance Committee</a></li>
+                <li class=""><a class="" href="/committees/board/reliabilitymarkets">Reliability and Markets Committee</a></li>
+                <li class=""><a class="" href="/committees/board/tech-security">Technology and Security Committee </a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/tac">Technical Advisory Committee</a>
+            <ul>
+                <li class=""><a class="" href="/committees/tac/lfltf">Large Flexible Load Task Force</a></li>
+                <li class=""><a class="" href="/committees/tac/cfsg">Credit Finance Sub Group</a></li>
+                <li class=""><a class="" href="/committees/tac/rtcbtf">Real-Time Co-optimization plus Batteries Task Force</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/prs">Protocol Revision Subcommittee</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/rms">Retail Market Subcommittee</a>
+            <ul>
+                <li class=""><a class="" href="/committees/rms/lritf">Lubbock Retail Integration Task Force </a></li>
+                <li class=""><a class="" href="/committees/rms/mct">Market Coordination Team for Texas SET Version Releases</a></li>
+                <li class=""><a class="" href="/committees/rms/pwg">Profiling Working Group</a></li>
+                <li class=""><a class="" href="/committees/rms/rmttf">Retail Market Training Task Force</a></li>
+                <li class=""><a class="" href="/committees/rms/tdtms">Texas Data Transport and MarkeTrak Systems Working Group</a></li>
+                <li class=""><a class="" href="/committees/rms/txset">Texas Standard Electronic Transaction Working Group</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/committees/ros">Reliability and Operations Subcommittee</a>
+            <ul>
+                <li class=""><a class="" href="/committees/ros/bswg">Black Start Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/dwg">Dynamics Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/ibrwg">Inverter-Based Resource Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/ndswg">Network Data Support Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/otwg">Operations Training Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/owg">Operations Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/pdcwg">Performance, Disturbance, Compliance Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/pgdtf">Planning Geomagnetic Disturbance Task Force</a></li>
+                <li class=""><a class="" href="/committees/ros/plwg">Planning Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/spwg">System Protection Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/sswg">Steady State Working Group</a></li>
+                <li class=""><a class="" href="/committees/ros/vpwg">Voltage Profile Working Group</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/committees/wms">Wholesale Market Subcommittee</a>
+            <ul>
+                <li class=""><a class="" href="/committees/wms/cmwg">Congestion Management Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/dswg">Demand Side Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/mswg">Market Settlements Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/mwg">Metering Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/rcwg">Resource Cost Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/sawg">Supply Analysis Working Group</a></li>
+                <li class=""><a class="" href="/committees/wms/wmwg">Wholesale Market Working Group</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/inactive">Inactive Groups</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/other">Other Groups</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/workshops">Workshops</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/committees/mktparticipants">Market Participants</a>
+            <ul>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/mktrules">Market Rules</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/mktrules">Market Rules</a></li>
+          <li class="">
+            <a class="" href="/mktrules/nprotocols">Protocols - Nodal</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/nprotocols/current">Current Protocols - Nodal</a></li>
+                <li class=""><a class="" href="/mktrules/nprotocols/library">Protocol Library - Nodal</a></li>
+                <li class=""><a class="" href="/mktrules/nprotocols/nprr">Nodal Protocol Revision Requests</a></li>
+                <li class=""><a class="" href="/mktrules/nprotocols/nprr_process">NPRR Submission Process</a></li>
+                <li class=""><a class="" href="/mktrules/nprotocols/pir_process">Protocol Interpretation Request Submission Process</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/protocols">Archives - Zonal</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/puctDirectives">PUCT Directives</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/puctDirectives/phase-2-bridging-options">Phase 2 Bridging Options</a></li>
+                <li class=""><a class="" href="/mktrules/puctDirectives/southernCross">Southern Cross Transmission</a></li>
+                <li class=""><a class="" href="/mktrules/puctDirectives/rtCoOptimization">Real-Time Co-Optimization</a></li>
+                <li class=""><a class="" href="/mktrules/puctDirectives/emergencyoperationsplans">Emergency Operations Plans</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/mktrules/guides">Market Guides</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/guides/commercialops">Commercial Operations Market Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/data_transport">Data Transport Guides</a></li>
+                <li class=""><a class="" href="/mktrules/guides/loadprofiling">Load Profiling Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/noperating">Nodal Operating Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/procedures">Operating Procedures</a></li>
+                <li class=""><a class="" href="/mktrules/guides/planning">Planning Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/resourcereg">Resource Registration Glossary</a></li>
+                <li class=""><a class="" href="/mktrules/guides/retail">Retail Market Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/settlement">Settlement Metering Operating Guide</a></li>
+                <li class=""><a class="" href="/mktrules/guides/txset">Texas Standard Electronic Transaction Guides</a></li>
+                <li class=""><a class="" href="/mktrules/guides/vcm">Verifiable Cost Manual</a></li>
+                <li class=""><a class="" href="/mktrules/guides/archives">Inactive Market Guides</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/mktrules/pilots">Pilot Projects</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/pilots/ader">Aggregate Distributed Energy Resource (ADER) Pilot Project</a></li>
+                <li class=""><a class="" href="/mktrules/pilots/ers">30-Minute Emergency Response Service - Completed</a></li>
+                <li class=""><a class="" href="/mktrules/pilots/frrs">Fast Responding Regulation Service - Completed</a></li>
+                <li class=""><a class="" href="/mktrules/pilots/wsers">Weather-Sensitive Emergency Response Service - Completed</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/syschangereq">System Changes</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/syschangereq/scr">System Change Requests</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/compliance">Compliance in ERCOT</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/bpm">Business Practice Manual</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/obd">Other Binding Documents</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/obd/obdlist">Other Binding Documents List</a></li>
+                <li class=""><a class="" href="/mktrules/obd/obdrr">Other Binding Documents Revision Requests</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktrules/keypriorities">Key Priorities</a>
+            <ul>
+                <li class=""><a class="" href="/mktrules/keypriorities/bes">Battery Energy Storage</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/mktinfo">Market Information</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/mktinfo">Market Information</a></li>
+          <li class="">
+            <a class="" href="/mktinfo/crr">Congestion Revenue Rights</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/dam">Day-Ahead Market</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/rtm">Real-Time Market</a>
+            <ul>
+                <li class=""><a class="" href="/mktinfo/rtm/marginallosses">Marginal Losses</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/prices">Market Prices</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/retail">Retail</a>
+            <ul>
+                <li class=""><a class="" href="/mktinfo/retail/lpandl">Lubbock Power & Light Transition</a></li>
+                <li class=""><a class="" href="/mktinfo/retail/electric">Labeling of Electricity</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/mktinfo/loadprofile">Load Profiling</a>
+            <ul>
+                <li class=""><a class="" href="/mktinfo/loadprofile/alp">Backcasted (Actual) Load Profiles - Historical</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/metering">Metering</a>
+            <ul>
+                <li class=""><a class="" href="/mktinfo/metering/competitive">Competitive Metering</a></li>
+                <li class=""><a class="" href="/mktinfo/metering/eps">ERCOT-Polled Settlement Metering</a></li>
+                <li class=""><a class="" href="/mktinfo/metering/dlfmethodology">TDSP Distribution Loss Factors - Methodology</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/mktinfo/data_agg">Data Aggregation</a>
+            <ul>
+                <li class=""><a class="" href="/mktinfo/data_agg/idr_pcv">IDR Protocol Compliance Verification - Historical</a></li>
+                <li class=""><a class="" href="/mktinfo/data_agg/4cp">ERCOT Four Coincident Peak Calculations</a></li>
+                <li class=""><a class="" href="/mktinfo/data_agg/ssig">Shadow Settlement Instruction Guides</a></li>
+                <li class=""><a class="" href="/mktinfo/data_agg/ufe">UFE Analysis Reports</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/settlements">Settlements</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mktinfo/reports">Market Reports</a>
+            <ul>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/gridinfo">Grid Information</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/gridinfo">Grid Information</a></li>
+          <li class="">
+            <a class="" href="/gridinfo/csc">Current System Conditions</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/gridinfo/generation">Generation</a>
+            <ul>
+                <li class=""><a class="" href="/gridinfo/generation/summerready">Summer Weather Readiness</a></li>
+                <li class=""><a class="" href="/gridinfo/generation/ibr-integration-reports">Inverter Based Resources Integration Reports</a></li>
+                <li class=""><a class="" href="/gridinfo/generation/winterready">Winter Weather Readiness</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/gridinfo/load">Load</a>
+            <ul>
+                <li class=""><a class="" href="/gridinfo/load/load_hist">Hourly Load Data Archives</a></li>
+                <li class=""><a class="" href="/gridinfo/load/covid-19-load-forecast">Supplemental Data for COVID-19 Scenario </a></li>
+                <li class=""><a class="" href="/gridinfo/load/forecast">Load Forecast</a></li>
+            </ul>
+          </li>
+            </ul><ul>
+          <li class="">
+            <a class="" href="/gridinfo/transmission">Transmission</a>
+            <ul>
+                <li class=""><a class="" href="/gridinfo/transmission/opsys-change-schedule">Production Load Schedule</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/gridinfo/resource">Resource Adequacy</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/gridinfo/sysplan">Market Reports</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/gridinfo/planning">Planning</a>
+            <ul>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+  <li class="">
+    <a class="" href="/mp">Market Participants</a>
+      <div class="dropdown">
+        <ul>           <li class="d-xl-none"><a class="" href="/mp">Market Participants</a></li>
+          <li class="">
+            <a class="" href="/mp/data-products">EMIL</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mp/mis-ercot-com">MIS Log In</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mp/rioo-rs">RIOO Log In</a>
+            <ul>
+            </ul>
+          </li>
+          <li class="">
+            <a class="" href="/mp/rec">Renewable Energy Credit</a>
+            <ul>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      
+    
+  </li>
+<ul class="m-list">
+<li class="d-block d-lg-none d-mb my-3 pt-3" style="
+    border-top: solid 2px rgba(255, 255, 255, 0.1);">
+    <a class="text-white text-decoration-none mx-4 subtitle1" href="https://www.ercot.com/news/releases">News Releases</a>
+</li>
+<li class="d-block d-lg-none d-mb my-3 pt-3" style="
+    border-top: solid 2px rgba(255, 255, 255, 0.1);">
+    <a class="text-white text-decoration-none mx-4 subtitle1" href="https://www.ercot.com/gridmktinfo/dashboards">Grid and Market Conditions</a>
+</li>
+</ul>
+</ul></nav>
+</mainheader>
+
+<script type="text/javascript">
+  var screenw;
+
+  function navToggle() {
+    $('body').toggleClass('mainmenuopen');
+    $('header .showSubNav').removeClass('showSubNav');
+  }
+
+  function headerDimensions(debug = false) {
+    // find the dimensions of each drop-down and center them
+    screenw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    if (screenw <= 1200) return; // don't bother on mobile
+
+    let leftLimit = Math.round($("header").offset().left);
+
+    let $menuLi = $('header.combined nav > ul > li:visible');
+    if (debug===true) {
+      console.clear(); // for Chrome
+      console.log({screenw: screenw, leftLimit: leftLimit});
+    }
+
+    $menuLi.each(function (index) {
+      const offset = 20; // nav is always within offset of left/right edges
+      leftLimit += offset;
+      const columnWidth = 250;
+      const spotlightWidth = 280; // widths must match CSS
+
+      let $this = $(this);
+      let colCount = $this.find('.dropdown > ul').length;  // columns
+      let sptCount = $this.find('.dropdown > div').length; // spotlights
+      let itemWidth = Math.round(colCount*columnWidth + sptCount*spotlightWidth);
+      let itemLeft = Math.round($this.offset().left); // offset only has top and left
+      let itemRight = itemLeft + Math.round($this.width());
+
+      let right = -offset; // right-align with top nav
+      let left = itemRight-right-itemWidth-itemLeft; // left position for full width
+
+      let checkpoint = itemLeft+left;
+      let adjustment;
+      if (checkpoint < leftLimit)  // part of nav is hidden
+        adjustment = itemLeft - leftLimit + left;
+      else
+        adjustment = 0;
+
+      let adjLeft = left-adjustment;
+      let adjRight = right+adjustment;
+
+      let css = {left: adjLeft+"px", right: adjRight+"px"};
+
+      if (debug===true) {
+        let dm = {i: index+1, iWidth: itemWidth, iLeft: itemLeft, iRight: itemRight, left: left, right: right, checkpoint: checkpoint, adjustment: adjustment, adjLeft: adjLeft, adjRight: adjRight};
+        console.log(JSON.stringify(dm));
+      }
+
+      $this.find('.dropdown').css(css);
+
+      if (debug===true) {
+        // adjust css to desired width (for testing purposes)
+        $("header.combined nav .dropdown > ul").css("width", columnWidth+"px");
+        $("header.combined nav .dropdown > div").css("width", spotlightWidth+"px");
+
+        // $menuLi.find('div.dropdown').css("display", "flex"); // show all the menus
+
+        // bring to front on hover
+        $menuLi.mouseover(function() { $(this).find('div.dropdown').css('z-index', '200') });
+        $menuLi.mouseout(function() { $(this).find('div.dropdown').css('z-index', '100') });
+
+        // to toggle show/hide on hover again
+        // $('header.combined nav > ul > li:visible div.dropdown').css("display", "");
+
+        // to show specific menu
+        // $('header.combined nav > ul > li:visible:nth-child(4) div.dropdown').css("display", "flex");
+      }
+    });
+  }
+
+  $(function () {
+    // recompute header nav display
+    headerDimensions();
+    $(window).on('resize', headerDimensions);
+    // $(window).off('resize').on('resize', function() { headerDimensions(true) }); // for debugging
+
+    $('header.combined .dropdown').each(function () {
+      $(this).parent().addClass('hasDropdown');
+    });
+    $('header.combined li.hasDropdown').click(function () {
+      $(this).toggleClass('showSubNav');
+    });
+  });
+</script>
+</header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <!-- Page Content -->
+                    <div id="bcrumb" class="d-sm-none d-md-block"><ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/mp">Market Participants</a></li>
+        <li><a href="/mp/data-products">EMIL</a></li>
+        <li class="active">Data Product Details</li>
+                    </ul></div>
+
+<script src="/static-assets/js/app/api.js"></script>
+<script src="/static-assets/js/app/product-details.js"></script>
+    <script>product = {"misDisplayType_s":"AGE","internal-name":"ESR Integration Report","market_s":"Nodal","lastUpdatedDate_dt_tz":"CST6CDT","objectGroupId":"ef23","misDisplayDuration_i":"365","descriptionOfChange_t":"PR449-01 SCR822 - new report","anticipatedEffectiveDate_dt":"2023-12-07T06:00:00.000Z","productDescription_s":"A high level summary of daily Energy Storage Resource generation and penetration records.","channel_o":{"item":[{"key":"Public","value_smv":"Public"},{"key":"EWS","value_smv":"EWS"}]},"productName_s":"ESR Integration Report","productName_t":"ESR Integration Report","businessOwner_s":"Nitika Mago","postingType_s":"Report","generationFrequency_o":{"item":{"key":"Chron - Daily","value_smv":"Chron - Daily"}},"generationSystem_o":{"item":{"key":"ISM","value_smv":"ISM"}},"id":"mis:/site/data/data-products/np4-765-er.xml","fileType_o":{"item":{"key":".pdf","value_smv":".pdf"}},"productSme_s":"Business Intelligence","traceability_o":{"item":[{"include":"/site/data/traceability/1698249174351.xml","component":{"createdDate_dt":"2023-10-25T15:52:54.351Z","createdDate":"2023-10-25T15:52:54.351Z","description_s":"SCR822","lastModifiedDate":"2023-10-25T15:52:54.351Z","lastModifiedDate_dt":"2023-10-25T15:52:54.351Z","internal-name":"SCR822","merge-strategy":"inherit-levels","content-type":"/component/traceability","objectGroupId":"7cf5","file-name":"1698249174351.xml","id_s":"1698249174351","descriptionOfChange_t":"SCR822"},"value":"SCR822","disableFlattening":"false","key":"/site/data/traceability/1698249174351.xml"}]},"crafterPublishedDate_dt":"2024-06-23T22:26:42.768672246Z","emilId_s":"np4-765-er","securityClassification_s":"Public","rfcNumber_s":"ITCM-403811","merge-strategy":"inherit-levels","infoType_s":"Data Catalog/EMIL","inheritsFrom_smv":["/crafter-level-descriptor.level.xml","/site/crafter-level-descriptor.level.xml","/site/data/crafter-level-descriptor.level.xml","/site/data/data-products/crafter-level-descriptor.level.xml"],"firstRunDate_dt_tz":"CST6CDT","rootId":"mis:/site/data/data-products/np4-765-er.xml","localId":"/site/data/data-products/np4-765-er.xml","archiveSystem_s":"ICE","productOwner_s":"Jamie Lavas","systemOfRecord_o":{"item":[{"key":"EMS","value_smv":"EMS"},{"key":"MMS","value_smv":"MMS"}]},"crafterSite":"mis","crafterPublishedDate":"2024-06-23T22:26:42.768672246Z","misLinks_o":{"item":[{"include":"/site/data/mis-links/b066caff-baec-46e8-baee-fd42bdafd646.xml","component":{"createdDate_dt":"2023-12-07T18:59:14.449Z","type_s":"ICE Data Product","subCategories_o":{"item":[{"subCategory_s":"Generation Information"}]},"lastModifiedDate":"2023-12-07T18:59:14.449Z","url_s":"23794","internal-name":"ESR Integration Report","genre_s":"Grid","objectGroupId":"4755","dataClassification_s":"Public","eMILID_o":{"item":[{"include":"/site/data/data-products/np4-765-er.xml","value":"ESR Integration Report","disableFlattening":"false","key":"/site/data/data-products/np4-765-er.xml"}]},"createdDate":"2023-12-07T18:59:14.449Z","lastModifiedDate_dt":"2023-12-07T18:59:14.449Z","category_s":"Generation","merge-strategy":"inherit-levels","content-type":"/component/mis-link","display-template":"/templates/web/components/mis-link.ftl","file-name":"b066caff-baec-46e8-baee-fd42bdafd646.xml","objectId":"b066caff-baec-46e8-baee-fd42bdafd646"},"value":"ESR Integration Report","disableFlattening":"false","key":"/site/data/mis-links/b066caff-baec-46e8-baee-fd42bdafd646.xml"}]},"content-type":"/component/data-product","inr_s":"No","objectId":"485fb8dc-0ca9-4106-b690-e2b68801d468","audience_o":{"item":{"value_htmlmv":"Public","key":"Public"}},"reportTypeId_i":"23794","createdDate_dt":"2023-12-07T18:59:14.448Z","anticipatedEffectiveDate_dt_tz":"CST6CDT","lastModifiedDate":"2023-12-07T18:59:14.448Z","topics_o":{"item":[{"topics_s":"Energy Storage Resources (ESR)"}]},"lastUpdatedDate_dt":"2023-12-07T19:01:35.219Z","release_s":"2023-R6","comments_t":"republish so that it will show in Studio Existing Products","createdDate":"2023-12-07T18:59:14.448Z","lastModifiedDate_dt":"2023-12-07T18:59:14.448Z","file-name":"np4-765-er.xml","typeOfChange_s":"Bulk update","businessSme_s":"Luis Hinojosa","status_s":"Active","firstRunDate_dt":"2023-12-06T06:00:00.000Z"};</script>
+    <script>pageProxySecureContextRequest = "https://mis.ercot.com/secure"</script>
+    
+<div class="row data-product-details">
+    <div class="col-xl content-margin px-xl-5">
+        <div class="title">
+              <h1>ESR Integration Report</h1>
+<div id="details">
+    <div class="row">
+        <div class="col description mb-2">A high level summary of daily Energy Storage Resource generation and penetration records.</div>
+    </div>
+    <a class="mb-2 product-details-accordion" id="productDetailsAccordionLink" data-toggle="collapse" href="#collapseDetails" role="button" aria-expanded="false" aria-controls="collapseDetails">
+        <span class="d-none"><i class="far fa-minus mt-1"></i> &nbsp; Hide EMIL Information</span>
+        <span><i class="far fa-plus mt-1"></i> &nbsp; Show EMIL Information</span>
+    </a>
+    <div id="collapseDetails" class="collapse hide text-wrap">
+        <div class="row mb-4">
+            <div class="col-sm-2">
+                <p>
+                    <label>EMIL ID</label>
+                    <span class="text-uppercase">np4-765-er</span>
+                </p>
+                <p>
+                    <label>Report Type ID</label>
+                        <span>23794</span>
+                </p>
+            </div>
+            <div class="col-sm-2">
+                <p>
+                    <label>Status</label>
+                    <span>Active</span>
+                </p>
+                <p>
+                    <label>Generation Frequency</label>
+                        <span>Chron - Daily</span>
+                </p>
+                <p>
+                    <label>First Run Date</label>
+                        <span>12-6-2023</span>
+                </p>
+            </div>
+            <div class="col-sm-5">
+                <p>
+                    <label>Audience</label>
+                        <span>Public</span>
+                </p>
+                <p>
+                    <label>Security Classification</label>
+                        <span>Public</span>
+                </p>
+                <p>
+                    <label>ECEII</label>
+                        <span>N/A</span>
+                </p>
+            </div>
+            <div class="col-sm-3">
+                <p>
+                    <label>Rule</label>
+                            <a class="d-block" href="/mp/data-products?protocolRules=SCR822">SCR822</a>
+                </p>
+                <p>
+                    <label>EMIL Last Updated Date</label>
+                        <span>12-7-2023</span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <p>
+                    <label>Channel</label>
+                        <span>Public, EWS</span>
+                </p>
+                <p>
+                    <label>Extract Subscriber</label>
+                        <span>N/A</span>
+                </p>
+                <p>
+                    <label>File Type</label>
+                        <span>.pdf</span>
+                </p>
+            </div>
+            <div class="col-sm-2">
+                <p>
+                    <label>User Guide</label>
+                        <span>N/A</span>
+                </p>
+                <p>
+                    <label>XSD Name</label>
+                        <span>N/A</span>
+                </p>
+                <p>
+                    <label>DDL Name</label>
+                        <span>N/A</span>
+                </p>
+            </div>
+            <div class="col-sm-5">
+                <p>
+                    <label>Posting Type</label>
+                        <span>Report</span>
+                </p>
+                <p>
+                    <label>MIS Posting Location</label>
+                        <span>N/A</span>
+                </p>
+                <p>
+                    <label>Display Duration</label>
+                        <span>365</span>
+                </p>
+            </div>
+            <div class="col-sm-3">
+                <p>
+                    <label>Market</label>
+                        <span>Nodal</span>
+                </p>
+                <p>
+                    <label>Digital Certificate Role</label>
+                        <span>N/A</span>
+                </p>
+                <p>
+                    <label>Notification Type</label>
+                        <span>N/A</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- if channel is public or user is authenticated -->
+<script src="/static-assets/js/app/report-table.js"></script>
+
+<script>
+    var reportTypeID = "23794";
+    var viewHTML = "false";
+    var reportListUrl = "https://www.ercot.com/misapp/servlets/IceDocListJsonWS?reportTypeId=";
+    var reportDownloadUrl = "https://www.ercot.com/misdownload/servlets/mirDownload?doclookupId=";
+    var reportViewUrl = "https://www.ercot.com/misdownload/servlets/ViewReport?doclookupId={docId}&reportTypeId={reportTypeId}";
+</script>
+
+<div class="row">
+    <div class="col-xl-10 reports-container">
+        <div class="dynamic--table mt-2">
+            <div class="tileView">
+                <table id="reportTable" class="table table-condensed report-table">
+                    <thead>
+                    <tr>
+                        <th>Friendly Name</th>
+                        <th colspan="2">Posted</th>
+                        <th>Available Files</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <script>
+                    if (typeof(reportTable)!="undefined") {
+                        reportTable.reportNone = function() {
+                            this.displayMessage('<p>There are no reports for this product.</p>');
+                        };
+                        reportTable.reportError = function() {
+                            this.displayMessage('<p>The report request failed. Please try again later.</p>');
+                        };
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>        </div>
+    </div>
+    <div class="d-none d-lg-block" style="width:280px">
+<div id="relatedProductsCard" class="card m2" >
+    <div id="rules" class="card-body"></div>
+    <script>related.noProducts = '<p>No related products found.</p>';</script>
+        <div id="topics" class="card-body">
+            <div class="card-title subtitle1">Search Related Topics</div>
+                    <a class="d-block pb-2"
+                       href="/mp/data-products?topics=Energy%20Storage%20Resources%20(ESR)">
+                        Energy Storage Resources (ESR)</a>
+        </div>
+</div>
+    </div>
+
+</div>                </div>
+            </div> <!-- row end -->
+        </div> <!-- container end -->
+
+<!-- footer icons and logo sprite sheet -->
+<svg width="0" height="0" class="hidden">
+  <symbol id="fb" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.9069 36.83714">
+    <defs></defs>
+    <path d="M18.17216,1.774a16,16,0,1,0,16,16A16.00084,16.00084,0,0,0,18.17216,1.774ZM21.6,17.77987h-2.2422V25.774h-3.3223v-7.9941h-1.5801v-2.8242h1.5801v-1.8281A3.1158,3.1158,0,0,1,19.388,9.774l2.461.0098V12.526h-1.7862a.67628.67628,0,0,0-.705.7695v1.6602H21.891Z"></path>
+  </symbol>
+  <symbol id="li" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.9069 36.83714">
+    <defs></defs>
+    <path d="M18.91245,17.24386v-.03319a.20251.20251,0,0,1-.0225.03319Z"></path>
+    <path d="M17.95345,2.41957a16,16,0,1,0,16,16A16.0002,16.0002,0,0,0,17.95345,2.41957Zm-4.3672,23.6465h-3.4307V15.74967h3.4307Zm-1.7158-11.7265H11.848a1.788,1.788,0,1,1,.0449-3.5664,1.78876,1.78876,0,1,1-.0224,3.5664Zm14.083,11.7265H22.52376v-5.5195c0-1.38671-.49611-2.334-1.73831-2.334a1.88107,1.88107,0,0,0-1.75969,1.2559,2.33048,2.33048,0,0,0-.11331.8359v5.7617H15.48376s.04389-9.3496,0-10.3164h3.42869v1.461a3.40358,3.40358,0,0,1,3.0918-1.7032c2.2558,0,3.9492,1.4727,3.9492,4.6426Z"></path>
+  </symbol>
+  <symbol version="1.1" id="mail-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xml:space="preserve" viewBox="0 0 35.9 36.8">
+    <path d="M18,2.4c-8.8,0-16,7.2-16,16s7.2,16,16,16s16-7.2,16-16C34,9.6,26.8,2.4,18,2.4z M26,22.9
+	c0,0.8-0.7,1.5-1.5,1.5h-13c-0.8,0-1.5-0.7-1.5-1.5v-6.4c0-0.2,0.2-0.2,0.3-0.1c0.7,0.5,1.6,1.2,4.8,3.5c0.7,0.5,1.8,1.5,2.9,1.5
+	c1.1,0,2.2-1,2.9-1.5c3.2-2.3,4.1-3,4.8-3.6c0.1-0.1,0.3,0,0.3,0.1V22.9z M26,14.5c0,0.2-0.1,0.5-0.3,0.6c-1,0.8-1.3,1-5.4,4
+	c-0.5,0.4-1.6,1.3-2.3,1.3c-0.7,0-1.8-0.9-2.3-1.3c-4.1-3-4.5-3.3-5.4-4C10.1,15,10,14.7,10,14.5v-0.6c0-0.8,0.7-1.5,1.5-1.5h13
+	c0.8,0,1.5,0.7,1.5,1.5V14.5z"></path>
+  </symbol>
+  <symbol version="1.1" id="news-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xml:space="preserve" viewBox="0 0 35.9 36.8">
+    <g>
+      <path d="M18.1,18.4h-4.8c-0.2,0-0.4,0.2-0.4,0.4V19c0,0.2,0.2,0.4,0.4,0.4h4.8c0.2,0,0.4-0.2,0.4-0.4v-0.2
+		C18.5,18.6,18.3,18.4,18.1,18.4z"></path>
+      <path d="M18.1,21.4h-4.8c-0.2,0-0.4,0.2-0.4,0.4V22c0,0.2,0.2,0.4,0.4,0.4h4.8c0.2,0,0.4-0.2,0.4-0.4v-0.2
+		C18.5,21.6,18.3,21.4,18.1,21.4z"></path>
+      <path d="M10.5,22.7c0,0.1,0.1,0.2,0.2,0.2s0.2-0.1,0.2-0.2v-7.8h-0.5V22.7z"></path>
+      <path d="M24.6,21.4h-4.8c-0.2,0-0.4,0.2-0.4,0.4V22c0,0.2,0.2,0.4,0.4,0.4h4.8c0.2,0,0.4-0.2,0.4-0.4v-0.2
+		C25,21.6,24.8,21.4,24.6,21.4z"></path>
+      <path d="M24.6,18.4h-4.8c-0.2,0-0.4,0.2-0.4,0.4V19c0,0.2,0.2,0.4,0.4,0.4h4.8c0.2,0,0.4-0.2,0.4-0.4v-0.2
+		C25,18.6,24.8,18.4,24.6,18.4z"></path>
+      <path d="M24.6,14.4H13.3c-0.2,0-0.4,0.2-0.4,0.4V16c0,0.2,0.2,0.4,0.4,0.4h11.2c0.2,0,0.4-0.2,0.4-0.4v-1.2
+		C25,14.6,24.8,14.4,24.6,14.4z"></path>
+      <path d="M18,2.4c-8.8,0-16,7.2-16,16s7.2,16,16,16s16-7.2,16-16C34,9.6,26.8,2.4,18,2.4z M27,22.9
+		c0,0.8-0.7,1.5-1.5,1.5H10.7c-1,0-1.8-0.8-1.8-1.8v-8.5c0-0.4,0.3-0.8,0.8-0.8H11v-0.2c0-0.4,0.3-0.8,0.8-0.8h14.5
+		c0.4,0,0.8,0.3,0.8,0.8V22.9z"></path>
+    </g>
+  </symbol>
+  <symbol id="tw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.9069 36.83714">
+<defs>
+</defs>
+<polygon class="cls-1" points="13.35 10.42 25.31 26.41 22.6 26.41 10.64 10.42 13.35 10.42"/>
+<path class="cls-1" d="M17.95,2.42C9.12,2.42,1.95,9.58,1.95,18.42s7.16,16,16,16,16-7.16,16-16S26.79,2.42,17.95,2.42ZM21.96,27.69l-5.44-7.28-6.74,7.28h-1.73l7.7-8.31-7.65-10.23h5.89l5.01,6.7,6.21-6.7h1.73l-7.16,7.74,8.08,10.8h-5.89Z"/>
+</symbol>
+  <symbol id="yt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.9069 36.83714">
+    <defs></defs>
+    <path d="M17.81185,15.98107a.40938.40938,0,0,0,.2939-.1015.37059.37059,0,0,0,.1104-.2832v-2.4297a.28961.28961,0,0,0-.1113-.2363.44838.44838,0,0,0-.293-.0899.40118.40118,0,0,0-.2715.0899.3007.3007,0,0,0-.1035.2363v2.4297a.38922.38922,0,0,0,.0977.2832A.35572.35572,0,0,0,17.81185,15.98107Z"></path>
+    <path d="M19.82355,20.46937a.8012.8012,0,0,0-.374.0957,1.302,1.302,0,0,0-.3467.2813v-1.7676h-.8183V24.569h.8183v-.3105a1.03156,1.03156,0,0,0,.3467.27339.94323.94323,0,0,0,.4228.08791.66866.66866,0,0,0,.54992-.2285,1.00372,1.00372,0,0,0,.19038-.6582v-2.248a1.21029,1.21029,0,0,0-.2022-.7579A.70072.70072,0,0,0,19.82355,20.46937Zm-.0449,3.1504a.443.443,0,0,1-.0693.2793.2626.2626,0,0,1-.2188.0879.45388.45388,0,0,1-.19528-.0449.68225.68225,0,0,1-.19242-.1426v-2.5234a.60506.60506,0,0,1,.167-.125.41944.41944,0,0,1,.1719-.0391.31074.31074,0,0,1,.2519.1055.48241.48241,0,0,1,.085.3125Z"></path>
+    <polygon points="12.209 19.878 13.153 19.878 13.153 24.569 14.065 24.569 14.065 19.878 15.009 19.878 15.009 19.079 12.209 19.079 12.209 19.878"></polygon>
+    <path d="M16.86655,23.59437a1.14864,1.14864,0,0,1-.251.2188.4591.4591,0,0,1-.2256.084.1969.1969,0,0,1-.166-.0645.34665.34665,0,0,1-.0498-.207v-3.1074h-.8096V23.905a.8693.8693,0,0,0,.1416.541.50038.50038,0,0,0,.4239.1816.97538.97538,0,0,0,.4697-.1289,1.7429,1.7429,0,0,0,.4668-.375v.4453h.8096v-4.0507h-.8096Z"></path>
+    <path d="M17.95345,2.41857a16,16,0,1,0,16,16A16.00084,16.00084,0,0,0,17.95345,2.41857Zm1.9297,9.7618h.91012v3.4199a.36888.36888,0,0,0,.05858.2285.22037.22037,0,0,0,.1856.0723.52933.52933,0,0,0,.2549-.0938,1.26744,1.26744,0,0,0,.2802-.2402v-3.3867h.9122v4.4609h-.9122v-.4941a1.91206,1.91206,0,0,1-.5244.416,1.156,1.156,0,0,1-.5283.1445.57139.57139,0,0,1-.47658-.2031.93317.93317,0,0,1-.16012-.59571Zm-3.3838,1.01949a1.01757,1.01757,0,0,1,.3672-.82419,1.49555,1.49555,0,0,1,.9902-.3067,1.34519,1.34519,0,0,1,.9278.3223,1.07432,1.07432,0,0,1,.3593.834V15.53a1.16241,1.16241,0,0,1-.3525.8984,1.39316,1.39316,0,0,1-.9766.3262,1.34275,1.34275,0,0,1-.957-.3379,1.18326,1.18326,0,0,1-.3584-.9043ZM14.017,10.59437l.666,2.418h.0644l.6358-2.418h1.042l-1.1944,3.5391v2.5078h-1.0253v-2.3965l-1.2217-3.6504ZM25.95345,23.321a2.92489,2.92489,0,0,1-2.9228,2.9238H12.87535a2.92342,2.92342,0,0,1-2.9219-2.9238v-2.3496a2.92342,2.92342,0,0,1,2.9219-2.9238h10.1553a2.92489,2.92489,0,0,1,2.9228,2.9238Z"></path>
+    <path d="M22.267,20.41857a1.22245,1.22245,0,0,0-.8858.3301,1.14246,1.14246,0,0,0-.3437.8594v1.8184a1.2909,1.2909,0,0,0,.3125.9179,1.10887,1.10887,0,0,0,.8564.334,1.20665,1.20665,0,0,0,.9082-.31251,1.29526,1.29526,0,0,0,.30572-.93939v-.2071h-.833v.1836a.88216.88216,0,0,1-.08012.46289.334.334,0,0,1-.2822.10551.30322.30322,0,0,1-.2744-.1231.89483.89483,0,0,1-.0791-.4453v-.7617h1.54882v-1.0332a1.2138,1.2138,0,0,0-.29882-.8828A1.134,1.134,0,0,0,22.267,20.41857Zm.32032,1.5918h-.71582v-.4082a.59457.59457,0,0,1,.084-.3632.32146.32146,0,0,1,.2773-.1133.31085.31085,0,0,1,.26952.1133.601.601,0,0,1,.085.3632Z"></path>
+  </symbol>
+  <symbol id="app-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.9069 36.83714">
+    <g>
+      <path d="M21.89,10.7h-7.87c-0.12,0-0.22,0.1-0.22,0.22v14.99c0,0.12,0.1,0.22,0.22,0.22h7.87
+		c0.12,0,0.22-0.1,0.22-0.22V10.92C22.11,10.8,22.01,10.7,21.89,10.7z M17.95,25.54c-0.66,0-1.19-0.53-1.19-1.19
+		c0-0.66,0.53-1.19,1.19-1.19c0.66,0,1.19,0.53,1.19,1.19C19.14,25.01,18.61,25.54,17.95,25.54z"></path>
+      <path d="M17.95,2.42c-8.84,0-16,7.16-16,16s7.16,16,16,16s16-7.16,16-16C33.95,9.58,26.79,2.42,17.95,2.42z
+		 M23.89,26.14c0,0.98-0.8,1.78-1.78,1.78H13.8c-0.98,0-1.78-0.8-1.78-1.78V10.7c0-0.98,0.8-1.78,1.78-1.78h8.31
+		c0.98,0,1.78,0.8,1.78,1.78V26.14z"></path>
+    </g>
+  </symbol>
+  <symbol version="1.1" id="ercot-lockup-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xml:space="preserve" viewBox="0 0 226.3 83.6">
+    <title>ERCOT-Lockup-white</title>
+    <g id="Layer_1-2">
+      <g id="Layer_1-2-2">
+        <path d="M29.3,48.9c-2.9,9.2-8.7,13.5-17.9,13.5c-4.6,0-7.8-1.2-9.6-3.4c-2-2.6-2.4-6.7-1.1-12.4l3.1-13.4
+			C6.4,22.2,12.6,17,22.5,17c4.6,0,7.8,1.1,9.6,3.4c2,2.6,2.4,6.7,1.1,12.4l-1.6,6.8c-0.1,0.6-0.6,1-1.2,0.9H11.3
+			c-0.8,0-1.1,0-1.2,0.8l-1.6,6.6c-0.8,3.2-0.6,5.5,0.6,7c1,1.2,2.6,1.8,4.2,1.7c4.1,0,6.9-2.7,8.2-7.9c0.1-0.3,0.4-0.6,0.8-0.6h6.5
+			c0.3-0.1,0.6,0.1,0.7,0.4c0,0,0,0,0,0C29.4,48.6,29.4,48.8,29.3,48.9 M20.7,22.8c-4.2,0-7,2.8-8.2,8.2L12,33.1
+			c-0.1,0.3-0.1,0.7,0,1.1c0.2,0.5,0.5,0.5,1.2,0.5h10.6c0.8,0,1-0.1,1.2-0.8l0.5-2.3c0.8-3.2,0.6-5.5-0.6-7
+			C23.8,23.3,22.3,22.7,20.7,22.8"></path>
+        <path d="M65.5,17.6c-0.3,1.5-1.2,5.1-1.5,6.5c-0.1,0.3-0.4,0.5-0.7,0.5c0,0,0,0,0,0l0,0c-1.6-0.4-3.3-0.6-5-0.6
+			c-3.6,0-8,2.1-9.1,6.9l-7.1,30.2c-0.1,0.3-0.3,0.5-0.6,0.5h-7c-0.3,0-0.5-0.2-0.5-0.5c0,0,0,0,0,0c0,0,0-0.1,0-0.1l10-42.7
+			c0.1-0.3,0.3-0.5,0.6-0.5h6.1c0.6,0,0.9,0.1,0.8,0.7l-0.2,1c-0.2,1,0.5,1.1,1.5,0.4c3.4-2.6,7.8-3.7,12.1-3
+			C65.3,16.9,65.6,17.2,65.5,17.6C65.5,17.5,65.5,17.5,65.5,17.6L65.5,17.6"></path>
+        <path d="M91.7,46.2c0.2,0,0.4,0.2,0.4,0.5c0,0,0,0.1,0,0.1c-2.7,10.6-8.7,15.7-18.5,15.7c-4.6,0-7.8-1.2-9.6-3.4
+			c-2-2.6-2.4-6.7-1.1-12.4l3.1-13.4C68.6,22.2,74.7,17,84.7,17c4.5,0,7.7,1.1,9.5,3.3s2.4,5.8,1.6,10.6c-0.1,0.4-0.4,0.7-0.8,0.7
+			h-6.8c-0.2,0-0.4-0.2-0.4-0.5c0,0,0,0,0,0c0,0,0-0.1,0-0.1c0.6-3,0.4-5.1-0.7-6.4c-1-1.2-2.6-1.8-4.2-1.7c-4.2,0-7,2.8-8.3,8.2
+			l-3.9,16.8c-0.8,3.2-0.6,5.5,0.6,7c1,1.2,2.6,1.8,4.2,1.7c4.2,0,7-2.8,8.3-8.2l0.4-1.7c0.1-0.2,0.3-0.4,0.5-0.4L91.7,46.2z"></path>
+        <path d="M109.1,62.4c-4.6,0-7.8-1.2-9.6-3.4c-2-2.6-2.4-6.7-1.1-12.4l3.1-13.4c2.6-10.9,8.6-16.2,18.6-16.2
+			c4.6,0,7.8,1.1,9.6,3.4c2,2.6,2.4,6.7,1.1,12.4l-3.1,13.4C125.2,57.2,119.1,62.5,109.1,62.4 M118.4,22.9c-4.2,0-7,2.8-8.3,8.2
+			l-3.9,16.8c-0.8,3.2-0.6,5.5,0.6,7c1,1.2,2.6,1.8,4.2,1.7c4.2,0,7-2.8,8.3-8.2l3.9-16.8c0.8-3.2,0.6-5.5-0.6-7
+			C121.5,23.3,119.9,22.7,118.4,22.9"></path>
+        <path d="M142,24.3l-6.8,29c-0.7,2.9-0.4,5.1,0.7,6.6c1.3,1.7,3.9,2.5,7.6,2.5c1.3,0,2.7-0.1,4-0.3
+			c0.2,0,0.3-0.2,0.4-0.4l1.3-5.7c0-0.2-0.1-0.3-0.2-0.4c0,0,0,0,0,0h-1.8c-1.4,0-2.8-0.2-3.4-0.9s-0.5-2.4-0.1-4l6.2-26.5
+			c0.1-0.5,0.4-0.6,0.9-0.6h5.4c0.3,0,0.6-0.2,0.6-0.5l1.1-4.8c0.1-0.2-0.1-0.5-0.3-0.5h-5.6c-0.3,0-0.5-0.2-0.5-0.4
+			c0-0.1,0-0.2,0.1-0.3l2.5-10.9c0.2-0.8-0.5-0.8-0.5-0.8H147c-0.3,0-0.6,0.2-0.7,0.4l-2.7,11.3c-0.1,0.4-0.2,0.6-0.7,0.6h-5.3
+			c0,0-0.4,0-0.7,0.6l-1.1,4.6c-0.1,0.5,0.5,0.6,0.5,0.6h5.1C141.4,23.6,142.2,23.6,142,24.3"></path>
+        <path d="M210.9,40.7l-20.4,23.6c-0.1,0.1-0.2,0.1-0.3,0c0,0,0,0,0,0c-0.1-0.1-0.1-0.1-0.1-0.2l2-10.6
+			c0-0.3-0.2-0.6-0.5-0.6c0,0,0,0,0,0h-0.1l-4.7,1.4c-0.4,0.1-0.8,0.5-0.8,0.9l-4.5,27.1c-0.1,0.7,0.5,1,1,0.4l36.1-42.4
+			c0.3-0.3,0.3-0.8,0.1-1.1c-1.3-2-3.3-3.6-5.6-4.3c-6.8-2.7-14.8,2.1-20.2,4.9c-13.9,7.3-22.2,0.5-23.9-1.2
+			c-0.2-0.2-0.4-0.3-0.7-0.3h-5.9c-0.2,0-0.4,0.2-0.4,0.4c0,0.1,0,0.1,0.1,0.2c1.3,1.7,5.2,6.6,10.7,8.4c4.9,1.6,12.7,3,22.9-2.5
+			l0.1-0.1c5.5-3.1,11.3-5.8,14.9-4.5C210.6,40.2,211.1,40.4,210.9,40.7 M194.2,20.7c-8.6,5.1-14.3,5.6-16.4,4.5
+			c-0.3-0.2-0.4-0.5-0.4-0.8l3.8-18.2c0.1-0.2,0.3-0.4,0.5-0.4h11.4c0.2,0,0.3,0.1,0.3,0.3c0,0,0,0,0,0c0,0,0,0,0,0.1l-2.1,9.4
+			c0,0.2,0.1,0.4,0.3,0.4c0.1,0,0.2,0,0.2,0l4.9-2.2c0.3-0.1,0.5-0.4,0.6-0.7l2.7-12c0.1-0.4-0.1-0.9-0.5-1c0,0,0,0,0,0h-0.2h-22
+			c-0.4,0-0.7,0.3-0.8,0.7L171,26.5c-0.1,0.3,0,0.6,0.2,0.9l0.6,0.8c0.4,0.6,3,3.3,8.7,3.3c3.8,0,8.4-1.3,17.3-5.9
+			c0.1-0.1,13.8-8.2,21.5,0.9c0.2,0.2,0.4,0.3,0.7,0.3h5.9c0.2,0,0.4-0.2,0.4-0.4c0,0,0,0,0,0c0-0.1,0-0.1-0.1-0.2
+			C216.3,10.6,201.4,16.4,194.2,20.7"></path>
+      </g>
+    </g>
+  </symbol>
+</svg>
+<!-- end sprite sheet -->
+
+<footer class="combined container-fluid">
+  <div class="fc_quarter large">
+    <a href="/about">About ERCOT</a>
+    <a href="/services">Services</a>
+    <a href="/committees">Committees & Groups</a>
+    <a href="/mktrules">Market Rules</a>
+    <a href="/mktinfo">Market Information</a>
+    <a href="/gridinfo">Grid Information</a>
+    <a href="/mp">Market Participants </a>
+  </div>
+  <div class="fc_quarter large">
+    <a href="/about/contact">Contact Us</a>
+    <a href="/glossary">Glossary</a>
+    <a href="/careers">Careers</a>
+    <a href="/about/locations">Locations</a>
+    <a href="/calendar">Calendar</a>
+  </div>
+  
+  <div class="fc_quarter medium">
+    <h5>Quick Links</h5>
+      <a href="/about/governance/ethics">Ethics Point</a>
+      <a href="/services/comm/mkt_notices/opsmessages">Operations Messages</a>
+      <a href="/services/projects">Project Status</a>
+      <a href="/services/sla">Service Level Agreements</a>
+      <a href="https://mis.ercot.com/secure/applications">MIS Applications</a>
+      <a href="/gridmktinfo/dashboards">Grid and Market Conditions</a>
+      <a href="/mp/data-products">ERCOT Market Information List</a>
+      <a href="https://sa.ercot.com/rioo-rs/">Resource Integration & Ongoing Operations – Resource Services</a>
+      <a href="/txans?utm_source=navigation&utm_medium=footer&utm_campaign=txans&utm_term=txans-launch">Texas Advisory and Notification System</a>
+  </div>
+  <div class="fc_quarter medium">
+    <h5>STAY CONNECTED</h5>
+    <h6>SOCIAL</h6>
+    <div class="social">
+        <a href="https://www.facebook.com/ERCOTISO/" target="_blank">
+            <svg class="icon"><use xlink:href="#fb"></use></svg>
+        </a>
+        <a href="https://twitter.com/ercot_iso" target="_blank">
+            <svg class="icon"><use xlink:href="#tw"></use></svg>
+        </a>
+        <a href="https://www.linkedin.com/company/ercot/" target="_blank">
+            <svg class="icon"><use xlink:href="#li"></use></svg>
+        </a>
+        <a href="https://www.youtube.com/user/ERCOTISO" target="_blank">
+            <svg class="icon"><use xlink:href="#yt"></use></svg>
+        </a>
+        <a href="http://www.ercot.com/news" target="_blank">
+            <svg class="icon"><use xlink:href="#app-icon"></use></svg>
+        </a>
+      
+    </div>
+
+    <h6>News & Press</h6>
+      <a class="hasicon" href="https://lists.ercot.com/">
+          <svg class="icon"><use xlink:href="#mail-icon"></use></svg>
+        Mailing Lists</a>
+      <a class="hasicon" href="/news">
+          <svg class="icon"><use xlink:href="#news-icon"></use></svg>
+        News & Publications</a>
+
+  </div>
+  <div class="fc_half copyright">© 1996-2024 Electric Reliability Council of Texas, Inc. All rights reserved.</div>
+  <div class="additional">
+      <a href="/help/sitemap">Sitemap</a>
+      <a href="/help/terms">Terms of Use</a>
+      <a href="/help/privacy">Privacy</a>
+  </div>
+  <div class="fc_quarter logo">
+    <a id="flogo" href="https://www.ercot.com">
+        <svg class="logo"><use xlink:href="#ercot-lockup-white"></use></svg>
+    </a>
+  </div>
+</footer>
+
+<!-- Help button -->
+<button id="btn--help" onclick="toggle_help('helpContainer');" class="btn btn--help" >
+    <i class="far fa-question-circle"></i> Help
+</button>
+
+<!-- Help content: /static-assets/data/help/v4/content/topics/mis/data_product_details-p.htm -->
+<div id="helpContainer" class="help--container with-iframe">
+    <div class="modal--custom">
+        <div class="modal-header">
+            <h5 class="modal-title pull-left">Help</h5>
+            <button onclick="toggle_help('helpContainer');" aria-label="Close" class="close pull-right"
+                type="button">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body pull-left">
+            <div class="modal-copy">
+                <iframe src="/static-assets/data/help/v4/content/topics/mis/data_product_details-p.htm" frameBorder=0 width="100%" height="100%"></iframe>
+            </div>
+        </div>
+    </div>
+</div><!-- End Help content -->
+    </div>
+</div>
+<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=840374757" async></script></body>
+</html>
