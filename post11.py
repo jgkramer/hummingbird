@@ -7,6 +7,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import re
 import numpy as np
+import pandas as pd
 
 import matplotlib.pyplot as plt
 
@@ -145,37 +146,57 @@ if "__main__" == __name__:
     datelist = list(sorted1)
     reportlist = list(sorted2)
 
+    print(reportlist[-1].discharging_mwh)
+    print(reportlist[-1].charging_mwh)
+
+    discharge_capacity = [r.installed_discharge_capacity for r in reportlist]
+    sum_discharge = [r.total_discharge for r in reportlist]
+    
+    fig, ax = plt.subplots(figsize = (7.5, 3.5))        
+    fig.tight_layout(pad = 2.0)
+    ax.plot(datelist, discharge_capacity, label = "Installed Discharge Capacity")
+    ax.plot(datelist, sum_discharge, label = "Daily Discharge Amount")
+    plt.legend()
+    plt.show()
+
+
     curr_month = datetime(datelist[0].year, datelist[0].month, 1)
     last_month = datetime(datelist[-1].year, datelist[-1].month, 1)
     print(curr_month, last_month)
     
+    charging_df = pd.DataFrame()
+    discharging_df = pd.DataFrame()
+
+    charging_df["Hour"] = np.arange(1, 25)
+    discharging_df["Hour"] = np.arange(1, 25)
+
+
 
     while(curr_month <= last_month):
-        print("Month is: ", curr_month)
+
+        monthname = curr_month.strftime("%b %Y")
+        print(f"Month is: {monthname}")
         month_hourly_charging = [report.charging_mwh for report in reportlist if report.date.year == curr_month.year and report.date.month == curr_month.month and report.valid_data]
         month_hourly_discharging = [report.discharging_mwh for report in reportlist if report.date.year == curr_month.year and report.date.month == curr_month.month and report.valid_data]
         
-        np.set_printoptions(precision = 1)
-
         array_charging = np.array(month_hourly_charging)
         average_charging = np.average(array_charging, axis = 0)
-        print(average_charging)
-        
+        charging_df[monthname] = average_charging
 
         array_discharging = np.array(month_hourly_discharging)
         average_discharging = np.average(array_discharging, axis = 0)
-        print(average_discharging)
+        discharging_df[monthname] = average_discharging
+
         print(round(sum(average_charging), 1), 
               round(sum(average_discharging), 1), 
               round(100 * sum(average_discharging) / sum(average_charging), 1), 
               "\n")
         curr_month = curr_month + relativedelta(months = 1)
+
+    pd.set_option('display.float_format', '{:.1f}'.format)    
+    print(charging_df)
+    print()
+    print(discharging_df)
         
-
-
-
-
-
-
 
         #print(report_data.date, report_data.total_charge, report_data.total_discharge)
