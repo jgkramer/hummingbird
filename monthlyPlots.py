@@ -52,7 +52,6 @@ class MonthlyPlots:
         plt.show()
         plt.close()
         
-
     def monthlyUsageLineChart(x_values,
                               y_values_list,
                               series_labels,
@@ -100,8 +99,4 @@ class MonthlyPlots:
         plt.savefig(path)
         plt.show()
         plt.close()
-
-            
-    
-
 
