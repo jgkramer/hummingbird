@@ -9,13 +9,67 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from ercotStorageReport import StorageData
-import ercotRtmPrices
+from ercotRtmPrices import ErcotRtmPrices
+
+
+
+def analyze_month(pricing, storage, curr_date: datetime):
+
+    # columns of this DF are Hour and Price, in quarter-hour increments
+    month_table = pricing.get_monthly_average(curr_date)
+
+    charges = storage.monthly_average_charging(curr_date)
+    charges_15m = [item for item in charges for i in range(4)]
+    month_table["Charging"] = charges_15m
+
+
+    discharges = storage.monthly_average_discharging(curr_date)
+    discharges_15m = [item for item in discharges for i in range(4)]
+    month_table["Discharging"] = discharges_15m
+
+    month_table["Net Discharging"] = month_table["Discharging"] - month_table["Charging"]
+    month_table["Net Sales"] = 0.25*month_table["Net Discharging"]*month_table["Price"]
+    print(month_table)
+
+    print(f"month {curr_date.strftime("%b %Y")}")
+    print(f"total charging {sum(month_table["Charging"])}")
+    print(f"total discharging {sum(month_table["Discharging"])}")
+    print(f"net sales per day {sum(month_table["Net Sales"])}")
+
+    fig, ax1 = plt.subplots()
+    ax1.step(month_table["Hour"], month_table["Net Discharging"], where="post", color='lightblue', label='Charging')
+    ax1.fill_between(month_table["Hour"], month_table["Net Discharging"], step="post", alpha = 0.5, color='lightblue')
+
+    ax1.set_ylim(1.2*min(month_table["Net Discharging"]), 1.2*max(month_table["Net Discharging"]))
+    neg_ratio = min(month_table["Net Discharging"])/max(month_table["Net Discharging"])
+
+    ax1.set_xlabel("Time")
+    ax1.set_ylabel("MW Net Discharging", color='blue')
+    ax1.tick_params(axis='y', labelcolor='blue')
+
+    ax2 = ax1.twinx()
+    ax2.plot(month_table["Hour"], month_table["Price"], color = "r", label="Price")
+    ax2.set_ylabel("Price $/MWh")
+    ax2.set_ylim(neg_ratio*1.2*max(month_table["Price"]), 1.2*max(month_table["Price"]))
+
+    ax1.legend()
+    fig.suptitle(f"{curr_date.strftime("%b %Y")}")
+    fig.tight_layout()
+    plt.show()
+
 
 if "__main__" == __name__:
     directory = "./ercot_esr_reports/"
-    data_set = StorageData(directory, download = False)
+    storage_data = StorageData(directory, download = False)
 
-    start_date, end_date = data_set.get_date_range()
+    start_date, end_date = storage_data.get_date_range()
     print(start_date, end_date)
 
+    pricing_2024 = ErcotRtmPrices(datetime(2024, 10, 6))
+    #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
+
+    curr_date = datetime(2024, 1, 1)
+    while(curr_date < datetime(2024, 10, 31)):
+        analyze_month(pricing_2024, storage_data, curr_date)
+        curr_date = curr_date + relativedelta(months = 1)
     #print(report_data.date, report_data.total_charge, report_data.total_discharge)

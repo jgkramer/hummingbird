@@ -128,24 +128,24 @@ class StorageData:
         return df
 
     def get_date_range(self):
-        return self.start_date, self.end_date
+        return self.start_date, self.end_date    
 
-    def monthly_averages(self, curr_month: datetime):        
-        monthname = curr_month.strftime("%b %Y")
-        print(f"Month is: {monthname}")
-
+    # returns a 24-element list with the charging MW for each hour of the day, averaged across all the dates of the month of curr_month
+    def monthly_average_charging(self, curr_month: datetime):          
         month_hourly_charging = [self.reports[d].charging_mwh for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
-        month_hourly_discharging = [self.reports[d].discharging_mwh for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
-
+        
         # for the i'th of the month, the i'th element of this array contains the 24-long series of hourly charging / discharging for that day
         array_charging = np.array(month_hourly_charging)
-        array_discharging = np.array(month_hourly_discharging)
-
+        
         # this computes the average across all days, resulting in a 24-hour long array)
         average_charging = np.average(array_charging, axis = 0)
+        return average_charging
+    
+    def monthly_average_discharging(self, curr_month: datetime):
+        month_hourly_discharging = [self.reports[d].discharging_mwh for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
+        array_discharging = np.array(month_hourly_discharging)
         average_discharging = np.average(array_discharging, axis = 0)
-
-        return average_charging, average_discharging        
+        return average_discharging
 
     def __init__(self, directory, download = False):
         if(download):
@@ -169,8 +169,5 @@ class StorageData:
         self.datelist = sorted(datelist)        
         self.start_date = self.datelist[0]
         self.end_date = self.datelist[-1]
-
-        print(self.start_date, self.end_date)
         
-        self.monthly_averages(self.start_date)
             

@@ -1,6 +1,5 @@
 
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 import re
 import numpy as np
 import pandas as pd
@@ -11,13 +10,13 @@ import matplotlib.pyplot as plt
 class ErcotRtmPrices:
 
     def __init__(self, filedate: datetime):
-        filename = f"rpt_{filedate.month:02}_{filedate.day:02}_{filedate.year}.xlsx"
+        filename = f"rtm_{filedate.month:02}_{filedate.day:02}_{filedate.year}.xlsx"
         path = f"post11_data/{filename}"
 
         # Read all sheets into a dictionary of DataFrames
         all_sheets = pd.read_excel(path, sheet_name=None)
         months = list(all_sheets.keys())
-        
+        self.file_date = filedate
         self.month_names = []
         self.full_data_by_month = {}
         self.monthly_averages = {}
@@ -42,9 +41,12 @@ class ErcotRtmPrices:
 
             self.monthly_averages[month] = hourly_average
 
-    def get_monthly_average(self, month_name):
+    def get_monthly_average(self, d: datetime):
+        month_name = d.strftime("%b")
+        print(f"month name = {month_name}")
+        print(self.month_names)
         if month_name not in self.month_names: return None
-        
+        print("hello get_monthly_average")
         return self.monthly_averages[month_name]
     
     def get_daily_prices(self, d: datetime):
@@ -52,13 +54,11 @@ class ErcotRtmPrices:
         day_string = d.strftime("%m/%d/%Y")
 
         print(month_name)
-        
         if month_name not in self.month_names: return None
 
         month_df = self.full_data_by_month[month_name]
         return month_df[month_df["Date"]==day_string].copy()
     
-
 if __name__ == "__main__":
     e = ErcotRtmPrices(datetime(2024, 10, 6))
     print("Monthly average for May")
