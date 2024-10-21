@@ -32,7 +32,7 @@ def download_storage_reports(directory: str):
                 file.write(response.content)
 
 class DailyStorageReport:
-    def __init__(self, path, date):
+    def __init__(self, path, date, pdf = True):
         self.summary_table_rows = []
         self.path = path
         self.date = date
@@ -91,9 +91,6 @@ class DailyStorageReport:
         page3 = reader.pages[2]
         page3_text = page3.extract_text()
 
-     #   fig, ax = plt.subplots(figsize = (7.5, 3.5))        
-     #   fig.tight_layout(pad = 2.0)
-
         pattern_discharging = r"Actual ESR Discharging Output.*Actual ESR Discharging Output"
         match_discharging = re.search(pattern_discharging, page3_text, re.DOTALL)
         if match_discharging: 
@@ -105,8 +102,8 @@ class DailyStorageReport:
             self.charging_percents = self.get_percent_series(match_charging.group(0))
 
         self.discharging_mwh = [self.installed_discharge_capacity * p for p in self.discharging_percents]
-        
         self.charging_mwh = [self.installed_charge_capacity * p for p in self.charging_percents]
+
         self.total_discharge = sum(self.discharging_mwh)
         self.total_charge = sum(self.charging_mwh)
 

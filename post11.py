@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import EIA_demand_data, EIA_generation_data
 import re
 import numpy as np
 import pandas as pd
@@ -10,6 +11,8 @@ import matplotlib.pyplot as plt
 
 from ercotStorageReport import StorageData
 from ercotRtmPrices import ErcotRtmPrices
+
+import pytz
 
 
 
@@ -59,6 +62,26 @@ def analyze_month(pricing, storage, curr_date: datetime):
 
 
 if "__main__" == __name__:
+
+    start_date = datetime(2023, 2, 1)
+    end_date = datetime.now()
+
+    print(start_date)
+    central = pytz.timezone("US/Central")
+    start_local = central.localize(start_date)
+    start_offset = round(start_local.utcoffset().total_seconds() / 3600)
+    end_local = central.localize(end_date)
+    end_offset = round(end_local.utcoffset().total_seconds() / 3600)
+
+    demand_df = EIA_demand_data.eia_request_data("ERCO", False, start_date, end_date, start_offset = start_offset, end_offset = end_offset)
+    demand_df.to_csv("demand.csv")
+
+#    generation_df = EIA_generation_data.eia_generation_data("ERCO", start_date, end_date, fuel_list = ["SUN"], start_offset = start_offset, end_offset = end_offset)
+#    print(generation_df)
+#    generation_df.to_csv("generation.csv")
+
+    exit()
+
     directory = "./ercot_esr_reports/"
     storage_data = StorageData(directory, download = False)
 
