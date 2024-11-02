@@ -1,5 +1,4 @@
 
-
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import EIA_demand_data, EIA_generation_data
@@ -15,7 +14,6 @@ from ercotRtmPrices import ErcotRtmPrices
 import pytz
 
 
-
 def analyze_month(pricing, storage, curr_date: datetime):
 
     # columns of this DF are Hour and Price, in quarter-hour increments
@@ -24,7 +22,6 @@ def analyze_month(pricing, storage, curr_date: datetime):
     charges = storage.monthly_average_charging(curr_date)
     charges_15m = [item for item in charges for i in range(4)]
     month_table["Charging"] = charges_15m
-
 
     discharges = storage.monthly_average_discharging(curr_date)
     discharges_15m = [item for item in discharges for i in range(4)]
@@ -61,33 +58,37 @@ def analyze_month(pricing, storage, curr_date: datetime):
     plt.show()
 
 
+def get_utc_offsets(tz: str, start_date, end_date):
+    tz = pytz.timezone(tz)
+    start_local = tz.localize(start_date)
+    start_offset = round(start_local.utcoffset().total_seconds() / 3600)
+    end_local = tz.localize(end_date)
+    end_offset = round(end_local.utcoffset().total_seconds() / 3600)
+    return start_offset, end_offset
+
 if "__main__" == __name__:
 
     start_date = datetime(2023, 2, 1)
     end_date = datetime.now()
 
-    print(start_date)
-    central = pytz.timezone("US/Central")
-    start_local = central.localize(start_date)
-    start_offset = round(start_local.utcoffset().total_seconds() / 3600)
-    end_local = central.localize(end_date)
-    end_offset = round(end_local.utcoffset().total_seconds() / 3600)
+    start_offset, end_offset = get_utc_offsets("US/Central", start_date, end_date)  
 
+    # first we get the demand data for texas
     demand_df = EIA_demand_data.eia_request_data("ERCO", False, start_date, end_date, start_offset = start_offset, end_offset = end_offset)
     demand_df.to_csv("demand.csv")
 
-#    generation_df = EIA_generation_data.eia_generation_data("ERCO", start_date, end_date, fuel_list = ["SUN"], start_offset = start_offset, end_offset = end_offset)
-#    print(generation_df)
-#    generation_df.to_csv("generation.csv")
+    # then we get generation data for solar, wind and natural gas
+    generation_df = EIA_generation_data.eia_generation_data("ERCO", start_date, end_date, fuel_list = ["SUN", "WND", "NG"], start_offset = start_offset, end_offset = end_offset)
+    generation_df.to_csv("generation.csv")
 
-    exit()
-
+    # this gets the BESS data
     directory = "./ercot_esr_reports/"
     storage_data = StorageData(directory, download = False)
 
     start_date, end_date = storage_data.get_date_range()
     print(start_date, end_date)
 
+    # finally, we get price data. 
     pricing_2024 = ErcotRtmPrices(datetime(2024, 10, 6))
     #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
 
@@ -95,4 +96,5 @@ if "__main__" == __name__:
     while(curr_date < datetime(2024, 10, 31)):
         analyze_month(pricing_2024, storage_data, curr_date)
         curr_date = curr_date + relativedelta(months = 1)
+
     #print(report_data.date, report_data.total_charge, report_data.total_discharge)

@@ -80,11 +80,11 @@ class DailyStorageReport:
             if re.match(pattern1, row[0]):
                 capacity_string = re.match(r"[0-9,]+", row[1]).group(0)
                 self.installed_discharge_capacity = int(capacity_string.replace(",",""))
-                self.installed_discharge_capacity_units = row[1][len(capacity_string):]
+                #self.installed_discharge_capacity_units = row[1][len(capacity_string):]
             if re.match(pattern2, row[0]):
                 capacity_string = re.match(r"[0-9,]+", row[1]).group(0)
                 self.installed_charge_capacity = int(capacity_string.replace(",",""))
-                self.installed_charge_capacity_units = row[1][len(capacity_string):]
+                #self.installed_charge_capacity_units = row[1][len(capacity_string):]
 
         # PdfPlumber puts the
         reader = PdfReader(self.path)
@@ -94,18 +94,24 @@ class DailyStorageReport:
         pattern_discharging = r"Actual ESR Discharging Output.*Actual ESR Discharging Output"
         match_discharging = re.search(pattern_discharging, page3_text, re.DOTALL)
         if match_discharging: 
-            self.discharging_percents = self.get_percent_series(match_discharging.group(0))
+            discharging_percents = self.get_percent_series(match_discharging.group(0))
             
         pattern_charging = r"Actual ESR Charging Output.*Actual ESR Charging Output"
         match_charging = re.search(pattern_charging, page3_text, re.DOTALL)
         if match_charging: 
-            self.charging_percents = self.get_percent_series(match_charging.group(0))
+            charging_percents = self.get_percent_series(match_charging.group(0))
 
-        self.discharging_mwh = [self.installed_discharge_capacity * p for p in self.discharging_percents]
-        self.charging_mwh = [self.installed_charge_capacity * p for p in self.charging_percents]
+        self.discharging_mwh = [self.installed_discharge_capacity * p for p in discharging_percents]
+        self.charging_mwh = [self.installed_charge_capacity * p for p in charging_percents]
 
         self.total_discharge = sum(self.discharging_mwh)
         self.total_charge = sum(self.charging_mwh)
+        
+    def get_summary_list(self):
+        summary_list = [self.date, self.valid_data, self.installed_charge_capacity, self.installed_discharge_capacity, self.total_charge, self.total_discharge]
+        summary_list.append(self.charging_mwh)
+        summary_list.append(self.discharging_mwh)
+        return summary_list
 
 
 class StorageData:
@@ -115,7 +121,6 @@ class StorageData:
         strings = re.split(r"_|\.", filename)
         date = datetime.strptime(strings[1], "%m-%d-%y")
         return date.date()
-
 
     # returns a data frame with columns Date, Charge, Discharge
     def daily_totals(self):
@@ -144,6 +149,23 @@ class StorageData:
         average_discharging = np.average(array_discharging, axis = 0)
         return average_discharging
 
+    def save_down(self):
+        columns = ["Date", "Valid", "Installed Charge Capacity", "Installed Discharge Capacity", "Total Charge", "Total Discharge", "Hourly Charging", "Hourly Discharging"]
+
+        df = pd.DataFrame(columns = columns)
+
+        for d in self.datelist:
+            report = self.reports[d]
+            row = report.get_summary_list()
+            df.loc[len(df)] = row
+            
+        print(df)
+        df.to_csv("storage.csv")
+
+
+    def load_saved(self):
+        pass
+
     def __init__(self, directory, download = False):
         if(download):
             download_storage_reports(directory)
@@ -166,5 +188,9 @@ class StorageData:
         self.datelist = sorted(datelist)        
         self.start_date = self.datelist[0]
         self.end_date = self.datelist[-1]
+
+        self.save_down()
+
+
         
             

@@ -43,7 +43,6 @@ def eia_single_request_other(region: str, start_date: datetime, end_date: dateti
     df = data_frame_from_request(url_data)
     df = df[df["type"]=="D"].reset_index()
     df = df[["period", "respondent-name", "value", "value-units"]].copy()
-    # print(df)
     return df
 
     
