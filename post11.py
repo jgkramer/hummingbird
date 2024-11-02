@@ -13,6 +13,9 @@ from ercotRtmPrices import ErcotRtmPrices
 
 import pytz
 
+def format_time(x, _):
+    hm = "{:d}:{:02d}".format((int(((x-1)%12)+1)), int((x%1)*60))
+    return hm + ("am" if (x%24)<12 else "pm")
 
 def analyze_month(pricing, storage, curr_date: datetime):
 
@@ -20,6 +23,7 @@ def analyze_month(pricing, storage, curr_date: datetime):
     month_table = pricing.get_monthly_average(curr_date)
 
     charges = storage.monthly_average_charging(curr_date)
+    print(charges)
     charges_15m = [item for item in charges for i in range(4)]
     month_table["Charging"] = charges_15m
 
@@ -53,10 +57,38 @@ def analyze_month(pricing, storage, curr_date: datetime):
     ax2.set_ylim(neg_ratio*1.2*max(month_table["Price"]), 1.2*max(month_table["Price"]))
 
     ax1.legend()
+    ax1.xaxis.set_major_formatter(format_time)
+    ax1.xaxis.set_ticks(np.arange(0, 24+1, 3))
     fig.suptitle(f"{curr_date.strftime("%b %Y")}")
     fig.tight_layout()
     plt.show()
 
+def storage_plot_one(storage: StorageData, dt_list):
+    n = len(dt_list)
+    fig, axes = plt.subplots(ncols = n, figsize = (8, 3), sharex = True, sharey = True)
+    plt.rcParams.update({'font.size': 8})
+
+    for i in range(n):
+        dt = dt_list[i]
+        charging = storage.daily_charging(dt)
+        discharging = storage.daily_discharging(dt)
+    # this is to make the last item of the bar chart look like a full hour instead of a single point
+    
+        charging.append(charging[-1])
+        discharging.append(discharging[-1])
+
+        axes[i].step(range(24 + 1), charging, where="post", color='orange', label='Charging')
+        axes[i].step(range(24 + 1), discharging, where="post", color='mediumblue', label="Discharging")
+        axes[i].legend()
+        axes[i].spines["right"].set_visible(False)
+        axes[i].spines["top"].set_visible(False)
+        axes[i].set_ylabel("Charging / Discharging During Hour (MWh)")
+        axes[i].xaxis.set_major_formatter(format_time)
+        axes[i].xaxis.set_ticks(np.arange(0, 24+1, 3))
+   
+    fig.tight_layout()
+    plt.savefig(f"post11_outputs/storage_example_{dt_list[0].year}_{dt_list[0].month}_{dt_list[0].day}.png")
+    plt.show()
 
 def get_utc_offsets(tz: str, start_date, end_date):
     tz = pytz.timezone(tz)
@@ -71,6 +103,27 @@ if "__main__" == __name__:
     start_date = datetime(2023, 2, 1)
     end_date = datetime.now()
 
+
+    # this gets the BESS data
+    directory = "./ercot_esr_reports/"
+    storage_data = StorageData(directory, download = False, load_from_csv = True)
+
+    start_date, end_date = storage_data.get_date_range()
+    print(start_date, end_date)
+
+    # finally, we get price data. 
+    pricing_2024 = ErcotRtmPrices(datetime(2024, 10, 27))
+    #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
+
+    storage_plot_one(storage_data, [datetime(2024, 7, 15), datetime(2024, 1, 15)])
+
+    exit(1)
+
+    curr_date = datetime(2024, 1, 1)
+    while(curr_date < datetime(2024, 10, 31)):
+        analyze_month(pricing_2024, storage_data, curr_date)
+        curr_date = curr_date + relativedelta(months = 1)
+
     start_offset, end_offset = get_utc_offsets("US/Central", start_date, end_date)  
 
     # first we get the demand data for texas
@@ -81,20 +134,3 @@ if "__main__" == __name__:
     generation_df = EIA_generation_data.eia_generation_data("ERCO", start_date, end_date, fuel_list = ["SUN", "WND", "NG"], start_offset = start_offset, end_offset = end_offset)
     generation_df.to_csv("generation.csv")
 
-    # this gets the BESS data
-    directory = "./ercot_esr_reports/"
-    storage_data = StorageData(directory, download = False)
-
-    start_date, end_date = storage_data.get_date_range()
-    print(start_date, end_date)
-
-    # finally, we get price data. 
-    pricing_2024 = ErcotRtmPrices(datetime(2024, 10, 6))
-    #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
-
-    curr_date = datetime(2024, 1, 1)
-    while(curr_date < datetime(2024, 10, 31)):
-        analyze_month(pricing_2024, storage_data, curr_date)
-        curr_date = curr_date + relativedelta(months = 1)
-
-    #print(report_data.date, report_data.total_charge, report_data.total_discharge)

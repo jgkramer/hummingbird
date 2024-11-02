@@ -32,9 +32,8 @@ def download_storage_reports(directory: str):
                 file.write(response.content)
 
 class DailyStorageReport:
-    def __init__(self, path, date, pdf = True):
+    def __init__(self, date, pdf = True):
         self.summary_table_rows = []
-        self.path = path
         self.date = date
         self.valid_data = True
 
@@ -66,8 +65,17 @@ class DailyStorageReport:
         percent_list = [float(s.rstrip("%")) / 100 for s in percent_str_list]
         return percent_list
 
-    def extract_data_from_pdf(self):
-        with pdfp.open(self.path) as pdf:
+    def set_data(self, valid, installed_charge_capacity, installed_discharge_capacity, total_charge, total_discharge, charging_mwh, discharging_mwh):
+        self.valid_data = valid
+        self.installed_charge_capacity = installed_charge_capacity
+        self.installed_discharge_capacity = installed_discharge_capacity
+        self.total_charge = total_charge
+        self.total_discharge = total_discharge
+        self.charging_mwh = charging_mwh
+        self.discharging_mwh = discharging_mwh
+
+    def extract_data_from_pdf(self, path):
+        with pdfp.open(path) as pdf:
             page1 = pdf.pages[0]
             front_tables = page1.extract_tables()
             
@@ -87,7 +95,7 @@ class DailyStorageReport:
                 #self.installed_charge_capacity_units = row[1][len(capacity_string):]
 
         # PdfPlumber puts the
-        reader = PdfReader(self.path)
+        reader = PdfReader(path)
         page3 = reader.pages[2]
         page3_text = page3.extract_text()
 
@@ -108,7 +116,7 @@ class DailyStorageReport:
         self.total_charge = sum(self.charging_mwh)
         
     def get_summary_list(self):
-        summary_list = [self.date, self.valid_data, self.installed_charge_capacity, self.installed_discharge_capacity, self.total_charge, self.total_discharge]
+        summary_list = [datetime.strftime(self.date, "%m/%d/%Y"), self.valid_data, self.installed_charge_capacity, self.installed_discharge_capacity, self.total_charge, self.total_discharge]
         summary_list.append(self.charging_mwh)
         summary_list.append(self.discharging_mwh)
         return summary_list
@@ -133,14 +141,16 @@ class StorageData:
         return self.start_date, self.end_date    
 
     # returns a 24-element list with the charging MW for each hour of the day, averaged across all the dates of the month of curr_month
-    def monthly_average_charging(self, curr_month: datetime):          
+    def monthly_average_charging(self, curr_month: datetime):
+        print("monthly average charging for", curr_month)
         month_hourly_charging = [self.reports[d].charging_mwh for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
-        
+        print(month_hourly_charging)
         # for the i'th of the month, the i'th element of this array contains the 24-long series of hourly charging / discharging for that day
         array_charging = np.array(month_hourly_charging)
         
         # this computes the average across all days, resulting in a 24-hour long array)
         average_charging = np.average(array_charging, axis = 0)
+        print(average_charging)
         return average_charging
     
     def monthly_average_discharging(self, curr_month: datetime):
@@ -150,10 +160,8 @@ class StorageData:
         return average_discharging
 
     def save_down(self):
-        columns = ["Date", "Valid", "Installed Charge Capacity", "Installed Discharge Capacity", "Total Charge", "Total Discharge", "Hourly Charging", "Hourly Discharging"]
-
+        columns = ["Date", "Valid", "Installed_Charge_Capacity", "Installed_Discharge_Capacity", "Total_Charge", "Total_Discharge", "Hourly_Charging", "Hourly_Discharging"]
         df = pd.DataFrame(columns = columns)
-
         for d in self.datelist:
             report = self.reports[d]
             row = report.get_summary_list()
@@ -162,34 +170,68 @@ class StorageData:
         print(df)
         df.to_csv("storage.csv")
 
-
     def load_saved(self):
-        pass
+        datelist = []
+        df = pd.read_csv("storage.csv")
+        for row in df.itertuples(index=True, name="Row"):
+            d = datetime.strptime(row.Date, "%m/%d/%Y").date()
+            valid = True
+            installed_charge_capacity = float(row.Installed_Charge_Capacity)
+            installed_discharge_capacity = float(row.Installed_Discharge_Capacity)
+            total_charge = float(row.Total_Charge)
+            total_discharge = float(row.Total_Discharge)
+            hourly_charging_strs = row.Hourly_Charging.strip("[]").split(", ")
+            hourly_charging_list = [float(s) for s in hourly_charging_strs]
+            hourly_discharging_strs = row.Hourly_Discharging.strip("[]").split(", ")
+            hourly_discharging_list = [float(s) for s in hourly_discharging_strs]
 
-    def __init__(self, directory, download = False):
-        if(download):
-            download_storage_reports(directory)
+            report = DailyStorageReport(d, pdf = False)
+            report.set_data(valid,
+                            installed_charge_capacity, 
+                            installed_discharge_capacity,
+                            total_charge,
+                            total_discharge,
+                            hourly_charging_list,
+                            hourly_discharging_list)
+            
+            datelist.append(d)
+            self.reports[d] = report
+        
+        self.datelist = sorted(datelist)
 
-        # list of filenames that (1) are files and not directories AND (2) have a filename matching ESR integration report
-        files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f)) and re.match(r"^ESRIntegration.*pdf", f, re.DOTALL)]
-        print(files)
+    def daily_charging(self, dt):
+        return self.reports[dt.date()].charging_mwh
+    
+    def daily_discharging(self, dt):
+        return self.reports[dt.date()].discharging_mwh
+
+    def __init__(self, directory, download = False, load_from_csv = True):
 
         datelist = []
         self.reports = {}
 
-        for filename in files:
-            path = directory + filename
-            date = StorageData.dateFromFilename(filename)
-            datelist.append(date)
-            report = DailyStorageReport(path, date)
-            report.extract_data_from_pdf()
-            self.reports[date] = report
+        if(download):
+            download_storage_reports(directory)
 
-        self.datelist = sorted(datelist)        
+        if(load_from_csv == False):
+            # list of filenames that (1) are files and not directories AND (2) have a filename matching ESR integration report
+            files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f)) and re.match(r"^ESRIntegration.*pdf", f, re.DOTALL)]
+            for filename in files:
+                path = directory + filename
+                date = StorageData.dateFromFilename(filename)
+                datelist.append(date)
+                report = DailyStorageReport(date)
+                report.extract_data_from_pdf(path)
+                self.reports[date] = report
+                self.datelist = sorted(datelist)   
+            self.save_down()     
+            
+        else: 
+            self.load_saved()
+
         self.start_date = self.datelist[0]
         self.end_date = self.datelist[-1]
-
-        self.save_down()
+        
 
 
         

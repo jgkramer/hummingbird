@@ -7,6 +7,8 @@ import calendar
 
 import matplotlib.pyplot as plt
 
+# https://www.ercot.com/mp/data-products/data-product-details?id=np6-785-er
+
 class ErcotRtmPrices:
 
     def __init__(self, filedate: datetime):
