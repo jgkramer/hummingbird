@@ -65,26 +65,37 @@ def analyze_month(pricing, storage, curr_date: datetime):
 
 def storage_plot_one(storage: StorageData, dt_list):
     n = len(dt_list)
-    fig, axes = plt.subplots(ncols = n, figsize = (8, 3), sharex = True, sharey = True)
     plt.rcParams.update({'font.size': 8})
-
+    fig, axes = plt.subplots(ncols = n, figsize = (9, 3), sharex = True, sharey = True)
+    
     for i in range(n):
         dt = dt_list[i]
         charging = storage.daily_charging(dt)
         discharging = storage.daily_discharging(dt)
+        print("Total Charge:", sum(charging))
+        print("Total Discharge:", sum(discharging))
+        print("Ratio", sum(discharging)/sum(charging))
     # this is to make the last item of the bar chart look like a full hour instead of a single point
     
         charging.append(charging[-1])
         discharging.append(discharging[-1])
 
+        axes[i].set_xlim([0, 24])
         axes[i].step(range(24 + 1), charging, where="post", color='orange', label='Charging')
         axes[i].step(range(24 + 1), discharging, where="post", color='mediumblue', label="Discharging")
-        axes[i].legend()
+        
         axes[i].spines["right"].set_visible(False)
         axes[i].spines["top"].set_visible(False)
-        axes[i].set_ylabel("Charging / Discharging During Hour (MWh)")
+        axes[i].set_title(dt.strftime("%-d-%b-%y"), fontsize=8, pad = -100)
+        if(i == 0):
+            axes[i].set_ylabel("Charging / Discharging During Hour (MWh)")
+            axes[i].legend(frameon = False)
+        else: 
+            axes[i].yaxis.set_visible(False)
+            axes[i].spines["left"].set_visible(False)
+
         axes[i].xaxis.set_major_formatter(format_time)
-        axes[i].xaxis.set_ticks(np.arange(0, 24+1, 3))
+        axes[i].xaxis.set_ticks(np.arange(0, 24+1, 4))
    
     fig.tight_layout()
     plt.savefig(f"post11_outputs/storage_example_{dt_list[0].year}_{dt_list[0].month}_{dt_list[0].day}.png")
@@ -115,7 +126,7 @@ if "__main__" == __name__:
     pricing_2024 = ErcotRtmPrices(datetime(2024, 10, 27))
     #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
 
-    storage_plot_one(storage_data, [datetime(2024, 7, 15), datetime(2024, 1, 15)])
+    storage_plot_one(storage_data, [datetime(2024, 1, 1), datetime(2024, 7, 15)])
 
     exit(1)
 
