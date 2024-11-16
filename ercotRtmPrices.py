@@ -45,19 +45,15 @@ class ErcotRtmPrices:
 
     def get_monthly_average(self, d: datetime):
         month_name = d.strftime("%b")
-        print(f"month name = {month_name}")
-        print(self.month_names)
+        # print(f"month name = {month_name}")
         if month_name not in self.month_names: return None
-        print("hello get_monthly_average")
-        return self.monthly_averages[month_name]
+        return self.monthly_averages[month_name].copy()
     
     def get_daily_prices(self, d: datetime):
         month_name = calendar.month_abbr[d.month]
         day_string = d.strftime("%m/%d/%Y")
-
-        print(month_name)
+        
         if month_name not in self.month_names: return None
-
         month_df = self.full_data_by_month[month_name]
         return month_df[month_df["Date"]==day_string].copy()
     

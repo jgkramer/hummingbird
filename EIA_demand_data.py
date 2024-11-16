@@ -12,7 +12,6 @@ import matplotlib as mpl
 import os
 
 
-
 def data_frame_from_request(url):
     results = requests.get(url)
 
@@ -45,7 +44,7 @@ def eia_single_request_other(region: str, start_date: datetime, end_date: dateti
     df = df[["period", "respondent-name", "value", "value-units"]].copy()
     return df
 
-    
+
 def eia_single_request_subba(region: str, start_date: datetime, end_date: datetime, start_offset, end_offset):
     start_offset_str = f"{start_offset:+03}:00"
     end_offset_str = f"{end_offset:+03}:00"
@@ -65,7 +64,6 @@ def eia_single_request_subba(region: str, start_date: datetime, end_date: dateti
     df = df[["period", "subba-name", "value", "value-units"]].copy()
     return df
 
-
 def eia_request_data(region: str, sub_ba: bool, start_date: datetime, end_date: datetime, start_offset = 0, end_offset = 0):
     df_list = []
     while(start_date < end_date):
@@ -81,12 +79,29 @@ def eia_request_data(region: str, sub_ba: bool, start_date: datetime, end_date: 
     full_df.sort_values(by = "period", inplace = True)
 
 # subtract 1 hour because we want to use "hour starting" convention and EIA data comes as hour ending
-    dts = full_df["period"].apply(lambda x: datetime.strptime(x + "00", '%Y-%m-%dT%H%z') + relativedelta(hours = -1))
-    full_df["Date"] = [dt.date() for dt in dts]
+    dts = full_df["period"].apply(lambda x: datetime.strptime(x + "00", '%Y-%m-%dT%H%z') + relativedelta(hours=-1))
     full_df["Hour Starting"] = [dt.hour for dt in dts]
+
+    # need to convert it to date to get rid of the offset, and then back to datetime to store (dates are annoying to work with later)
+    full_df["Date"] = [pd.to_datetime(dt.date()) for dt in dts]
     full_df = full_df.drop(columns = ["respondent-name"])
 
     return full_df
+
+class EIA_demand:
+
+    def __init__(self, region: str, sub_ba: bool, start_date: datetime, end_date: datetime, start_offset = 0, end_offset = 0):
+        self.full_df = eia_request_data(region, sub_ba, start_date, end_date, start_offset, end_offset)
+        self.full_df["value"] = pd.to_numeric(self.full_df["value"])
+
+    def monthly_demand(self, d: datetime):
+        slice = self.full_df[(self.full_df["Date"].dt.year == d.year) & (self.full_df["Date"].dt.month == d.month)][["Date", "Hour Starting", "value"]].copy()
+        averages = slice.groupby("Hour Starting")["value"].mean().reset_index()
+        print(averages)
+
+    def daily_demand(self, d: datetime):
+        slice = self.full_df[self.full_df["Date"].dt.date == d.date()][["Hour Starting", "value"]].copy()
+        print(slice)
 
 
 

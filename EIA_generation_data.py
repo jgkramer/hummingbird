@@ -79,8 +79,10 @@ def eia_generation_data(region: str, start_date: datetime, end_date: datetime, f
     return full_df
 
 if __name__ == "__main__":
-    df = eia_generation_data("ERCO", start_date = datetime(2024, 8, 1), end_date = datetime(2024, 10, 10), fuel_list = ["SUN", "COL", "WND"])
+    df = eia_generation_data("ERCO", start_date = datetime(2024, 8, 1), end_date = datetime(2024, 11, 1), fuel_list = ["SUN", "COL", "WND"])
     df.to_csv("gendata.csv")
+
+
 
 
 

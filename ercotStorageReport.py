@@ -138,19 +138,21 @@ class StorageData:
         return df
 
     def get_date_range(self):
-        return self.start_date, self.end_date    
+        return self.start_date, self.end_date
 
     # returns a 24-element list with the charging MW for each hour of the day, averaged across all the dates of the month of curr_month
+    def monthly_average_discharge_capacity(self, curr_month: datetime):
+        month_discharge_capacity = [self.reports[d].installed_discharge_capacity for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
+        return (sum(month_discharge_capacity) / len(month_discharge_capacity))
+    
     def monthly_average_charging(self, curr_month: datetime):
-        print("monthly average charging for", curr_month)
         month_hourly_charging = [self.reports[d].charging_mwh for d in self.datelist if d.year == curr_month.year and d.month == curr_month.month and self.reports[d].valid_data]
-        print(month_hourly_charging)
+        
         # for the i'th of the month, the i'th element of this array contains the 24-long series of hourly charging / discharging for that day
         array_charging = np.array(month_hourly_charging)
         
         # this computes the average across all days, resulting in a 24-hour long array)
         average_charging = np.average(array_charging, axis = 0)
-        print(average_charging)
         return average_charging
     
     def monthly_average_discharging(self, curr_month: datetime):
@@ -174,7 +176,7 @@ class StorageData:
         datelist = []
         df = pd.read_csv("storage.csv")
         for row in df.itertuples(index=True, name="Row"):
-            d = datetime.strptime(row.Date, "%m/%d/%Y").date()
+            d = datetime.strptime(row.Date, "%m/%d/%Y")
             valid = True
             installed_charge_capacity = float(row.Installed_Charge_Capacity)
             installed_discharge_capacity = float(row.Installed_Discharge_Capacity)
@@ -200,10 +202,10 @@ class StorageData:
         self.datelist = sorted(datelist)
 
     def daily_charging(self, dt):
-        return self.reports[dt.date()].charging_mwh
+        return self.reports[dt].charging_mwh.copy()
     
     def daily_discharging(self, dt):
-        return self.reports[dt.date()].discharging_mwh
+        return self.reports[dt].discharging_mwh.copy()
 
     def __init__(self, directory, download = False, load_from_csv = True):
 

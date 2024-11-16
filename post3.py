@@ -71,7 +71,6 @@ def print_comp_graphs(susses: List[StateUsageStats], individuals: List[TimeSerie
                                        path = filepath)
 
     
-
 def print_normalized_graphs(NVE: NVenergyUsage, start: datetime, end: datetime):
         
     kramer_df = NVE.usage_monthly_average()
