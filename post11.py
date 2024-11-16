@@ -279,6 +279,7 @@ if "__main__" == __name__:
     demand.monthly_demand(datetime(2024, 10, 15))
 
     # then we get generation data for solar, wind and natural gas
-#    generation_df = EIA_generation_data.eia_generation_data("ERCO", start_date, end_date, fuel_list = ["SUN", "WND", "NG"], start_offset = start_offset, end_offset = end_offset)
-#    generation_df.to_csv("post11_data/generation.csv")
+    generation = EIA_generation_data.EIA_generation("ERCO", start_date, end_date, fuel = "SUN", start_offset = start_offset, end_offset = end_offset)
+    print(generation.daily_generation(datetime(2024, 10, 15)))
+    print(generation.monthly_generation(datetime(2024, 10, 15)))
 

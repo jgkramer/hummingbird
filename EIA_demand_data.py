@@ -30,12 +30,12 @@ def eia_single_request_other(region: str, start_date: datetime, end_date: dateti
     start_offset_str = f"{start_offset:+03}:00"
     end_offset_str = f"{end_offset:+03}:00"
 
-    url_data = "https://api.eia.gov/v2/electricity/rto/region-data/data/?frequency=local-hourly&data[0]=value&facets[respondent][]={}&facets[type][]=D&start={}T00{}&end={}T23{}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
+    url_data = "https://api.eia.gov/v2/electricity/rto/region-data/data/?frequency=local-hourly&data[0]=value&facets[respondent][]={}&facets[type][]=D&start={}T01{}&end={}T00{}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
     
     url_data = url_data.format(region, 
                                start_date.strftime("%Y-%m-%d"),
                                start_offset_str,
-                               end_date.strftime("%Y-%m-%d"),
+                               (end_date + timedelta(days = 1)).strftime("%Y-%m-%d"), # to end on 0th hour next day
                                end_offset_str,
                                api_key)
     
@@ -96,16 +96,10 @@ class EIA_demand:
 
     def monthly_demand(self, d: datetime):
         slice = self.full_df[(self.full_df["Date"].dt.year == d.year) & (self.full_df["Date"].dt.month == d.month)][["Date", "Hour Starting", "value"]].copy()
-        averages = slice.groupby("Hour Starting")["value"].mean().reset_index()
-        print(averages)
+        averages = slice.groupby("Hour Starting")["value"].mean().reset_index().copy()
+        return averages
 
     def daily_demand(self, d: datetime):
         slice = self.full_df[self.full_df["Date"].dt.date == d.date()][["Hour Starting", "value"]].copy()
-        print(slice)
+        return slice
 
-
-
-
-
-
-    
