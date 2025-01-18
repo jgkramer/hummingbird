@@ -187,6 +187,70 @@ def bar_charts(storage: StorageData, dt_list, path):
     plt.savefig(path, dpi=300) 
     plt.show()
 
+def price_vs_gen_and_demand(pricing, 
+                            demand: EIA_demand_data.EIA_demand, 
+                            solar: EIA_generation_data.EIA_generation, 
+                            wind: EIA_generation_data.EIA_generation, 
+                            natgas: EIA_generation_data.EIA_generation,
+                            date_list, path, ax1_lim = None, ax2_lim = None):
+
+    plt.rcParams.update({"font.size":8})
+    ncols = 2
+    fig, axes = plt.subplots(ncols = 2, nrows = 1, figsize = (9, 4))
+
+    for ix, curr_date in enumerate(date_list):
+        ax1 = axes[ix]
+
+        ax1.set_xlim(0, 24)
+        
+        ax1.xaxis.set_major_formatter(format_time)
+        ax1.xaxis.set_ticks(np.arange(0, 24+1, 4))
+        ax1.set_title(f"{curr_date.strftime("%b %Y")}")
+
+        hours = np.arange(0.5, 24.5, 1.0)
+        demand_values = (1/1000)*demand.monthly_demand(curr_date)["value"]
+        solar_values = (1/1000)*solar.monthly_generation(curr_date)["value"]
+        wind_values = (1/1000)*wind.monthly_generation(curr_date)["value"]
+        diff = [d - s - w for (d, s, w) in zip(demand_values, solar_values, wind_values)]
+        
+        ax1.plot(hours, demand_values, color = "darkgray", label = "Total Demand", linewidth = 0.5)
+        ax1.plot(hours, solar_values, label = "Solar Generation", color = "darkorange", linewidth = 0.5)
+        ax1.plot(hours, wind_values, label = "Wind Generation", color = "darkblue", linewidth = 0.5)
+        ax1.plot(hours, diff, label = "Demand minus\nSolar and Wind", color = "mediumblue", linewidth = 2.0)
+        
+        ax2 = ax1.twinx()
+
+        quarter_hours = np.arange(0.125, 24.125, 0.25)
+        ax2.plot(quarter_hours, pricing_2024.get_monthly_average(curr_date)["Price"], color = "red", label = "Electricity Price", linewidth = 2.0)
+
+        if ax1_lim is not None: ax1.set_ylim(0, ax1_lim)
+        if ax2_lim is not None: ax2.set_ylim(0, ax2_lim)
+
+        ax1.spines["top"].set_visible(False)
+        ax2.spines["top"].set_visible(False)
+        handles1, labels1 = ax1.get_legend_handles_labels()
+        handles2, labels2 = ax2.get_legend_handles_labels()
+        
+        if(ix == 0): 
+            ax1.spines["right"].set_visible(False)
+            ax2.spines["right"].set_visible(False)
+            ax1.set_ylabel("GW", color = "blue")
+            ax1.tick_params(axis='y', labelcolor='blue')
+            ax2.tick_params(axis='y', which='both', right=False, labelright=False)
+
+            ax1.legend(handles=handles1 + handles2, labels=labels1 + labels2, loc='upper left', frameon = False)
+
+        if(ix == 1): 
+            ax1.spines["left"].set_visible(False)
+            ax2.spines["left"].set_visible(False)
+            ax2.set_ylabel("Price $/MWh", color='red')
+            ax2.tick_params(axis='y', labelcolor='red')
+            ax1.tick_params(axis='y', which='both', left=False, labelleft=False)
+
+    fig.tight_layout()
+    plt.savefig(path, dpi = 300)
+    plt.show()
+
 def storage_plot_one(storage: StorageData, dt_list):
     n = len(dt_list)
     plt.rcParams.update({'font.size': 8})
@@ -237,7 +301,7 @@ def get_utc_offsets(tz: str, start_date, end_date):
 
 if "__main__" == __name__:
 
-    start_date = datetime(2023, 2, 1)
+    start_date = datetime(2024, 1, 1)
     end_date = datetime.now()
 
     # this gets the BESS data
@@ -247,7 +311,8 @@ if "__main__" == __name__:
     start_date, end_date = storage_data.get_date_range()
     print(start_date, end_date)
 
-    storage_plot_one(storage_data, [datetime(2024, 1, 1), datetime(2024, 7, 15)])
+    storage_plot_one(storage_data, [datetime(2024, 2, 15), datetime(2024, 7, 15)])
+    exit(1) 
 
     months1 = [datetime(2024, m, 1) for m in [1, 2, 3, 4, 5]]
     multi_month_net(storage_data, months1, "post11_outputs/months1.png", ylim = [-1500, 2000])
@@ -258,7 +323,7 @@ if "__main__" == __name__:
     bar_charts(storage_data, [datetime(2024, m+1, 1) for m in range(11)], "post11_outputs/monthly_bars.png")
 
     # finally, we get price data. 
-    pricing_2024 = ErcotRtmPrices(datetime(2024, 11, 10))
+    pricing_2024 = ErcotRtmPrices(datetime(2024, 11,24))
     #pricing_2023 = ErcotRtmPrices(datetime(2023, 12, 31))
 
     date_list = [datetime(2024, m, 1) for m in [1, 3]]
@@ -275,11 +340,13 @@ if "__main__" == __name__:
 
     # first we get the demand data for texas
     demand = EIA_demand_data.EIA_demand("ERCO", False, start_date, end_date, start_offset = start_offset, end_offset = end_offset)
-    demand.daily_demand(datetime(2024, 10, 15))
-    demand.monthly_demand(datetime(2024, 10, 15))
 
     # then we get generation data for solar, wind and natural gas
-    generation = EIA_generation_data.EIA_generation("ERCO", start_date, end_date, fuel = "SUN", start_offset = start_offset, end_offset = end_offset)
-    print(generation.daily_generation(datetime(2024, 10, 15)))
-    print(generation.monthly_generation(datetime(2024, 10, 15)))
+    solar = EIA_generation_data.EIA_generation("ERCO", start_date, end_date, fuel = "SUN", start_offset = start_offset, end_offset = end_offset)
+    wind = EIA_generation_data.EIA_generation("ERCO", start_date, end_date, fuel = "WND", start_offset = start_offset, end_offset = end_offset)
+    natgas = EIA_generation_data.EIA_generation("ERCO", start_date, end_date, fuel = "NG", start_offset = start_offset, end_offset = end_offset)
+
+    price_vs_gen_and_demand(pricing_2024, demand, solar, wind, natgas, [datetime(2024, 1, 15), datetime(2024, 3, 15)], path = f"post11_outputs/eia1.png", ax1_lim = 80, ax2_lim = 100)
+    price_vs_gen_and_demand(pricing_2024, demand, solar, wind, natgas, [datetime(2024, 7, 15), datetime(2024, 9, 15)], path = f"post11_outputs/eia2.png", ax1_lim = 80, ax2_lim = 100)
+
 
