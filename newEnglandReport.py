@@ -1,4 +1,4 @@
-
+import math
 from anthropic import Anthropic
 import os
 from PIL import Image as PILImage
@@ -23,8 +23,8 @@ class NewEnglandReport:
 
     def initiate_anthropic(self):
         load_dotenv()
-        print(os.environ.get("ANTHROPIC_API_KEY"))
-        self.anthropic = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        #print(os.environ.get("ANTHROPIC_API_KEY"))
+        #self.anthropic = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
         
 
     def find_pages_with_text(self, search_text):
@@ -174,34 +174,19 @@ class NewEnglandReport:
                     vertical_lines.append({"top": y1, "bottom": y2, "xpos": (x1+x2)/2})
 
         sorted_horizontal = sorted(horizontal_lines, key = lambda line: line["ypos"])
+        top_horizontal_line = sorted_horizontal[0]["ypos"]
+        bottom_horizontal_line = sorted_horizontal[-1]["ypos"]
 
-        filtered_horizontal = []
-        line_just_added = None
-        for line in sorted_horizontal:
-            if line_just_added is None:  # if this is the first line, add it.
-                filtered_horizontal.append(line)
-                line_just_added = line
-            elif line["ypos"] - line_just_added["ypos"] > 6:   # otherwise only add it if it is distinct from the previous line added.
-                filtered_horizontal.append(line)
-                line_just_added = line
-
-        top_horizontal_line = 2*img_height # start below bottom of chart and replace if higher
-        bottom_horizontal_line = -1 # start above top of chart and replace if lower
-
-        for i, fl in enumerate(filtered_horizontal):
-            if fl["ypos"] < top_horizontal_line:
-                top_horizontal_line = fl["ypos"]
-            if fl["ypos"] > bottom_horizontal_line:
-                bottom_horizontal_line = fl["ypos"]
+        # if we have detected two sides of the same edge, take the midpoint
+        if(len(sorted_horizontal) > 1):
+            if sorted_horizontal[1]["ypos"] - sorted_horizontal[0]["ypos"] < 6:
+                top_horizontal_line = 0.5 * (sorted_horizontal[0]["ypos"] + sorted_horizontal[1]["ypos"])
+            if sorted_horizontal[-1]["ypos"] - sorted_horizontal[-2]["ypos"] < 6:
+                bottom_horizontal_line = 0.5 * (sorted_horizontal[-1]["ypos"] + sorted_horizontal[-2]["ypos"])
 
         print(f"Top gridline {top_horizontal_line}.  X-axis {bottom_horizontal_line}")
-
-        sorted_vertical = sorted(vertical_lines, key = lambda line: line["xpos"])
-        for i, vl in enumerate(sorted_vertical):
-            print(f"vertical line {i}: {vl}")
-            
-
-        left_band_img = img_cv2[:, :filtered_horizontal[0]["left"]]
+        
+        left_band_img = img_cv2[:, :sorted_horizontal[0]["left"]]
         left_band_gray = cv2.cvtColor(left_band_img, cv2.COLOR_BGR2GRAY)
         left_band_thresh = cv2.adaptiveThreshold(left_band_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                 cv2.THRESH_BINARY_INV, 11, 2)
@@ -216,10 +201,40 @@ class NewEnglandReport:
                 y_labels.append(float(word))
                 y_labels_pos.append(ypos)
         print(f"Max y yabel is {max(y_labels), min(y_labels_pos)}, Min is {min(y_labels), max(y_labels_pos)}")
+
+        y_axis_scale = (1.0 * bottom_horizontal_line - top_horizontal_line) / (max(y_labels) - min(y_labels))
+        print(f"y_axis_scale {y_axis_scale} pixels per bcf")
+
+
+
+        sorted_vertical = sorted(vertical_lines, key = lambda line: line["xpos"])
+        left_vertical_line = sorted_vertical[0]["xpos"]
+        right_vertical_line = sorted_vertical[-1]["xpos"]
+
+        # if we have detected two sides of the same edge, take the innerermost_edge
+
+        print(f"Left edge of chart {left_vertical_line}.   Right edge of chart {right_vertical_line}")
+
+
+        if(len(sorted_vertical) > 1):
+            if (sorted_vertical[1]["xpos"] - sorted_vertical[0]["xpos"]) < 6:
+                left_vertical_line = sorted_vertical[1]["xpos"]
+            if (sorted_vertical[-1]["xpos"] - sorted_vertical[-2]["xpos"]) < 6:
+                right_vertical_line = sorted_vertical[-2]["xpos"]
+
+        # move the zone of the chart inward by 2 pixels to make sure we are picking up color pixels and not just off edge
+        left_vertical_line = left_vertical_line + 2
+        right_vertical_line = right_vertical_line - 2
+
+        print(f"Left edge of chart {left_vertical_line}.   Right edge of chart {right_vertical_line}")
+        two_week_span = right_vertical_line - left_vertical_line
+        date_locations = [(round((left_vertical_line + (two_week_span) * (i/13)), 0)) for i in range(14)]
+        print(date_locations)
+
         
     def __init__(self, pdf_path):
         self.pdf_path = pdf_path
-        self.initiate_anthropic()
+        #self.initiate_anthropic()
         img_cv2 = self.prepare_image()
         if img_cv2 is not None:
             cropped_img_cv2 = self.cropChart(img_cv2)
