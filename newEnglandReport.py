@@ -9,7 +9,9 @@ import pdf2image
 import io
 import cv2
 import numpy as np
+import pandas as pd
 import pytesseract
+from datetime import datetime, timedelta    
 
 
 def is_number(s):
@@ -20,12 +22,6 @@ def is_number(s):
         return False
 
 class NewEnglandReport:
-
-    def initiate_anthropic(self):
-        load_dotenv()
-        #print(os.environ.get("ANTHROPIC_API_KEY"))
-        #self.anthropic = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-        
 
     def find_pages_with_text(self, search_text):
         matching_pages = []
@@ -65,8 +61,6 @@ class NewEnglandReport:
             return img_cv2
         return None
     
-
-
     def cropChart(self, img_cv2):        
             img_rgb = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
             data = pytesseract.image_to_data(img_rgb, output_type=pytesseract.Output.DICT)
@@ -108,8 +102,8 @@ class NewEnglandReport:
             chart_box = {}
             chart_box["left"] = title_box["left"] - 20
             chart_box["top"] = title_box["top"]
-            chart_box["width"] = (int) ((legend_box["left"] + legend_box["width"] - chart_box["left"])*(7/6))
-            chart_box["height"] = (int) (legend_box["top"] - (legend_box["height"] * 1.5) - title_box["top"])
+            chart_box["width"] = int(((legend_box["left"] + legend_box["width"] - chart_box["left"])*(7/6)))
+            chart_box["height"] = int((legend_box["top"] - (legend_box["height"] * 1.5) - title_box["top"]))
             # print(chart_box)
 
             cropped_img_cv2 = img_cv2[chart_box["top"]:chart_box["top"]+chart_box["height"], chart_box["left"]:chart_box["left"]+chart_box["width"]]
@@ -184,6 +178,10 @@ class NewEnglandReport:
             if sorted_horizontal[-1]["ypos"] - sorted_horizontal[-2]["ypos"] < 6:
                 bottom_horizontal_line = 0.5 * (sorted_horizontal[-1]["ypos"] + sorted_horizontal[-2]["ypos"])
 
+        # make sure that we don't crop vertically from rounding
+        top_horizontal_line = int(math.floor(top_horizontal_line))
+        bottom_horizontal_line = int(math.ceil(bottom_horizontal_line))
+
         print(f"Top gridline {top_horizontal_line}.  X-axis {bottom_horizontal_line}")
         
         left_band_img = img_cv2[:, :sorted_horizontal[0]["left"]]
@@ -206,7 +204,6 @@ class NewEnglandReport:
         print(f"y_axis_scale {y_axis_scale} pixels per bcf")
 
 
-
         sorted_vertical = sorted(vertical_lines, key = lambda line: line["xpos"])
         left_vertical_line = sorted_vertical[0]["xpos"]
         right_vertical_line = sorted_vertical[-1]["xpos"]
@@ -218,31 +215,73 @@ class NewEnglandReport:
 
         if(len(sorted_vertical) > 1):
             if (sorted_vertical[1]["xpos"] - sorted_vertical[0]["xpos"]) < 6:
-                left_vertical_line = sorted_vertical[1]["xpos"]
+                left_vertical_line = (sorted_vertical[1]["xpos"] + sorted_vertical[0]["xpos"])/2
             if (sorted_vertical[-1]["xpos"] - sorted_vertical[-2]["xpos"]) < 6:
-                right_vertical_line = sorted_vertical[-2]["xpos"]
+                right_vertical_line = (sorted_vertical[-1]["xpos"] + sorted_vertical[-2]["xpos"])/2
 
         # move the zone of the chart inward by 2 pixels to make sure we are picking up color pixels and not just off edge
-        left_vertical_line = left_vertical_line + 2
-        right_vertical_line = right_vertical_line - 2
+        left_vertical_line = left_vertical_line + 1
+        right_vertical_line = right_vertical_line - 1
 
         print(f"Left edge of chart {left_vertical_line}.   Right edge of chart {right_vertical_line}")
         two_week_span = right_vertical_line - left_vertical_line
-        date_locations = [(round((left_vertical_line + (two_week_span) * (i/13)), 0)) for i in range(14)]
+        date_locations = [int((round((left_vertical_line + (two_week_span) * (i/13)), 0))) for i in range(14)]
         print(date_locations)
 
+        color_ranges = {
+            'blue': ((40, 150, 180), (90, 200, 250)), 
+            'brown': ((180, 120, 70), (220, 160, 120)),    # industrial
+            'green': ((80, 140, 80), (140, 200, 140)),  
+        }     
+
+        start_date = self.report_date - timedelta(days=13)
+        dates = [start_date + timedelta(days=i) for i in range(14)]
+        data = []
+        for date, xpos in zip(dates, date_locations[:14]):
+            counts = {'green': 0, 'brown': 0, 'blue': 0}
+            for ypos in range(top_horizontal_line, bottom_horizontal_line):
+                pixel = rgb[ypos, xpos]
+                # print(pixel)
+                for color, (lower, upper) in color_ranges.items():
+                    if np.all(np.array(lower) <= pixel) and np.all(pixel <= np.array(upper)):
+                        counts[color] += 1
+                        # print(f"found {color}")
+                        break
+            #print(f"Counts for {xpos} are {counts}")
+            data.append({"date": date,
+                    "green": round(counts["green"] / y_axis_scale, 2),
+                    "brown": round(counts["brown"] / y_axis_scale + counts["green"] / y_axis_scale,2 ),
+                    "blue": round(counts["blue"] / y_axis_scale + counts["brown"] / y_axis_scale + counts["green"] / y_axis_scale, 2),
+                })
+            
+
+        df = pd.DataFrame(data)
+        print(df)
+
+        top_left = (date_locations[0], top_horizontal_line)       # (x1, y1)
+        bottom_right = (date_locations[-1], bottom_horizontal_line)  # (x2, y2)
+            
+        # Draw red rectangle — note: in RGB, red = (255, 0, 0)
+        img_box = cv2.rectangle(img_cv2, top_left, bottom_right, color=(255, 0, 0), thickness=1)
+        cv2.imshow("img_box", img_box)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
         
-    def __init__(self, pdf_path):
+    def __init__(self, pdf_path, report_date):
         self.pdf_path = pdf_path
-        #self.initiate_anthropic()
+        self.report_date = report_date
+        
         img_cv2 = self.prepare_image()
         if img_cv2 is not None:
             cropped_img_cv2 = self.cropChart(img_cv2)
             self.findChartDimensions(cropped_img_cv2)
 
 if __name__ == "__main__":
-    report = NewEnglandReport("./new_england_natgas/20250101_new_england_dashboard.pdf")
-    report = NewEnglandReport("./new_england_natgas/20241227_new_england_dashboard.pdf")
-    report = NewEnglandReport("./new_england_natgas/20240905_new_england_dashboard.pdf")
-    report = NewEnglandReport("./new_england_natgas/20240802_new_england_dashboard.pdf")
+    report = NewEnglandReport("./new_england_natgas/20250101_new_england_dashboard.pdf", datetime(2025, 1, 1))
+    report = NewEnglandReport("./new_england_natgas/20241227_new_england_dashboard.pdf", datetime(2024, 12, 27))
+    report = NewEnglandReport("./new_england_natgas/20240905_new_england_dashboard.pdf", datetime(2024, 9, 5))
+    report = NewEnglandReport("./new_england_natgas/20240802_new_england_dashboard.pdf", datetime(2024, 8, 2))
+    report = NewEnglandReport("./new_england_natgas/20250408_new_england_dashboard.pdf", datetime(2025, 4, 8))
+
 
