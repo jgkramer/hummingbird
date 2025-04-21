@@ -147,18 +147,24 @@ class NewEnglandReport:
         y_labels_pos = []
 
         for word, ypos in zip(y_label_candidates["text"], y_label_candidates["top"]):
+            # print(f"{word}, {ypos}")
             if(is_number(word)):
-                y_labels.append(float(word))
+                number = float(word)
+                if number > 10: 
+                    number = number / 10
+                y_labels.append(number)
                 y_labels_pos.append(ypos)
-        # print(f"Max y yabel is {max(y_labels), min(y_labels_pos)}, Min is {min(y_labels), max(y_labels_pos)}")
-
+        
         if len(y_labels) == 0:
             print("No y-axis labels found")
             for word, ypos in zip(y_label_candidates["text"], y_label_candidates["top"]):
                 print(f"{word}, {ypos}")
             return None
 
-        y_axis_scale = (1.0 * distance_top_to_bottom) / (max(y_labels) - min(y_labels))
+        if max(y_labels) != y_labels[0]:
+            print(f"{max(y_labels)} != {y_labels[0]} on date {self.report_date}")
+
+        y_axis_scale = (1.0 * distance_top_to_bottom) / (y_labels[0])
         # print(f"y_axis_scale {y_axis_scale} pixels per bcf")
 
         return y_axis_scale
@@ -317,9 +323,9 @@ class NewEnglandReport:
                         break
             #print(f"Counts for {xpos} are {counts}")
             data.append({"date": date,
-                    "electric": round(counts["green"] / y_axis_scale, 2),
+                    "resi_comm": round(counts["green"] / y_axis_scale, 2),
                     "industrial": round(counts["brown"] / y_axis_scale + counts["green"] / y_axis_scale,2 ),
-                    "resi_comm": round(counts["blue"] / y_axis_scale + counts["brown"] / y_axis_scale + counts["green"] / y_axis_scale, 2),
+                    "electric": round(counts["blue"] / y_axis_scale + counts["brown"] / y_axis_scale + counts["green"] / y_axis_scale, 2),
                 })
             
         df = pd.DataFrame(data)
@@ -373,7 +379,7 @@ def downloadReportIfAbsent(report_date):
 
 if __name__ == "__main__":
     start_date = datetime(2024, 1, 1)
-    end_date = datetime(2025, 4, 18)
+    end_date = datetime(2025, 4, 20)
     curr_date = start_date
 
     raw_bcf_values_electric = {}
