@@ -378,7 +378,7 @@ def downloadReportIfAbsent(report_date):
     return pdf_path
 
 if __name__ == "__main__":
-    start_date = datetime(2024, 1, 1)
+    start_date = datetime(2023, 1, 1)
     end_date = datetime(2025, 4, 20)
     curr_date = start_date
 
