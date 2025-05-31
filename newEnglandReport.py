@@ -379,7 +379,7 @@ def downloadReportIfAbsent(report_date):
 
 if __name__ == "__main__":
     start_date = datetime(2023, 1, 1)
-    end_date = datetime(2025, 4, 20)
+    end_date = datetime(2025, 5, 15)
     curr_date = start_date
 
     raw_bcf_values_electric = {}
