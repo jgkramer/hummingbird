@@ -13,14 +13,11 @@ from ercotStorageReport import StorageData
 
 import pytz
 
-
-
 if __name__ == "__main__":
-    # this gets the BESS data from ERCOT
-    directory = "./ercot_esr_reports/"
-    storage_data = StorageData(directory, download = True, load_from_csv = False)
-
-    start_date, end_date = storage_data.get_date_range()
-    print(start_date, end_date)
-
+    ISO_NE_demand  = EIA_demand_data.EIA_demand_daily(region = "ISNE", 
+                                                      sub_ba = False, 
+                                                      start_date = datetime(2022, 1, 1), 
+                                                      end_date = datetime(2024, 12, 31),
+                                                      timezone_str = "Eastern")
+    
     

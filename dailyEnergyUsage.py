@@ -18,7 +18,6 @@ class DailyEnergyUsage(TimeSeriesEnergyUsage):
     def __init__(self, path):
         self.process_table(path)
 
-
     def usage_by_month(self, start: datetime = None, end: datetime = None):
         if(start == None): start = self.first
         if(end == None): end = self.last

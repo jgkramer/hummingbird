@@ -25,6 +25,23 @@ def data_frame_from_request(url):
     # print(df)
     return df
 
+
+def eia_single_daily_request(region: str, start_date: datetime, end_date: datetime, timezone_str: str):
+    api_key = os.getenv("EIA_API_KEY")
+    url_data = "https://api.eia.gov/v2/electricity/rto/daily-region-data/data/?frequency=daily&data[0]=value&facets[respondent][]={}&facets[type][]=D&facets[timezone][]={}&start={}&end={}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
+
+    url_data = url_data.format(region,
+                               timezone_str,
+                               start_date.strftime("%Y-%m-%d"),
+                               end_date.strftime("%Y-%m-%d"),
+                               api_key)
+    print(url_data)
+    df = data_frame_from_request(url_data)
+    if df is not None:
+        print("Got data")
+    return df
+    
+                                 
 def eia_single_request_other(region: str, start_date: datetime, end_date: datetime, start_offset, end_offset):
     api_key = os.getenv("EIA_API_KEY")
     start_offset_str = f"{start_offset:+03}:00"
@@ -64,6 +81,24 @@ def eia_single_request_subba(region: str, start_date: datetime, end_date: dateti
     df = df[["period", "subba-name", "value", "value-units"]].copy()
     return df
 
+
+def eia_request_daily_data(region: str, sub_ba: bool, start_date: datetime, end_date: datetime, timezone_str: str):
+    df_list = []
+    while start_date < end_date:
+        request_end = min(start_date + relativedelta(months=24, days=-1), end_date)
+        df = eia_single_daily_request(region, start_date, request_end, timezone_str)
+        start_date = start_date + relativedelta(months=24)
+        df_list.append(df)
+    full_df = pd.concat(df_list)
+    full_df.sort_values(by="period", inplace=True, ignore_index=True)
+    dates = full_df["period"].apply(lambda x: datetime.strptime(x, "%Y-%m-%d"))
+    full_df["Date"] = dates
+    full_df = full_df.drop(columns = ["period", "respondent-name", "type", "type-name", "timezone-description"]).reindex()
+    
+    print(full_df)
+    return full_df
+
+
 def eia_request_data(region: str, sub_ba: bool, start_date: datetime, end_date: datetime, start_offset = 0, end_offset = 0):
     df_list = []
     while(start_date < end_date):
@@ -102,4 +137,11 @@ class EIA_demand:
     def daily_demand(self, d: datetime):
         slice = self.full_df[self.full_df["Date"].dt.date == d.date()][["Hour Starting", "value"]].copy()
         return slice
+
+class EIA_demand_daily:
+
+    def __init__(self, region: str, sub_ba: bool, start_date: datetime, end_date: datetime, timezone_str: str = "Eastern"):
+        self.full_df = eia_request_daily_data(region, sub_ba, start_date, end_date, timezone_str)
+
+
 
