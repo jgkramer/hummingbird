@@ -56,6 +56,8 @@ def eia_single_request_other(region: str, start_date: datetime, end_date: dateti
                                end_offset_str,
                                api_key)
     
+    print(url_data)
+
     df = data_frame_from_request(url_data)
     df = df[df["type"]=="D"].reset_index()
     df = df[["period", "respondent-name", "value", "value-units"]].copy()
@@ -98,14 +100,14 @@ def eia_request_daily_data(region: str, sub_ba: bool, start_date: datetime, end_
     print(full_df)
     return full_df
 
-
 def eia_request_data(region: str, sub_ba: bool, start_date: datetime, end_date: datetime, start_offset = 0, end_offset = 0):
     df_list = []
     while(start_date < end_date):
+        block_end = min(start_date + relativedelta(months = 6, days = -1), end_date)    
         if(sub_ba):
-            df = eia_single_request_subba(region, start_date, start_date + relativedelta(months = 6, days = -1), start_offset, end_offset)
+            df = eia_single_request_subba(region, start_date, block_end, start_offset, end_offset)
         else:
-            df = eia_single_request_other(region, start_date, start_date + relativedelta(months = 6, days = -1), start_offset, end_offset)
+            df = eia_single_request_other(region, start_date, block_end, start_offset, end_offset)
             
         start_date = start_date + relativedelta(months = 6)
         df_list.append(df)
@@ -137,11 +139,17 @@ class EIA_demand:
     def daily_demand(self, d: datetime):
         slice = self.full_df[self.full_df["Date"].dt.date == d.date()][["Hour Starting", "value"]].copy()
         return slice
+    
+    def full_demand(self):
+        return self.full_df[["Date", "Hour Starting", "value"]].copy()
+   
 
 class EIA_demand_daily:
 
     def __init__(self, region: str, sub_ba: bool, start_date: datetime, end_date: datetime, timezone_str: str = "Eastern"):
         self.full_df = eia_request_daily_data(region, sub_ba, start_date, end_date, timezone_str)
 
-
+    def demand(self):
+        return self.full_df[["Date", "value"]].copy()
+    
 

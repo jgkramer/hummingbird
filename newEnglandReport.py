@@ -14,6 +14,7 @@ import pytesseract
 from datetime import datetime, timedelta    
 import requests
 
+show_image_flag = False
 
 def is_number(s):
     try:
@@ -22,8 +23,20 @@ def is_number(s):
     except ValueError:
         return False
 
-class NewEnglandReport:
+def show_image(image):
+    if show_image_flag == False:
+        return
+    
+    if isinstance(image, PILImage.Image):
+        image.show()
+    elif isinstance(image, np.ndarray):
+        cv2.imshow("Image", image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    else:
+        raise TypeError("Unsupported image type. Use PIL Image or numpy array.")
 
+class NewEnglandReport:
     def find_pages_with_text(self, search_text):
         matching_pages = []
         with pdfplumber.open(self.pdf_path) as pdf:
@@ -55,7 +68,6 @@ class NewEnglandReport:
         image_str = self.pdf_page_to_base64(self.pdf_path, page_num)
 
         if image_str:
-            # print("we found an image string")
             image_data = base64.b64decode(image_str)
             nparr = np.frombuffer(image_data, np.uint8)
             img_cv2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -65,6 +77,7 @@ class NewEnglandReport:
     # this function finds the "Daily Natural Gas Consumption by Sector" in the image of the full page, and returns it
     def findNaturalGasChart(self, img_cv2):        
         img_rgb = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
+        
         data = pytesseract.image_to_data(img_rgb, output_type=pytesseract.Output.DICT)
 
         target_title = "Daily natural gas consumption by sector"
@@ -107,6 +120,11 @@ class NewEnglandReport:
         chart_box["height"] = int((legend_box["top"] - (legend_box["height"] * 1.5) - title_box["top"]))
             # print(chart_box)
 
+        print(f"Title box: {title_box}")
+        print(f"Legend box: {legend_box}")
+        print(f"Chart box: {chart_box}")
+        # show_image(img_cv2)
+
         cropped_img_cv2 = img_cv2[chart_box["top"]:chart_box["top"]+chart_box["height"], chart_box["left"]:chart_box["left"]+chart_box["width"]]
         cropped_img_rgb = cv2.cvtColor(cropped_img_cv2, cv2.COLOR_BGR2RGB)
 
@@ -130,24 +148,25 @@ class NewEnglandReport:
                 crop2_top = subtitle_box["top"] + subtitle_box["height"]
             
         graph_only_img_cv2 = cropped_img_cv2[crop2_top:, :]
-        #cv2.imshow("cropped", graph_only_img_cv2)
-        #cv2.waitKey(0)
-        #cv2.destroyAllWindows()
+
+        show_image(graph_only_img_cv2)
         return graph_only_img_cv2
 
 
     def findYAxisScale(self, left_band_img, distance_top_to_bottom):
         left_band_gray = cv2.cvtColor(left_band_img, cv2.COLOR_BGR2GRAY)
+
         left_band_thresh = cv2.adaptiveThreshold(left_band_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                 cv2.THRESH_BINARY_INV, 11, 2)
-        custom_config = r'--psm 6 -c tessedit_char_whitelist=0123456789.'
+        custom_config = r'--psm 6 -c tessedit_char_whitelist=0123456789.-'
         y_label_candidates = pytesseract.image_to_data(left_band_thresh, config=custom_config, output_type=pytesseract.Output.DICT)
+        show_image(left_band_gray)
         
         y_labels = []
         y_labels_pos = []
 
         for word, ypos in zip(y_label_candidates["text"], y_label_candidates["top"]):
-            # print(f"{word}, {ypos}")
+            #print(f"{word}, {ypos}")
             if(is_number(word)):
                 number = float(word)
                 if number > 10: 
@@ -157,8 +176,10 @@ class NewEnglandReport:
         
         if len(y_labels) == 0:
             print("No y-axis labels found")
-            for word, ypos in zip(y_label_candidates["text"], y_label_candidates["top"]):
-                print(f"{word}, {ypos}")
+            return None
+        
+        if(y_labels[-1] != 0):
+            print("Bottom y-axis label is not 0, which is unexpected")
             return None
 
         if max(y_labels) != y_labels[0]:
@@ -182,10 +203,7 @@ class NewEnglandReport:
         x_labels_left = []
         x_labels_right = []
 
-        
-        #cv2.imshow("edges", bottom_band_thresh)
-        #cv2.waitKey(0)
-        #cv2.destroyAllWindows()
+        #show_image(bottom_band_thresh)
 
         # print("x axis labels found:")
         for word, left, width in zip(x_label_candidates["text"], x_label_candidates["left"], x_label_candidates["width"]):
@@ -205,7 +223,7 @@ class NewEnglandReport:
             print("Bad x-axis labels")
             return False
 
-        
+
         label_center_span = 0.5 * (x_labels_left[-1] + x_labels_right[-1]) - 0.5 * (x_labels_left[0] + x_labels_right[0])
         day_span = label_center_span / 12.0
 
@@ -213,7 +231,7 @@ class NewEnglandReport:
         ratio = (1.0 * x_axis_span) / day_span
         #print(f"label_center_span {label_center_span}, day_span {day_span}, x_axis_span {x_axis_span}, ratio {ratio}")
         #print(ratio)
-        if 12.5 < ratio < 13.5:
+        if 12.6 < ratio < 13.4:
             # print(f"X axis OK: ratio {ratio} (should be ~13)")
             return True
         else: 
@@ -235,7 +253,9 @@ class NewEnglandReport:
         
         # Step 1: Edge detection        
         edges = cv2.Canny(thresh, 30, 100, apertureSize=5)
-        
+
+        show_image(edges)
+
         # Step 2: Hough Line Transform to find lines
         lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=100, minLineLength=50, maxLineGap=10)
 
@@ -270,7 +290,7 @@ class NewEnglandReport:
 
         #print(f"Top gridline {top_horizontal_line}.  X-axis {bottom_horizontal_line}")
         
-        left_band_img = img_cv2[:, :sorted_horizontal[0]["left"]]
+        left_band_img = img_cv2[:, :sorted_horizontal[0]["left"]-10]
         y_axis_scale = self.findYAxisScale(left_band_img, bottom_horizontal_line - top_horizontal_line)
         if y_axis_scale is None: 
             return None
@@ -329,7 +349,7 @@ class NewEnglandReport:
                 })
             
         df = pd.DataFrame(data)
-        # print(df)
+        #print(df)
 
         if(False):
             top_left = (date_locations[0], top_horizontal_line)       # (x1, y1)
@@ -339,11 +359,9 @@ class NewEnglandReport:
             for d in date_locations:
                 pt1 = (d, top_horizontal_line)
                 pt2 = (d, bottom_horizontal_line)
-                cv2.line(img_box, pt1, pt2, color=(0, 255, 0), thickness=1)  
-            
-            cv2.imshow("img_box", img_box)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+                cv2.line(img_box, pt1, pt2, color=(0, 255, 0), thickness=1)
+
+            show_image(img_box)
 
         return df
 
@@ -358,7 +376,7 @@ class NewEnglandReport:
                 self.df = self.findChartDimensions(cropped_img_cv2)
 
 
-def downloadReportIfAbsent(report_date):
+def downloadReportIfAbsent(report_date):#
     report_date_str = report_date.strftime("%Y%m%d")
     report_year = report_date.strftime("%Y")
     report_month = report_date.strftime("%m")
@@ -378,8 +396,8 @@ def downloadReportIfAbsent(report_date):
     return pdf_path
 
 if __name__ == "__main__":
-    start_date = datetime(2023, 1, 1)
-    end_date = datetime(2025, 5, 15)
+    start_date = datetime(2025, 6, 1)
+    end_date = datetime(2025, 7, 5)
     curr_date = start_date
 
     raw_bcf_values_electric = {}
@@ -425,7 +443,7 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(all_data)
     print(df)
-    df.to_csv("new_england_natgas.csv", index=False)
+    df.to_csv("new_england_natgas_June2025.csv", index=False)
 
 
 

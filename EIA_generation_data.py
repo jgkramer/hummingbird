@@ -12,6 +12,14 @@ import matplotlib as mpl
 import math
 import os
 
+all_fuels = ["NG", "SUN", "WND", "NUC", "COL", "WAT", "OTH", "OIL", "PS", "BAT", "SNB"]
+
+def fuel_valid(fuel):
+    if fuel not in all_fuels:
+        print(f"Fuel {fuel} is not a valid fuel type. Valid types are: {all_fuels}")
+        return False
+    return True
+
 def data_frame_from_request(url):
     results = requests.get(url)
 
@@ -24,10 +32,9 @@ def data_frame_from_request(url):
     df = pd.DataFrame(json_data)
     return df
 
-def eia_generation_request(region: str, start_date: datetime, end_date: datetime, fuel_list, start_offset, end_offset):
+def eia_generation_request(region: str, start_date: datetime, end_date: datetime, fuel, start_offset, end_offset):
     facets_str = f"facets[respondent][]={region}&"
-    for f in fuel_list:
-        facets_str = facets_str + f"facets[fueltype][]={f}&"
+    facets_str = facets_str + f"facets[fueltype][]={fuel}&"
     
     start_offset_str = f"{start_offset:+03}:00"
     end_offset_str = f"{end_offset:+03}:00"
@@ -35,7 +42,7 @@ def eia_generation_request(region: str, start_date: datetime, end_date: datetime
     print("offsets", start_offset_str, end_offset_str)
 
     api_key = os.getenv("EIA_API_KEY")
-
+    
     url_data = "https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?frequency=local-hourly&data[0]=value&{}start={}T01{}&end={}T00{}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
 
     url_data = url_data.format(facets_str,
@@ -51,10 +58,12 @@ def eia_generation_request(region: str, start_date: datetime, end_date: datetime
     return df
 
 #fuel list = [] for all fuels
-#otherwise, include a subset list of "NG" (natural gas), "SUN" (solar), "WND" (wind), "NUC" (nuclear), "COL" (coal), "WAT" (hydro), "OTH" (other)
+#otherwise, include a subset list of "NG" (natural gas), "SUN" (solar), "WND" (wind), "NUC" (nuclear), "COL" (coal), "WAT" (hydro), "OTH" (other), 
+# "OIL" (oil), "PS" (pumped storage), "BAT" (battery), "SNB" (synthetic natural gas)
+
 def eia_generation_data(region: str, start_date: datetime, end_date: datetime, fuel, start_offset = 0, end_offset = 0):
     print("input ", fuel)
-    if fuel not in ["NG", "SUN", "WND", "NUC", "COL", "WAT", "OTH"]:
+    if not fuel_valid(fuel):
         raise ValueError("Not a valid fuel type")
         
     df_list = []
@@ -64,7 +73,7 @@ def eia_generation_data(region: str, start_date: datetime, end_date: datetime, f
     
     while(start_date < end_date):
       end_block = min(end_date, start_date + relativedelta(days = day_bump - 1))
-      df = eia_generation_request(region, start_date, end_block, [fuel], start_offset, end_offset)
+      df = eia_generation_request(region, start_date, end_block, fuel, start_offset, end_offset)
       df_list.append(df)
       start_date = start_date + relativedelta(days = day_bump)
               
@@ -98,17 +107,11 @@ def get_utc_offsets(tz: str, start_date, end_date):
     end_offset = round(end_local.utcoffset().total_seconds() / 3600)
     return start_offset, end_offset
 
-if __name__ == "__main__":
-    start_date = datetime(2024, 8, 1)
-    end_date = datetime(2024, 11, 1)
-    start_offset, end_offset = get_utc_offsets("US/Central", start_date, end_date)  
-    df = eia_generation_data("ERCO", start_date = start_date, end_date = end_date, fuel = "COL", start_offset = start_offset, end_offset = end_offset)
-    df.to_csv("gendata.csv")
-
 class EIA_generation:
 
     def __init__(self, region: str, start_date: datetime, end_date: datetime, fuel: str, start_offset = 0, end_offset = 0):
         self.fuel = fuel
+        print("Fuel type:", fuel)
         self.full_df = eia_generation_data(region, start_date, end_date, fuel, start_offset, end_offset)
         self.full_df["value"] = pd.to_numeric(self.full_df["value"])
 
@@ -120,9 +123,60 @@ class EIA_generation:
     def daily_generation(self, d: datetime):
         slice = self.full_df[self.full_df["Date"].dt.date == d.date()][["Hour Starting", "value"]].copy()
         return slice
-
-
-
-
-
     
+    def full_generation(self):
+        return self.full_df[["Date", "Hour Starting", "value"]].copy()
+    
+
+class EIA_generation_daily:
+    def eia_single_daily_request(self, region: str, fuel, start_date: datetime, end_date: datetime, timezone_str: str):
+        api_key = os.getenv("EIA_API_KEY")
+        print("API key", api_key)
+        facets_str = f"facets[respondent][]={region}&facets[timezone][]={timezone_str}&"
+        facets_str = facets_str + f"facets[fueltype][]={fuel}&"
+        url_data = "https://api.eia.gov/v2/electricity/rto/daily-fuel-type-data/data/?frequency=daily&data[0]=value&{}start={}&end={}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&api_key={}"
+        url_data = url_data.format(facets_str, 
+                                   start_date.strftime("%Y-%m-%d"),
+                                   end_date.strftime("%Y-%m-%d"),
+                                   api_key)        
+        print(url_data)
+        df = data_frame_from_request(url_data)
+        if df is not None:
+            print("Got data")
+            return df
+
+    def eia_request_daily_data(self, region: str, fuel, start_date: datetime, end_date: datetime, timezone_str: str = "Eastern"):
+        df_list = []
+
+        max_months = math.floor(4900 / (31))  # 5000 is the max number of data points returned by EIA, use 4900 to be safe
+        month_steps = min(24, max_months)
+
+        while start_date < end_date:
+            request_end = min(start_date + relativedelta(months=month_steps, days=-1), end_date)
+            df = self.eia_single_daily_request(region, fuel, start_date, request_end, timezone_str)
+            start_date = start_date + relativedelta(months=month_steps)
+            df_list.append(df)
+        full_df = pd.concat(df_list)
+        full_df.sort_values(by="period", inplace=True, ignore_index=True)
+        dates = full_df["period"].apply(lambda x: datetime.strptime(x, "%Y-%m-%d"))
+        full_df["Date"] = dates
+        full_df = full_df.drop(columns = ["period", "respondent-name", "type-name", "timezone-description"]).reindex()
+        print(full_df)
+        return full_df
+
+    def __init__(self, region: str, fuel, start_date: datetime, end_date: datetime, timezone_str: str = "Eastern"):
+        if not fuel_valid(fuel):
+            raise ValueError("Not a valid fuel type")
+        self.full_df = self.eia_request_daily_data(region, fuel, start_date, end_date)
+        
+    def generation(self):
+        return self.full_df[["Date", "value"]].copy()
+
+if __name__ == "__main__":
+    start_date = datetime(2025, 5, 1)
+    end_date = datetime(2025, 7, 1)
+    gen = EIA_generation_daily("ISNE", fuel = "NG", start_date = start_date, end_date = end_date, timezone_str = "Eastern")
+
+    #display all rows
+    pd.set_option('display.max_rows', None)
+    print(gen.full_df)
