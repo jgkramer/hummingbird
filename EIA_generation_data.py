@@ -12,7 +12,7 @@ import matplotlib as mpl
 import math
 import os
 
-all_fuels = ["NG", "SUN", "WND", "NUC", "COL", "WAT", "OTH", "OIL", "PS", "BAT", "SNB"]
+all_fuels = ["NG", "SUN", "WND", "NUC", "COL", "WAT", "OTH", "OIL", "PS", "BAT", "SNB", "UES"]
 
 def fuel_valid(fuel):
     if fuel not in all_fuels:
@@ -71,7 +71,7 @@ def eia_generation_data(region: str, start_date: datetime, end_date: datetime, f
     day_bump = math.floor(4900/(24*nfuels))
     print(day_bump)
     
-    while(start_date < end_date):
+    while(start_date <= end_date):
       end_block = min(end_date, start_date + relativedelta(days = day_bump - 1))
       df = eia_generation_request(region, start_date, end_block, fuel, start_offset, end_offset)
       df_list.append(df)
@@ -108,12 +108,12 @@ def get_utc_offsets(tz: str, start_date, end_date):
     return start_offset, end_offset
 
 class EIA_generation:
-
     def __init__(self, region: str, start_date: datetime, end_date: datetime, fuel: str, start_offset = 0, end_offset = 0):
         self.fuel = fuel
         print("Fuel type:", fuel)
         self.full_df = eia_generation_data(region, start_date, end_date, fuel, start_offset, end_offset)
         self.full_df["value"] = pd.to_numeric(self.full_df["value"])
+        self.full_df.dropna(inplace=True)
 
     def monthly_generation(self, d: datetime):
         slice = self.full_df[(self.full_df["Date"].dt.year == d.year) & (self.full_df["Date"].dt.month == d.month)][["Date", "Hour Starting", "value"]]
@@ -127,7 +127,6 @@ class EIA_generation:
     def full_generation(self):
         return self.full_df[["Date", "Hour Starting", "value"]].copy()
     
-
 class EIA_generation_daily:
     def eia_single_daily_request(self, region: str, fuel, start_date: datetime, end_date: datetime, timezone_str: str):
         api_key = os.getenv("EIA_API_KEY")
@@ -151,7 +150,7 @@ class EIA_generation_daily:
         max_months = math.floor(4900 / (31))  # 5000 is the max number of data points returned by EIA, use 4900 to be safe
         month_steps = min(24, max_months)
 
-        while start_date < end_date:
+        while start_date <= end_date:
             request_end = min(start_date + relativedelta(months=month_steps, days=-1), end_date)
             df = self.eia_single_daily_request(region, fuel, start_date, request_end, timezone_str)
             start_date = start_date + relativedelta(months=month_steps)
@@ -168,6 +167,8 @@ class EIA_generation_daily:
         if not fuel_valid(fuel):
             raise ValueError("Not a valid fuel type")
         self.full_df = self.eia_request_daily_data(region, fuel, start_date, end_date)
+        self.full_df["value"] = pd.to_numeric(self.full_df["value"])
+        self.full_df.dropna(inplace=True)
         
     def generation(self):
         return self.full_df[["Date", "value"]].copy()

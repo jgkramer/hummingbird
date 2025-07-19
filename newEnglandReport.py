@@ -396,8 +396,8 @@ def downloadReportIfAbsent(report_date):#
     return pdf_path
 
 if __name__ == "__main__":
-    start_date = datetime(2025, 6, 1)
-    end_date = datetime(2025, 7, 5)
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 1, 15)
     curr_date = start_date
 
     raw_bcf_values_electric = {}
@@ -443,7 +443,7 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(all_data)
     print(df)
-    df.to_csv("new_england_natgas_June2025.csv", index=False)
+    df.to_csv("new_england_natgas_2023.csv", index=False)
 
 
 
