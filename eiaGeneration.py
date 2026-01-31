@@ -57,7 +57,6 @@ class EIAGeneration:
         hour_averages = (df_filtered.groupby("Hour"))["Solar Generation (MWh)"].mean(numeric_only = True).reset_index()
         return (hour_averages["Hour"].copy(), hour_averages["Solar Generation (MWh)"].copy())
 
-
     def averageDayInPeriodFilteredHourly(self, start: datetime, end: datetime, N: int = 5):
         fil = self.df["Start Time"].apply(lambda d: start <= d and d < end)
         df_filtered = self.df[fil]

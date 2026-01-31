@@ -59,7 +59,7 @@ def eia_generation_request(region: str, start_date: datetime, end_date: datetime
 
 #fuel list = [] for all fuels
 #otherwise, include a subset list of "NG" (natural gas), "SUN" (solar), "WND" (wind), "NUC" (nuclear), "COL" (coal), "WAT" (hydro), "OTH" (other), 
-# "OIL" (oil), "PS" (pumped storage), "BAT" (battery), "SNB" (synthetic natural gas)
+# "OIL" (oil), "PS" (pumped storage), "BAT" (battery), "SNB" (synthetic natural gas), "UES" (unknown energy storage)
 
 def eia_generation_data(region: str, start_date: datetime, end_date: datetime, fuel, start_offset = 0, end_offset = 0):
     print("input ", fuel)
